@@ -1,0 +1,108 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const links = [
+  { href: 'https://discord.gg/FarmingDuds', label: '🚜🌽 Farming Duds Discord 🛻🧑🌾' },
+  { href: 'https://discord.gg/Qya9GTTzTw', label: '🌽 Maize+ Discord' },
+  { href: 'https://discord.gg/2y3MG7m7eG', label: '🌽 Alte Gefilde Discord - FS19 Odenwälderlande' },
+  { href: 'https://github.com/sashaman/FS22_stoppelfahrspur', label: 'FS22 Stoppelfahrspur / Stubble Lane - for all crops + special 🌽 Maize' },
+  { href: 'https://github.com/sashaman/HorseExtension', label: '🌽 Maize+ 🐴 Horse Extension 🤓 DIY guide' },
+  { href: 'https://workupload.com/file/vBxCMjJursV', label: '💧🗜️🩸 FS19_compostteaProdi' },
+  { href: 'https://workupload.com/file/Q7hJcZsCtKX', label: '🛢️ FS19_PlaceableTriggerFuelTank' },
+  { href: 'https://workupload.com/file/baWdALDUQRJ', label: '⛽ FS19_PlaceableTriggerFuelBuyingStation' },
+  { href: 'https://workupload.com/file/zMyNAUzkpRS', label: '💧 FS19_PlaceableTriggerWaterBuyingStation' },
+  { href: 'https://docs.google.com/spreadsheets/d/18kgYaqGbwny9IDG6Mh1ECIfQuomc9QRRE-foNfD1WGw/', label: '🚜🌻 FarmingDud\'s ✔️ FS22 mod list' },
+  { href: 'https://docs.google.com/spreadsheets/d/1DMjn6HHMz7rVnhJiDhI940AfTOrmi4Yy4Kv2WJzmchk/', label: '🌻 FarmingDud\'s ✔️ FS19 mod list' },
+  { href: 'https://farming-simulator.com/mods.php', label: '🍿 Farming Simulator Mods' },
+  { href: 'https://gdn.giants-software.com/', label: '📚 GIANTS Developer Network' },
+  { href: 'https://emojipedia.org/', label: 'Emojipedia ✂️ Copy and 📋 Paste Emoji 👍' },
+  { href: 'https://siiimple.com/', label: '🖥 Minimalist Website Gallery' },
+];
+
+const username = '@sashaman';
+const userPhoto = '/img/aoum.png';
+---
+
+<Layout title="Sash's Links // Orbit">
+  <div class="min-h-screen bg-background overflow-hidden relative">
+    <!-- Animated background -->
+    <div class="absolute inset-0 overflow-hidden">
+      <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-purple/20 rounded-full blur-[100px] animate-pulse"></div>
+      <div class="absolute bottom-1/4 right-1/4 w-80 h-80 bg-pink/15 rounded-full blur-[80px] animate-pulse" style="animation-delay: 2s;"></div>
+    </div>
+    
+    <div class="relative z-10 max-w-lg mx-auto pt-16 pb-20 px-6">
+      <!-- Floating profile -->
+      <div class="text-center mb-12 relative">
+        <div class="inline-block relative">
+          <img 
+            src={userPhoto} 
+            alt="avatar"
+            class="w-28 h-28 mx-auto rounded-full border-3 border-pink shadow-[0_0_30px_rgba(255,121,198,0.4)] animate-float"
+          />
+          <div class="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-pink text-background text-xs px-3 py-1 rounded-full font-medium">
+            online
+          </div>
+        </div>
+        
+        <a 
+          href="https://github.com/sashaman" 
+          class="inline-block mt-6 text-xl font-medium text-pink hover:text-white transition-colors"
+        >
+          {username}
+        </a>
+      </div>
+      
+      <!-- Staggered link cards -->
+      <div class="space-y-4">
+        {links.map((link, i) => (
+          <a 
+            href={link.href} 
+            target="_blank" 
+            rel="noopener"
+            class="block py-4 px-5 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl text-center text-white/80 no-underline hover:bg-white/10 hover:border-purple/50 hover:text-white hover:scale-[1.02] transition-all duration-300"
+            style={`animation-delay: ${i * 80}ms`}
+          >
+            {link.label}
+          </a>
+        ))}
+      </div>
+      
+      <!-- Footer -->
+      <footer class="mt-10 text-center text-comment text-xs">
+        <span class="inline-flex items-center gap-2">
+          <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+          live {new Date().getFullYear()}
+        </span>
+      </footer>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  
+  .animate-float {
+    animation: float 4s ease-in-out infinite;
+  }
+  
+  /* Stagger animation for links */
+  a {
+    opacity: 0;
+    animation: slideUp 0.5s ease forwards;
+  }
+  
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

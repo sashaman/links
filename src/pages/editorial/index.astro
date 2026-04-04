@@ -1,0 +1,99 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const links = [
+  { href: 'https://discord.gg/FarmingDuds', label: '🚜🌽 Farming Duds Discord 🛻🧑🌾' },
+  { href: 'https://discord.gg/Qya9GTTzTw', label: '🌽 Maize+ Discord' },
+  { href: 'https://discord.gg/2y3MG7m7eG', label: '🌽 Alte Gefilde Discord - FS19 Odenwälderlande' },
+  { href: 'https://github.com/sashaman/FS22_stoppelfahrspur', label: 'FS22 Stoppelfahrspur / Stubble Lane - for all crops + special 🌽 Maize' },
+  { href: 'https://github.com/sashaman/HorseExtension', label: '🌽 Maize+ 🐴 Horse Extension 🤓 DIY guide' },
+  { href: 'https://workupload.com/file/vBxCMjJursV', label: '💧🗜️🩸 FS19_compostteaProdi' },
+  { href: 'https://workupload.com/file/Q7hJcZsCtKX', label: '🛢️ FS19_PlaceableTriggerFuelTank' },
+  { href: 'https://workupload.com/file/baWdALDUQRJ', label: '⛽ FS19_PlaceableTriggerFuelBuyingStation' },
+  { href: 'https://workupload.com/file/zMyNAUzkpRS', label: '💧 FS19_PlaceableTriggerWaterBuyingStation' },
+  { href: 'https://docs.google.com/spreadsheets/d/18kgYaqGbwny9IDG6Mh1ECIfQuomc9QRRE-foNfD1WGw/', label: '🚜🌻 FarmingDud\'s ✔️ FS22 mod list' },
+  { href: 'https://docs.google.com/spreadsheets/d/1DMjn6HHMz7rVnhJiDhI940AfTOrmi4Yy4Kv2WJzmchk/', label: '🌻 FarmingDud\'s ✔️ FS19 mod list' },
+  { href: 'https://farming-simulator.com/mods.php', label: '🍿 Farming Simulator Mods' },
+  { href: 'https://gdn.giants-software.com/', label: '📚 GIANTS Developer Network' },
+  { href: 'https://emojipedia.org/', label: 'Emojipedia ✂️ Copy and 📋 Paste Emoji 👍' },
+  { href: 'https://siiimple.com/', label: '🖥 Minimalist Website Gallery' },
+];
+
+const username = '@sashaman';
+const userPhoto = '/img/aoum.png';
+
+const featured = links.slice(0, 3);
+const rest = links.slice(3);
+---
+
+<Layout title="Sash's Links // Editorial">
+  <div class="min-h-screen bg-[#faf9f7]">
+    <!-- Hero Section -->
+    <header class="relative overflow-hidden">
+      <div class="absolute inset-0 bg-gradient-to-br from-purple-100 via-pink-50 to-yellow-50/30"></div>
+      <div class="absolute inset-0 opacity-30" style="background-image: url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23bd93f9\' fill-opacity=\'0.1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
+      
+      <div class="relative max-w-xl mx-auto pt-20 pb-12 px-6 text-center">
+        <img 
+          src={userPhoto} 
+          alt="avatar"
+          class="w-28 h-28 mx-auto rounded-2xl shadow-xl mb-6"
+        />
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">{username}</h1>
+        <p class="text-gray-500 text-sm">Farming Simulator enthusiast & mod developer</p>
+      </div>
+    </header>
+
+    <!-- Featured Links -->
+    <main class="max-w-xl mx-auto px-6 pb-16 -mt-4">
+      <div class="grid gap-4">
+        {featured.map((link) => (
+          <a 
+            href={link.href} 
+            target="_blank" 
+            rel="noopener"
+            class="group block p-5 bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-lg hover:border-purple-200 hover:-translate-y-0.5 transition-all duration-300"
+          >
+            <span class="text-purple-500 text-sm">{link.label.split(' ')[0]}</span>
+            <div class="text-gray-800 font-medium mt-1 group-hover:text-purple-600 transition-colors">
+              {link.label.split(' ').slice(1).join(' ')}
+            </div>
+          </a>
+        ))}
+      </div>
+
+      <!-- Divider -->
+      <div class="my-8 flex items-center gap-4">
+        <div class="flex-1 h-px bg-gray-200"></div>
+        <div class="text-gray-400 text-xs uppercase tracking-widest">More</div>
+        <div class="flex-1 h-px bg-gray-200"></div>
+      </div>
+
+      <!-- Rest of links -->
+      <div class="space-y-3">
+        {rest.map((link) => (
+          <a 
+            href={link.href} 
+            target="_blank" 
+            rel="noopener"
+            class="flex items-center justify-between py-3 px-4 bg-white/60 rounded-lg hover:bg-white hover:shadow-sm transition-all group"
+          >
+            <span class="text-gray-700 text-sm">{link.label}</span>
+            <span class="text-purple-400 opacity-0 group-hover:opacity-100 transition-opacity text-lg">→</span>
+          </a>
+        ))}
+      </div>
+
+      <!-- Footer -->
+      <footer class="mt-12 pt-6 border-t border-gray-200 text-center">
+        <p class="text-gray-400 text-xs">🧛🏻 Dark theme for all the things</p>
+      </footer>
+    </main>
+  </div>
+</Layout>
+
+<style>
+  body {
+    background: #faf9f7;
+  }
+</style>
