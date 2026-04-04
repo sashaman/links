@@ -1,47 +1,43 @@
-# Project State: Sash's Links (Astro + Tailwind)
+# Project State: Sash's Links
 
-## What we built
-- Migrated from static HTML/CSS to **Astro + Tailwind**
-- Created **4 layout concepts** for preview:
-  - `/` — basic (original style preserved)
-  - `/terminal/` — **WINNER** — dark terminal aesthetic
-  - `/editorial/` — light, magazine-style
-  - `/orbit/` — kinetic, animated cards
+## What it is
+- Astro + Tailwind static link page (terminal theme)
+- Deployed to GitHub Pages: https://sashaman.github.io/links/
 
-## Terminal theme (selected)
-- Dark background with scanline overlay
-- Terminal-style header (`sash@links:~$ ./init.sh`)
-- Profile with avatar + pulsing green status dot
-- Link cards with staggered entrance animation (expand bottom-left → top-right, 60ms delay each)
-- Hover: scale up + green border glow + arrow reveal
-- Footer with pulsing session indicator
+## Tech stack
+- Astro 5.x
+- @astrojs/tailwind 5.x
+- Tailwind CSS 3.x
+- Zero JS runtime
 
 ## Project structure
 ```
-src/
-  layouts/Layout.astro        # Base HTML shell
-  pages/
-    index.astro               # Basic version
-    terminal/index.astro      # Selected theme
-    editorial/index.astro     # Light editorial
-    orbit/index.astro         # Kinetic orbit
+links/
+├── .github/workflows/deploy.yml   # GitHub Pages auto-deploy on push to master
+├── .gitignore                     # node_modules/, dist/, .astro/
+├── astro.config.mjs               # site + base: /links
+├── tailwind.config.mjs
+├── package.json
+├── public/img/                    # Static assets (avatar, favicon)
+│   ├── aoum.png
+│   ├── emojipedia-symbol.png
+│   └── favicon.ico
+└── src/
+    ├── layouts/Layout.astro       # Base HTML shell
+    └── pages/index.astro          # Terminal theme (root page)
 ```
 
 ## Commands
-- `npm run dev` — start dev server (port 3000)
-- `npm run build` — build static site to `dist/`
+- `npm run dev` — dev server (port 3000)
+- `npm run build` — static build to dist/
 - `npm run preview` — preview built site
 
-## Dependencies
-- astro ^6.1.3
-- @astrojs/tailwind ^6.0.2
-- tailwindcss ^3.4.19
-- autoprefixer ^10.4.27
+## Key details
+- Asset paths use `import.meta.env.BASE_URL` for correct `/links/` prefix
+- 15 links (Discord, GitHub repos, workupload files, Google Sheets, FS community sites)
+- Terminal aesthetic: dark bg, scanline overlay, green accents, staggered card animations
 
-## Next steps (pending)
-1. Polish terminal theme (hover glow, cursor animation, link categories, better header)
-2. Set up GitHub Pages deploy action
-3. Clean up unused concept pages (optional)
-
-## All original links preserved
-- 15 links total (Discord, GitHub, workupload, Google Sheets, farming-simulator, giants-software, emojipedia, siiimple)
+## Removed
+- Old static HTML/CSS (index.html, style.css)
+- Concept pages (editorial, orbit) — terminal is the only theme
+- Duplicate terminal subpage — now only at root

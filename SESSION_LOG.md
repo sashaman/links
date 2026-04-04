@@ -1,71 +1,24 @@
-# Session Log: Sash's Links Migration
+# Session Log: Sash's Links
 
-## Timeline
-- **Start:** ~2026-04-03 14:00
-- **Current:** ~2026-04-04 (ongoing)
+## Current session: 2026-04-04
 
-## What was accomplished
-1. Initialized npm project, installed astro + @astrojs/tailwind + tailwindcss + autoprefixer
-2. Created astro.config.mjs with Tailwind integration
-3. Created tailwind.config.mjs with Dracula-inspired color tokens
-4. Created src/layouts/Layout.astro (base HTML shell with Fira Sans)
-5. Created src/pages/index.astro (basic faithful reproduction)
-6. Created src/pages/terminal/index.astro (dark terminal aesthetic - SELECTED WINNER)
-7. Created src/pages/editorial/index.astro (light magazine-style)
-8. Created src/pages/orbit/index.astro (kinetic animated cards)
-9. Fixed import paths after route restructuring
-10. Added staggered entrance animation to terminal theme
-11. Added pulsing green status indicator to terminal theme
-12. All builds pass successfully
+### What was done
+1. Set terminal theme as root homepage (was at /terminal/)
+2. Created .gitignore (node_modules/, dist/, .astro/)
+3. Set up GitHub Actions deploy workflow (.github/workflows/deploy.yml)
+4. Fixed Astro 6 → 5 downgrade (tailwind plugin incompatibility)
+5. Moved static assets from img/ to public/img/ (Astro requirement)
+6. Fixed asset paths with import.meta.env.BASE_URL for /links base path
+7. Updated site title to "Sash's Linktree"
+8. Cleaned up: removed old static HTML/CSS, concept pages, preview images
 
-## Project structure
-```
-links/
-├── astro.config.mjs
-├── tailwind.config.mjs
-├── package.json
-├── PROJECT_STATE.md
-├── SESSION_LOG.md
-├── src/
-│   ├── layouts/
-│   │   └── Layout.astro
-│   ├── pages/
-│   │   ├── index.astro
-│   │   ├── terminal/
-│   │   │   └── index.astro
-│   │   ├── editorial/
-│   │   │   └── index.astro
-│   │   └── orbit/
-│   │       └── index.astro
-│   └── styles/
-├── img/
-│   ├── aoum.png
-│   ├── favicon.ico
-│   └── emojipedia-symbol.png
-├── dist/ (build output)
-└── node_modules/
-```
+### Issues encountered
+- **npm ci failed on CI**: @astrojs/tailwind@6 requires Astro 3-5, we had Astro 6 → downgraded
+- **Images 404 on GitHub Pages**: static assets must live in public/ folder for Astro
+- **Wrong asset URLs**: absolute paths (/img/...) ignored base path → used import.meta.env.BASE_URL
+- **Missing slash in paths**: `${BASE_URL}img/` produced `/linksimg/` → fixed to `${BASE_URL}/img/`
 
-## Commands
-- `npm run dev` — dev server (port 3000)
-- `npm run build` — static build to dist/
-- `npm run preview` — preview built site
-
-## Selected design: Terminal theme
-- Dark background, scanline overlay
-- Terminal prompt header
-- Pulsing green status dot
-- Staggered card entrance animation (bottom-left → top-right, 60ms stagger)
-- Hover: scale + green border + arrow reveal
-- All 15 original links preserved
-
-## Pending work
-1. Further polish terminal theme (hover glow, cursor animation, link categories)
-2. GitHub Pages deploy action setup
-3. Clean up unused concept pages (optional)
-
-## Known issues during session
-- Plan mode blocked file writes initially
-- Dev server died due to tool timeout (fixed by starting detached)
-- Import paths broke after route restructuring (fixed)
-- Animation not visible on first attempt (fixed with CSS keyframes + inline style delays)
+### Final state
+- Clean working tree, deployed successfully
+- Live at: https://sashaman.github.io/links/
+- 15 links, terminal theme, auto-deploys on push to master
