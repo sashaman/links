@@ -1,13 +1,75 @@
 ---
-const { title } = Astro.props;
+interface Props {
+  title: string;
+  /** Meta + og:description */
+  description?: string;
+  /** Defaults to `title` */
+  ogTitle?: string;
+  /** Path under site base, e.g. `img/aoum.png` or full `https://…` */
+  ogImage?: string;
+  ogImageAlt?: string;
+  ogSiteName?: string;
+  /** Discord / browser UI accent */
+  themeColor?: string;
+}
+
+const {
+  title,
+  description = '',
+  ogTitle,
+  ogImage,
+  ogImageAlt = '',
+  ogSiteName = 'sashaman',
+  themeColor = '#50fa7b',
+} = Astro.props;
+
+const metaDescription = description || `${title} — link hub`;
+const socialTitle = ogTitle ?? title;
+
+const site = Astro.site;
+const baseRaw = import.meta.env.BASE_URL;
+const base = baseRaw.endsWith('/') ? baseRaw : `${baseRaw}/`;
+const pageUrl = site ? new URL(Astro.url.pathname, site).href : Astro.url.href;
+
+let imageUrl: string;
+if (ogImage?.startsWith('http')) {
+  imageUrl = ogImage;
+} else {
+  const pathUnderBase = (ogImage ?? 'img/aoum.png').replace(/^\/+/, '');
+  if (site) {
+    const baseRoot = new URL(base, site);
+    imageUrl = new URL(pathUnderBase, baseRoot).href;
+  } else {
+    imageUrl = `${base}${pathUnderBase}`.replace(/\/+/g, '/');
+  }
+}
 ---
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="noindex,nofollow">
   <title>{title}</title>
+  <meta name="description" content={metaDescription} />
+
+  <link rel="canonical" href={pageUrl} />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content={socialTitle} />
+  <meta property="og:description" content={metaDescription} />
+  <meta property="og:url" content={pageUrl} />
+  <meta property="og:image" content={imageUrl} />
+  <meta property="og:image:alt" content={ogImageAlt || socialTitle} />
+  <meta property="og:site_name" content={ogSiteName} />
+  <meta property="og:locale" content="en_US" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={socialTitle} />
+  <meta name="twitter:description" content={metaDescription} />
+  <meta name="twitter:image" content={imageUrl} />
+
+  <meta name="theme-color" content={themeColor} />
+
   <link rel="icon" href={`${import.meta.env.BASE_URL}/img/favicon.ico`} type="image/x-icon">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
