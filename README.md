@@ -1,6 +1,8 @@
-# Sash’s Linktree
+# Sash’s Termlink
 
-Personal link-in-bio page: a **terminal / CRT–style** layout built with [Astro](https://astro.build/) and [Tailwind CSS](https://tailwindcss.com/), shipped as static HTML.
+Personal **link-in-bio** page in a terminal / CRT style. **Termlink** is just the label for this site (terminal + links)—not affiliated with [Linktree](https://linktr.ee/)® or any other service.
+
+**For context:** “Link-in-bio” pages are widely associated with products like **Linktree**; people often call the pattern “linktree-style.” This repo is independent. An earlier static version drew layout ideas from [LinkFree](https://github.com/michaelbarney/LinkFree) (Michael Barney’s link-in-bio template collection); the current stack is Astro + Tailwind.
 
 **Live site:** [https://sashaman.github.io/links/](https://sashaman.github.io/links/)
 
