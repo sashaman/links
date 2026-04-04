@@ -1,7 +1,7 @@
 {
   "name": "links",
   "version": "1.0.0",
-  "description": "MNMLSM is a simple theme inspired by the command line. It has a darkmode and no javascript. In other words: it is future proof.",
+  "description": "Terminal-style link-in-bio (Astro + Tailwind), deployed to GitHub Pages.",
   "main": "index.js",
   "scripts": {
     "dev": "astro dev",
@@ -20,7 +20,7 @@
   "bugs": {
     "url": "https://github.com/sashaman/links/issues"
   },
-  "homepage": "https://github.com/sashaman/links#readme",
+  "homepage": "https://sashaman.github.io/links/",
   "dependencies": {
     "@astrojs/tailwind": "^5.1.5",
     "astro": "^5.0.0",
