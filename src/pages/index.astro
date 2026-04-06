@@ -1,22 +1,44 @@
 ---
 import Layout from '../layouts/Layout.astro';
 
-const links = [
-  { href: 'https://discord.gg/FarmingDuds', label: '🚜🌽 Farming Duds Discord 🛻🧑🌾' },
-  { href: 'https://discord.gg/Qya9GTTzTw', label: '🌽 Maize+ Discord' },
-  { href: 'https://discord.gg/2y3MG7m7eG', label: '🌽 Alte Gefilde Discord - FS19 Odenwälderlande' },
-  { href: 'https://github.com/sashaman/FS22_stoppelfahrspur', label: 'FS22 Stoppelfahrspur / Stubble Lane - for all crops + special 🌽 Maize' },
-  { href: 'https://github.com/sashaman/HorseExtension', label: '🌽 Maize+ 🐴 Horse Extension 🤓 DIY guide' },
-  { href: 'https://workupload.com/file/vBxCMjJursV', label: '💧🗜️🩸 FS19_compostteaProdi' },
-  { href: 'https://workupload.com/file/Q7hJcZsCtKX', label: '🛢️ FS19_PlaceableTriggerFuelTank' },
-  { href: 'https://workupload.com/file/baWdALDUQRJ', label: '⛽ FS19_PlaceableTriggerFuelBuyingStation' },
-  { href: 'https://workupload.com/file/zMyNAUzkpRS', label: '💧 FS19_PlaceableTriggerWaterBuyingStation' },
-  { href: 'https://docs.google.com/spreadsheets/d/18kgYaqGbwny9IDG6Mh1ECIfQuomc9QRRE-foNfD1WGw/', label: '🚜🌻 FarmingDud\'s ✔️ FS22 mod list' },
-  { href: 'https://docs.google.com/spreadsheets/d/1DMjn6HHMz7rVnhJiDhI940AfTOrmi4Yy4Kv2WJzmchk/', label: '🌻 FarmingDud\'s ✔️ FS19 mod list' },
-  { href: 'https://farming-simulator.com/mods.php', label: '🍿 Farming Simulator Mods' },
-  { href: 'https://gdn.giants-software.com/', label: '📚 GIANTS Developer Network' },
-  { href: 'https://emojipedia.org/', label: 'Emojipedia ✂️ Copy and 📋 Paste Emoji 👍' },
-  { href: 'https://siiimple.com/', label: '🖥 Minimalist Website Gallery' },
+const categories = [
+  {
+    id: 'community',
+    label: 'Discord & community',
+    header: '// discord & community',
+    links: [
+      { href: 'https://discord.gg/FarmingDuds', label: '🚜🌽 Farming Duds Discord 🛻🧑🌾' },
+      { href: 'https://discord.gg/Qya9GTTzTw', label: '🌽 Maize+ Discord' },
+      { href: 'https://discord.gg/2y3MG7m7eG', label: '🌽 Alte Gefilde Discord - FS19 Odenwälderlande' },
+    ],
+  },
+  {
+    id: 'mods',
+    label: 'Mods & uploads',
+    header: '// mods & uploads',
+    links: [
+      { href: 'https://github.com/sashaman/FS22_stoppelfahrspur', label: 'FS22 Stoppelfahrspur / Stubble Lane - for all crops + special 🌽 Maize' },
+      { href: 'https://github.com/sashaman/HorseExtension', label: '🌽 Maize+ 🐴 Horse Extension 🤓 DIY guide' },
+      { href: 'https://workupload.com/file/vBxCMjJursV', label: '💧🗜️🩸 FS19_compostteaProdi' },
+      { href: 'https://workupload.com/file/Q7hJcZsCtKX', label: '🛢️ FS19_PlaceableTriggerFuelTank' },
+      { href: 'https://workupload.com/file/baWdALDUQRJ', label: '⛽ FS19_PlaceableTriggerFuelBuyingStation' },
+      { href: 'https://workupload.com/file/zMyNAUzkpRS', label: '💧 FS19_PlaceableTriggerWaterBuyingStation' },
+      { href: 'https://www.farming-simulator.com/mods.php?title=fs2025&filter=org&org_id=194125', label: '🍿 my FS25 Modhub Mods' },
+    ],
+  },
+  {
+    id: 'resources',
+    label: 'Lists & tools',
+    header: '// lists & tools',
+    links: [
+      { href: 'https://docs.google.com/spreadsheets/d/18kgYaqGbwny9IDG6Mh1ECIfQuomc9QRRE-foNfD1WGw/', label: '🚜🌻 FarmingDud\'s ✔️ FS22 mod list' },
+      { href: 'https://docs.google.com/spreadsheets/d/1DMjn6HHMz7rVnhJiDhI940AfTOrmi4Yy4Kv2WJzmchk/', label: '🌻 FarmingDud\'s ✔️ FS19 mod list' },
+      { href: 'https://www.farming-simulator.com/mods.php?title=fs2025&filter=org&org_id=194125', label: '🍿 Farming Simulator 25 Mods' },
+      { href: 'https://gdn.giants-software.com/', label: '📚 GIANTS Developer Network' },
+      { href: 'https://emojipedia.org/', label: 'Emojipedia ✂️ Copy and 📋 Paste Emoji 👍' },
+      { href: 'https://astro.build/', label: '💫 Astro 🌌 The web framework for content-driven websites 🛠️' },
+    ],
+  },
 ];
 
 const username = '@sashaman';
@@ -33,19 +55,16 @@ const userPhoto = `${import.meta.env.BASE_URL}/img/aoum.png`;
   themeColor="#0a0a0a"
 >
   <div class="min-h-screen bg-black p-6 font-mono">
-    <!-- Scanline overlay -->
     <div class="fixed inset-0 pointer-events-none opacity-[0.03] z-50" style="background: repeating-linear-gradient(0deg, transparent, transparent 2px, #00ff00 2px, #00ff00 4px);"></div>
-    
+
     <div class="max-w-2xl mx-auto pt-12">
-      <!-- Terminal header -->
       <div class="mb-8 text-xs text-green-500/60">
         <span class="text-green-400">sash</span>@<span class="text-blue-400">links</span>:~$ <span class="text-yellow-400">./init.sh</span>
       </div>
-      
-      <!-- User profile -->
+
       <div class="mb-6 flex items-center gap-4">
-        <img 
-          src={userPhoto} 
+        <img
+          src={userPhoto}
           alt="avatar"
           class="w-16 h-16 rounded-lg border border-green-500/40 shadow-[0_0_15px_rgba(0,255,0,0.2)]"
         />
@@ -57,33 +76,93 @@ const userPhoto = `${import.meta.env.BASE_URL}/img/aoum.png`;
           </div>
         </div>
       </div>
-      
-      <!-- Available commands -->
-      <div class="mb-2 text-xs text-gray-500">// available modules</div>
-      
-      <div class="space-y-2">
-        {links.map((link, i) => (
-          <a 
-            href={link.href} 
-            target="_blank" 
-            rel="noopener"
-            class="terminal-link flex items-center gap-3 py-3 px-4 bg-gray-900/50 border border-gray-800 rounded hover:border-green-500/50 hover:bg-green-500/5 hover:scale-[1.02] transition-all duration-300 transform-gpu group"
-            style={`animation-delay: ${i * 60}ms`}
+
+      <div id="nav-shell" class="relative rounded-lg">
+        <div
+          id="category-view"
+          class="nav-panel flex flex-col transition-all duration-[380ms] ease-out motion-reduce:duration-150"
+        >
+          <div class="mb-2 text-xs text-gray-500">// module categories — select to expand</div>
+          <div class="space-y-2">
+            {categories.map((cat, i) => (
+              <button
+                type="button"
+                data-category={cat.id}
+                class="category-tile terminal-link w-full text-left flex items-center gap-3 py-3 px-4 bg-gray-900/50 border border-gray-800 rounded hover:border-green-500/50 hover:bg-green-500/5 hover:scale-[1.02] transition-all duration-300 transform-gpu group cursor-pointer"
+                style={`animation-delay: ${i * 60}ms`}
+              >
+                <span class="text-green-500/40 text-xs font-mono w-6">[{i.toString().padStart(2, '0')}]</span>
+                <span class="text-gray-300 group-hover:text-green-400 text-sm font-mono flex-1 min-w-0">
+                  {cat.header}
+                </span>
+                <span class="text-gray-600 text-xs tabular-nums shrink-0">{cat.links.length} modules</span>
+                <span class="text-green-500/30 text-xs opacity-0 group-hover:opacity-100 transition-opacity shrink-0">►</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div
+          id="links-view"
+          class="nav-panel hidden flex flex-col opacity-0 scale-[0.98] transition-all duration-[380ms] ease-out motion-reduce:duration-150 motion-reduce:transition-opacity"
+          aria-hidden="true"
+        >
+          <button
+            type="button"
+            id="back-categories"
+            class="mb-4 self-start flex items-center gap-2 py-2 px-3 text-xs text-yellow-400/90 border border-yellow-500/30 rounded hover:bg-yellow-500/10 hover:border-yellow-500/50 transition-colors"
           >
-            <span class="text-green-500/40 text-xs font-mono w-6">
-              [{i.toString().padStart(2, '0')}]
-            </span>
-            <span class="text-gray-300 group-hover:text-green-400 text-sm font-mono truncate">
-              {link.label}
-            </span>
-            <span class="ml-auto text-green-500/30 text-xs opacity-0 group-hover:opacity-100 transition-opacity">
-              ►
-            </span>
-          </a>
+            <span aria-hidden="true">←</span>
+            <span class="font-mono">cd ..</span>
+            <span class="text-gray-600">// back to categories</span>
+          </button>
+          <div id="links-context" class="mb-2 text-xs text-gray-500 font-mono"></div>
+          <div id="links-active-slot" class="space-y-2"></div>
+        </div>
+      </div>
+
+      <div id="links-source" class="hidden" aria-hidden="true">
+        {categories.map((cat) => (
+          <div data-cat-source={cat.id}>
+            {cat.links.map((link, i) => (
+              <a
+                href={link.href}
+                target="_blank"
+                rel="noopener"
+                class="sub-link flex items-center gap-3 py-3 px-4 bg-gray-900/50 border border-gray-800 rounded hover:border-green-500/50 hover:bg-green-500/5 hover:scale-[1.02] transition-all duration-300 transform-gpu group"
+                style={`--stagger: ${i * 50}ms`}
+              >
+                <span class="text-green-500/40 text-xs font-mono w-6">
+                  [{i.toString().padStart(2, '0')}]
+                </span>
+                <span class="text-gray-300 group-hover:text-green-400 text-sm font-mono truncate">
+                  {link.label}
+                </span>
+                <span class="ml-auto text-green-500/30 text-xs opacity-0 group-hover:opacity-100 transition-opacity">►</span>
+              </a>
+            ))}
+          </div>
         ))}
       </div>
-      
-      <!-- Footer -->
+
+      <noscript>
+        <div class="mt-6 space-y-2">
+          <p class="text-gray-500 text-xs mb-2">// all modules (JS disabled)</p>
+          {categories.flatMap((cat) =>
+            cat.links.map((link) => (
+              <a
+                href={link.href}
+                target="_blank"
+                rel="noopener"
+                class="flex items-center gap-3 py-3 px-4 bg-gray-900/50 border border-gray-800 rounded text-gray-300 text-sm no-underline hover:border-green-500/50"
+              >
+                {link.label}
+              </a>
+            ))
+          )}
+        </div>
+      </noscript>
+
       <div class="mt-8 pt-4 border-t border-gray-800 text-xs text-gray-600 font-mono">
         <span class="inline-flex items-center gap-2">
           <span class="h-2 w-2 rounded-full bg-green-500 animate-pulse"></span>
@@ -94,11 +173,142 @@ const userPhoto = `${import.meta.env.BASE_URL}/img/aoum.png`;
   </div>
 </Layout>
 
+<script
+  define:vars={{
+    categoryMeta: categories.map((c) => ({ id: c.id, header: c.header })),
+  }}
+>
+  const categoryView = document.getElementById('category-view');
+  const linksView = document.getElementById('links-view');
+  const slot = document.getElementById('links-active-slot');
+  const context = document.getElementById('links-context');
+  const sourceRoot = document.getElementById('links-source');
+  const backBtn = document.getElementById('back-categories');
+
+  const DURATION = 380;
+
+  function prefersReducedMotion() {
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }
+
+  function openCategory(id) {
+    const src = sourceRoot?.querySelector(`[data-cat-source="${id}"]`);
+    if (!src || !slot || !context) return;
+
+    const meta = categoryMeta.find((c) => c.id === id);
+    context.textContent = meta?.header ?? '';
+
+    slot.replaceChildren();
+    for (const child of src.children) {
+      slot.appendChild(child.cloneNode(true));
+    }
+
+    if (prefersReducedMotion()) {
+      categoryView?.classList.add('hidden');
+      linksView?.classList.remove('hidden');
+      linksView?.classList.remove('opacity-0', 'scale-[0.98]');
+      linksView?.classList.add('opacity-100', 'scale-100');
+      linksView?.setAttribute('aria-hidden', 'false');
+
+      const rows = slot.querySelectorAll('.sub-link');
+      rows.forEach((el, i) => {
+        el.classList.remove('sub-link-enter');
+        void el.offsetWidth;
+        el.style.setProperty('--stagger', `${i * 50}ms`);
+        el.classList.add('sub-link-enter');
+      });
+
+      backBtn?.focus();
+      return;
+    }
+
+    categoryView?.classList.add('opacity-0', 'scale-95', 'pointer-events-none');
+
+    window.setTimeout(() => {
+      categoryView?.classList.add('hidden');
+      categoryView?.classList.remove('opacity-0', 'scale-95', 'pointer-events-none');
+
+      linksView?.classList.remove('hidden');
+      linksView?.classList.add('opacity-0', 'scale-[0.98]', 'pointer-events-none');
+      void linksView?.offsetWidth;
+      linksView?.classList.remove('pointer-events-none');
+      linksView?.classList.add('opacity-100', 'scale-100');
+      linksView?.setAttribute('aria-hidden', 'false');
+
+      const rows = slot.querySelectorAll('.sub-link');
+      rows.forEach((el, i) => {
+        el.classList.remove('sub-link-enter');
+        void el.offsetWidth;
+        el.style.setProperty('--stagger', `${i * 50}ms`);
+        el.classList.add('sub-link-enter');
+      });
+
+      backBtn?.focus();
+    }, DURATION);
+  }
+
+  function closeCategory() {
+    if (prefersReducedMotion()) {
+      linksView?.classList.add('hidden', 'opacity-0', 'scale-[0.98]');
+      linksView?.classList.remove('opacity-100', 'scale-100');
+      linksView?.setAttribute('aria-hidden', 'true');
+      categoryView?.classList.remove('hidden');
+      slot?.replaceChildren();
+      context.textContent = '';
+      return;
+    }
+
+    linksView?.classList.add('pointer-events-none');
+    linksView?.classList.remove('opacity-100', 'scale-100');
+    linksView?.classList.add('opacity-0', 'scale-[0.98]');
+
+    window.setTimeout(() => {
+      linksView?.classList.add('hidden');
+      linksView?.classList.remove(
+        'opacity-0',
+        'scale-[0.98]',
+        'opacity-100',
+        'scale-100',
+        'pointer-events-none'
+      );
+      linksView?.setAttribute('aria-hidden', 'true');
+
+      categoryView?.classList.remove('hidden');
+      categoryView?.classList.add('opacity-0', 'scale-[0.98]');
+      void categoryView?.offsetWidth;
+      categoryView?.classList.remove('opacity-0', 'scale-[0.98]');
+
+      slot?.replaceChildren();
+      context.textContent = '';
+    }, DURATION);
+  }
+
+  document.querySelectorAll('[data-category]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const id = btn.getAttribute('data-category');
+      if (id) openCategory(id);
+    });
+  });
+
+  backBtn?.addEventListener('click', () => closeCategory());
+
+  document.addEventListener('keydown', (e) => {
+    if (
+      e.key === 'Escape' &&
+      linksView &&
+      !linksView.classList.contains('hidden') &&
+      linksView.getAttribute('aria-hidden') === 'false'
+    ) {
+      closeCategory();
+    }
+  });
+</script>
+
 <style>
   body {
     background: #0a0a0a;
   }
-  
+
   @keyframes expandIn {
     from {
       opacity: 0;
@@ -111,9 +321,36 @@ const userPhoto = `${import.meta.env.BASE_URL}/img/aoum.png`;
       transform-origin: bottom left;
     }
   }
-  
+
   .terminal-link {
     opacity: 0;
     animation: expandIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   }
+
+  @keyframes subLinkIn {
+    from {
+      opacity: 0;
+      transform: translateY(12px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  .sub-link-enter {
+    opacity: 0;
+    animation: subLinkIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    animation-delay: var(--stagger, 0ms);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .terminal-link,
+    .sub-link-enter {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+  }
+
 </style>
