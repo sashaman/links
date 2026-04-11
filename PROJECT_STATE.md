@@ -13,7 +13,8 @@
 - GitHub Pages must use **GitHub Actions** as source.
 - Both pages have independent social cards:
   - `/links/` -> `public/img/termlink-og.png` via `Layout.astro`.
-  - `/links/fs25_animalic_food.html` -> `public/preview.png` via in-file OG tags.
+  - `/links/fs25_animalic_food.html` -> `public/og-animal-food-explorer.png` via in-file OG tags.
+  - `/links/fs25_animalic_food_builder.html` -> `public/og-animal-food-builder.png` via in-file OG tags.
 
 ## Checkpoint: 2026-04-11 — FS25 `fs25_animalic_food_builder.html`
 

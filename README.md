@@ -47,17 +47,19 @@ npm run preview  # serve dist/ locally
 
 Standalone HTML for the mod [FS25 Tierernährung (Animalic Food)](https://www.farming-simulator.com/mod.php?mod_id=337612&title=fs2025):
 
-- **`public/fs25_animalic_food.html`** — German info page (nutrition groups, PARALLEL mode, etc.), linked from the Giants mod hub on your next update.
-- **`public/preview.png`** — `1200×630` (or similar) image referenced by Open Graph / Twitter meta tags so Discord and other platforms show a rich embed.
+- **`public/fs25_animalic_food.html`** — Interactive explorer (nutrition groups, calculators, DE/EN/FR), linked from the Giants mod hub on your next update.
+- **`public/fs25_animalic_food_builder.html`** — Guided `animalFood.xml` editor (sibling page, own OG tags).
+- **`public/og-animal-food-explorer.png`** — `1200×630` (or similar) Open Graph / Twitter image for the **explorer** page (Discord embeds).
+- **`public/og-animal-food-builder.png`** — Same role for the **builder** page.
 
 **Live URLs** (after deploy):
 
-- Page: `https://sashaman.github.io/links/fs25_animalic_food.html`
-- Embed image: `https://sashaman.github.io/links/preview.png`
+- Explorer: `https://sashaman.github.io/links/fs25_animalic_food.html` → `https://sashaman.github.io/links/og-animal-food-explorer.png`
+- Builder: `https://sashaman.github.io/links/fs25_animalic_food_builder.html` → `https://sashaman.github.io/links/og-animal-food-builder.png`
 
 These files live under **`public/`** so Astro copies them into `dist/` and the GitHub Pages workflow actually publishes them. If you only kept them in the repo root, they would not be included in the `dist/` artifact.
 
-If you change the preview image, Discord may cache the old thumbnail for a while; bumping a query on the image URL (e.g. `preview.png?v=2`) in the HTML meta tags can force a refresh after you redeploy.
+**Naming:** `og-<topic>.png` keeps social preview assets obvious next to other `public/` files. If Discord caches an old thumbnail after you replace an image, bump a query on the URL in the HTML meta tags (e.g. `og-animal-food-builder.png?v=2`).
 
 ## GitHub Pages
 
@@ -77,8 +79,10 @@ links/
 ├── astro.config.mjs
 ├── package.json
 ├── public/
-│   ├── fs25_animalic_food.html  # FS25 mod info (OG tags → preview.png)
-│   ├── preview.png              # Discord / social embed image
+│   ├── fs25_animalic_food.html       # FS25 explorer (OG → og-animal-food-explorer.png)
+│   ├── fs25_animalic_food_builder.html
+│   ├── og-animal-food-explorer.png   # Discord / social embed (explorer)
+│   ├── og-animal-food-builder.png    # Discord / social embed (builder)
 │   └── img/                     # avatar, favicon, …
 ├── src/
 │   ├── layouts/Layout.astro

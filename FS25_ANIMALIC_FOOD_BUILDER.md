@@ -40,6 +40,8 @@ Served like any other `public/` asset on GitHub Pages, e.g.:
 
 `https://sashaman.github.io/links/fs25_animalic_food_builder.html`
 
+Open Graph / Twitter meta tags point at `https://sashaman.github.io/links/og-animal-food-builder.png` (same `public/` folder as the explorer’s `og-animal-food-explorer.png`; each HTML file uses its own image URL).
+
 Requires HTTP(S) for sample fetch; local static server recommended during development.
 
 ## Progress Log
@@ -57,6 +59,6 @@ Requires HTTP(S) for sample fetch; local static server recommended during develo
 
 ### Possible follow-ups (not committed)
 
-- Optional OG/meta tags if the builder should have its own social preview card.
+- Localized OG `title`/`description` per UI language (optional; currently English in meta).
 - Import existing XML into the form (parse + populate state) for round-tripping with the explorer.
 - Align builder UI language with explorer (DE/EN/FR toggle) if usage justifies the extra strings.

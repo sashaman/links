@@ -13,7 +13,8 @@
 - `src/layouts/Layout.astro` -> global meta/OG/twitter handling
 - `public/fs25_animalic_food.html` -> standalone FS25 explorer app
 - `public/fs25_animalic_food_builder.html` -> guided `animalicFood.xml` authoring (see **FS25_ANIMALIC_FOOD_BUILDER.md**)
-- `public/preview.png` -> OG image for FS25 page
+- `public/og-animal-food-explorer.png` -> OG image for FS25 explorer page
+- `public/og-animal-food-builder.png` -> OG image for FS25 builder page
 - `public/img/termlink-og.png` -> OG image for homepage
 - `astro.config.mjs` -> `site` + `base: '/links'`
 - `DEVELOPMENT_WORKFLOW.md` -> suggested next steps (polish, tests, refactor, a11y)
