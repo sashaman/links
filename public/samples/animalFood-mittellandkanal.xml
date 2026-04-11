@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<!-- Example map mod: FS25 Am Mittellandkanal — extended cereals, alfalfa/clover chain, custom FORAGE bands. For testing the explorer only. -->
+<animalFood>
+    <animals>
+        <animal animalType="COW" consumptionType="SERIAL">
+            <foodGroup title="$l10n_fillTypeGroup_forage"   productionWeight="1.00"                         fillTypes="FORAGE"/>
+            <foodGroup title="$l10n_fillTypeGroup_silage"   productionWeight="0.90"                         fillTypes="SILAGE ALFALFA_FERMENTED CLOVER_FERMENTED"/>
+            <foodGroup title="$l10n_fillTypeGroup_hay"      productionWeight="0.60"                         fillTypes="DRYGRASS_WINDROW DRYALFALFA_WINDROW DRYCLOVER_WINDROW"/>
+            <foodGroup title="$l10n_fillTypeGroup_grass"    productionWeight="0.80"                         fillTypes="GRASS_WINDROW ALFALFA_WINDROW CLOVER_WINDROW"/>
+        </animal>
+        <animal animalType="SHEEP" consumptionType="PARALLEL">
+            <foodGroup title="$l10n_fillTypeGroup_grass"    productionWeight="0.85"     eatWeight="0.85"    fillTypes="GRASS_WINDROW DRYGRASS_WINDROW ALFALFA_WINDROW DRYALFALFA_WINDROW CLOVER_WINDROW DRYCLOVER_WINDROW"/>
+            <foodGroup title="$l10n_fillTypeGroup_silage"   productionWeight="0.10"     eatWeight="0.10"    fillTypes="SILAGE ALFALFA_FERMENTED CLOVER_FERMENTED"/>
+            <foodGroup title="$l10n_fillTypeGroup_earth"    productionWeight="0.05"     eatWeight="0.05"    fillTypes="SUGARBEET_CUT CARROT PARSNIP BEETROOT"/>
+        </animal>
+        <animal animalType="PIG" consumptionType="PARALLEL">
+            <foodGroup title="$l10n_fillTypeGroup_base"     productionWeight="0.50"     eatWeight="0.50"    fillTypes="MAIZE SORGHUM TRITICALE"/>
+            <foodGroup title="$l10n_fillTypeGroup_grain"    productionWeight="0.25"     eatWeight="0.25"    fillTypes="WHEAT BARLEY RYE SPELT WINTERBARLEY WINTERWHEAT"/>
+            <foodGroup title="$l10n_fillTypeGroup_protein"  productionWeight="0.20"     eatWeight="0.20"    fillTypes="SOYBEAN CANOLA SUNFLOWER"/>
+            <foodGroup title="$l10n_fillTypeGroup_earth"    productionWeight="0.05"     eatWeight="0.05"    fillTypes="POTATO SUGARBEET_CUT CARROT PARSNIP BEETROOT"/>
+        </animal>
+        <animal animalType="HORSE" consumptionType="PARALLEL">
+            <foodGroup title="$l10n_fillTypeGroup_grain"    productionWeight="0.10"     eatWeight="0.20"    fillTypes="OAT SORGHUM"/>
+            <foodGroup title="$l10n_fillTypeGroup_bulk"     productionWeight="0.85"     eatWeight="0.75"    fillTypes="DRYGRASS_WINDROW GRASS_WINDROW ALFALFA_WINDROW DRYALFALFA_WINDROW CLOVER_WINDROW DRYCLOVER_WINDROW"/>
+            <foodGroup title="$l10n_fillTypeGroup_earth"    productionWeight="0.05"     eatWeight="0.05"    fillTypes="CARROT PARSNIP BEETROOT"/>
+        </animal>
+        <animal animalType="CHICKEN" consumptionType="PARALLEL">
+            <foodGroup title="$l10n_fillTypeGroup_bulk"     productionWeight="0.70"     eatWeight="0.70"    fillTypes="WHEAT BARLEY SORGHUM WINTERBARLEY WINTERWHEAT"/>
+            <foodGroup title="$l10n_fillTypeGroup_grain"    productionWeight="0.25"     eatWeight="0.25"    fillTypes="MAIZE"/>
+            <foodGroup title="$l10n_fillTypeGroup_earth"    productionWeight="0.05"     eatWeight="0.05"    fillTypes="CARROT"/>
+        </animal>
+    </animals>
+    <mixtures>
+        <mixture animalType="PIG" fillType="PIGFOOD">
+            <ingredient fillTypes="MAIZE SORGHUM TRITICALE" weight="0.5"/>
+            <ingredient fillTypes="WHEAT BARLEY RYE SPELT WINTERBARLEY WINTERWHEAT" weight="0.25"/>
+            <ingredient fillTypes="SOYBEAN CANOLA SUNFLOWER" weight="0.2"/>
+            <ingredient fillTypes="POTATO SUGARBEET_CUT CARROT PARSNIP BEETROOT" weight="0.05"/>
+        </mixture>
+        <mixture animalType="CHICKEN" fillType="CHICKENFOOD">
+            <ingredient fillTypes="WHEAT BARLEY SORGHUM" weight="0.7"/>
+            <ingredient fillTypes="MAIZE" weight="0.25"/>
+            <ingredient fillTypes="CARROT" weight="0.05"/>
+        </mixture>
+    </mixtures>
+    <recipes>
+        <recipe fillType="FORAGE">
+            <ingredient name="dryGrass" title="$l10n_fillType_dryGrass" fillTypes="DRYALFALFA_WINDROW DRYCLOVER_WINDROW DRYGRASS_WINDROW" minPercentage="20" maxPercentage="75"/>
+            <ingredient name="silage" title="$l10n_fillType_silage" fillTypes="ALFALFA_FERMENTED CLOVER_FERMENTED SUGARBEET_CUT SILAGE" minPercentage="20" maxPercentage="75"/>
+            <ingredient name="straw" title="$l10n_fillType_straw" fillTypes="STRAW" minPercentage="0" maxPercentage="30"/>
+            <ingredient name="mineralFeed" title="$l10n_fillType_mineralFeed" fillTypes="WHEAT BARLEY RYE TRITICALE SPELT WINTERBARLEY WINTERWHEAT MINERAL_FEED" minPercentage="0" maxPercentage="10"/>
+        </recipe>
+    </recipes>
+</animalFood>

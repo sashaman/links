@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<!-- Consolidated bale sample for FS25 Am Mittellandkanal (merged capacities from map bales XMLs). Upload this file in the Bale XML input. -->
+<bale xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://validation.gdn.giants-software.com/xml/fs25/bale.xsd">
+  <fillTypes>
+    <fillType name="ALFALFA_WINDROW" capacity="300" />
+    <fillType name="ALFALFA_WINDROW" capacity="2000" />
+    <fillType name="ALFALFA_WINDROW" capacity="2800" />
+    <fillType name="ALFALFA_WINDROW" capacity="3000" />
+    <fillType name="ALFALFA_WINDROW" capacity="3500" />
+    <fillType name="ALFALFA_WINDROW" capacity="3750" />
+    <fillType name="ALFALFA_WINDROW" capacity="4200" />
+    <fillType name="ALFALFA_WINDROW" capacity="4500" />
+
+    <fillType name="CLOVER_WINDROW" capacity="300" />
+    <fillType name="CLOVER_WINDROW" capacity="2000" />
+    <fillType name="CLOVER_WINDROW" capacity="2800" />
+    <fillType name="CLOVER_WINDROW" capacity="3000" />
+    <fillType name="CLOVER_WINDROW" capacity="3500" />
+    <fillType name="CLOVER_WINDROW" capacity="3750" />
+    <fillType name="CLOVER_WINDROW" capacity="4200" />
+    <fillType name="CLOVER_WINDROW" capacity="4500" />
+
+    <fillType name="DRYALFALFA_WINDROW" capacity="500" />
+    <fillType name="DRYALFALFA_WINDROW" capacity="3500" />
+    <fillType name="DRYALFALFA_WINDROW" capacity="5000" />
+    <fillType name="DRYALFALFA_WINDROW" capacity="6000" />
+    <fillType name="DRYALFALFA_WINDROW" capacity="7000" />
+    <fillType name="DRYALFALFA_WINDROW" capacity="8000" />
+
+    <fillType name="DRYCLOVER_WINDROW" capacity="500" />
+    <fillType name="DRYCLOVER_WINDROW" capacity="3500" />
+    <fillType name="DRYCLOVER_WINDROW" capacity="5000" />
+    <fillType name="DRYCLOVER_WINDROW" capacity="6000" />
+    <fillType name="DRYCLOVER_WINDROW" capacity="7000" />
+    <fillType name="DRYCLOVER_WINDROW" capacity="8000" />
+
+    <fillType name="ALFALFA_FERMENTED" capacity="2000" />
+    <fillType name="ALFALFA_FERMENTED" capacity="2800" />
+    <fillType name="ALFALFA_FERMENTED" capacity="3000" />
+    <fillType name="ALFALFA_FERMENTED" capacity="3500" />
+    <fillType name="ALFALFA_FERMENTED" capacity="3750" />
+    <fillType name="ALFALFA_FERMENTED" capacity="4500" />
+
+    <fillType name="CLOVER_FERMENTED" capacity="2000" />
+    <fillType name="CLOVER_FERMENTED" capacity="2800" />
+    <fillType name="CLOVER_FERMENTED" capacity="3000" />
+    <fillType name="CLOVER_FERMENTED" capacity="3500" />
+    <fillType name="CLOVER_FERMENTED" capacity="3750" />
+    <fillType name="CLOVER_FERMENTED" capacity="4500" />
+
+    <fillType name="GRASS_WINDROW" capacity="300" />
+    <fillType name="GRASS_WINDROW" capacity="2000" />
+    <fillType name="GRASS_WINDROW" capacity="2800" />
+    <fillType name="GRASS_WINDROW" capacity="3000" />
+    <fillType name="GRASS_WINDROW" capacity="3500" />
+    <fillType name="GRASS_WINDROW" capacity="3750" />
+    <fillType name="GRASS_WINDROW" capacity="4200" />
+    <fillType name="GRASS_WINDROW" capacity="4500" />
+
+    <fillType name="DRYGRASS_WINDROW" capacity="500" />
+    <fillType name="DRYGRASS_WINDROW" capacity="3500" />
+    <fillType name="DRYGRASS_WINDROW" capacity="5000" />
+    <fillType name="DRYGRASS_WINDROW" capacity="6000" />
+    <fillType name="DRYGRASS_WINDROW" capacity="7000" />
+    <fillType name="DRYGRASS_WINDROW" capacity="8000" />
+
+    <fillType name="SILAGE" capacity="2000" />
+    <fillType name="SILAGE" capacity="2800" />
+    <fillType name="SILAGE" capacity="3000" />
+    <fillType name="SILAGE" capacity="3500" />
+    <fillType name="SILAGE" capacity="3750" />
+    <fillType name="SILAGE" capacity="4500" />
+
+    <fillType name="STRAW" capacity="700" />
+    <fillType name="STRAW" capacity="5000" />
+    <fillType name="STRAW" capacity="7000" />
+    <fillType name="STRAW" capacity="7500" />
+    <fillType name="STRAW" capacity="8250" />
+    <fillType name="STRAW" capacity="9000" />
+    <fillType name="STRAW" capacity="9800" />
+    <fillType name="STRAW" capacity="11000" />
+
+    <fillType name="CHAFF" capacity="2000" />
+    <fillType name="CHAFF" capacity="3000" />
+    <fillType name="CHAFF" capacity="4500" />
+
+    <fillType name="SUGARBEET_CUT" capacity="2000" />
+    <fillType name="SUGARBEET_CUT" capacity="3000" />
+    <fillType name="SUGARBEET_CUT" capacity="4500" />
+
+    <fillType name="FORAGE" capacity="2000" />
+    <fillType name="FORAGE" capacity="3000" />
+    <fillType name="FORAGE" capacity="4500" />
+  </fillTypes>
+</bale>

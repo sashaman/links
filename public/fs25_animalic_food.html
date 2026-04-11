@@ -3,689 +3,2203 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FS25 Tierernährung — Aekzl Custom Config</title>
+<title>FS25 Tierernahrung - Animalic Food Explorer</title>
 
-<!-- ═══ Open Graph / Discord Embed ═══ -->
-<meta property="og:type"              content="website">
-<meta property="og:title"             content="🌾 FS25 Tierernährung — Custom Config">
-<meta property="og:description"       content="Angepasste Futtergruppen für Kuh, Schaf, Schwein, Pferd & Huhn. Alle Tiere im PARALLEL-Modus mit individuellen Gewichtungen. Inkl. Forage-Rezept.">
-<meta property="og:url"               content="https://sashaman.github.io/links/fs25_animalic_food.html">
-<meta property="og:image"             content="https://sashaman.github.io/links/preview.png">
-<meta property="og:image:width"       content="1200">
-<meta property="og:image:height"      content="630">
-<meta property="og:image:alt"         content="FS25 Tierernährung Übersicht — Futtergruppen und Gewichtungen">
-<meta property="og:locale"            content="de_DE">
-<meta property="og:site_name"         content="FS25 Animalic Mod">
+<meta property="og:type" content="website">
+<meta property="og:title" content="FS25 Tierernahrung - Animalic Food Explorer">
+<meta property="og:description" content="Responsive, interaktive Ubersicht fur animalicFood.xml mit Upload, Sprachumschaltung und dynamischen Infografiken.">
+<meta property="og:url" content="https://sashaman.github.io/links/fs25_animalic_food.html">
+<meta property="og:image" content="https://sashaman.github.io/links/preview.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="FS25 animalFood Explorer Vorschau">
+<meta property="og:locale" content="de_DE">
+<meta property="og:site_name" content="FS25 Animalic Mod">
 
-<!-- ═══ Twitter / fallback ═══ -->
-<meta name="twitter:card"             content="summary_large_image">
-<meta name="twitter:title"            content="🌾 FS25 Tierernährung — Custom Config">
-<meta name="twitter:description"      content="Angepasste Futtergruppen für Kuh, Schaf, Schwein, Pferd & Huhn. PARALLEL-Modus mit individuellen Gewichtungen.">
-<meta name="twitter:image"            content="https://sashaman.github.io/links/preview.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="FS25 Tierernahrung - Animalic Food Explorer">
+<meta name="twitter:description" content="Upload einer animalicFood.xml und sofortige Auswertung mit DE/EN/FR.">
+<meta name="twitter:image" content="https://sashaman.github.io/links/preview.png">
 
-<!-- ═══ Discord Embed Farbe (Sidebar) ═══ -->
-<meta name="theme-color"              content="#c8a84b">
-
-<!-- ═══ Allgemein ═══ -->
-<meta name="description"              content="Angepasste Futtergruppen für Kuh, Schaf, Schwein, Pferd & Huhn. Alle Tiere im PARALLEL-Modus mit individuellen Gewichtungen. Inkl. Forage-Rezept.">
+<meta name="theme-color" content="#c8a84b">
+<meta name="description" content="Interaktive, responsive Analyse fur FS25 animalFood.xml mit Ubersetzung und Visualisierung von Animals, Mixtures und Recipes.">
 
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg:        #151a10;
-    --surface:   #1e2614;
-    --card:      #252f16;
-    --border:    #3a4a22;
-    --gold:      #c8a84b;
+    --bg: #151a10;
+    --surface: #1e2614;
+    --card: #252f16;
+    --border: #3a4a22;
+    --gold: #c8a84b;
     --gold-soft: #e6c97a;
-    --text:      #e8e0cc;
-    --muted:     #8a9070;
-    --hay:       #d4a843;
-    --silage:    #6ab04c;
-    --grass:     #3ec98f;
-    --bulk:      #5b9bd5;
-    --base:      #e87d2c;
-    --grain:     #c9963a;
-    --protein:   #9b6fc7;
-    --earth:     #b8714a;
-    --bar-h:     22px;
+    --text: #e8e0cc;
+    --muted: #8a9070;
+    --ok: #63d471;
+    --warn: #ffc857;
+    --error: #ff6b6b;
+    --card-strong: #2b361b;
+    --table-head: #2f3c1d;
+    --table-row: #202915;
+    --table-row-alt: #1b2312;
+    --hay: #d4a843;
+    --silage: #6ab04c;
+    --grass: #3ec98f;
+    --bulk: #5b9bd5;
+    --base: #e87d2c;
+    --grain: #c9963a;
+    --protein: #9b6fc7;
+    --earth: #b8714a;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  * { box-sizing: border-box; }
   body {
-    background: var(--bg);
+    margin: 0;
+    background: radial-gradient(circle at 20% 0%, #1f2813 0%, var(--bg) 40%);
     color: var(--text);
     font-family: 'Barlow', sans-serif;
-    width: 960px;
-    padding: 36px 40px 44px;
   }
-
-  /* ── HEADER ── */
-  .header {
-    display: flex;
-    align-items: center;
-    gap: 18px;
-    margin-bottom: 30px;
-    border-bottom: 2px solid var(--border);
-    padding-bottom: 20px;
-  }
-  .header-icon { font-size: 44px; line-height: 1; }
-  .header-text h1 {
-    font-family: 'Oswald', sans-serif;
-    font-size: 28px;
-    font-weight: 700;
-    color: var(--gold-soft);
-    letter-spacing: 1px;
-  }
-  .header-text p {
-    font-size: 13px;
-    color: var(--muted);
-    margin-top: 3px;
-  }
-  .badge {
-    margin-left: auto;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 6px 14px;
-    font-family: 'Oswald', sans-serif;
-    font-size: 12px;
-    color: var(--gold);
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-  }
-
-  /* ── SECTION TITLE ── */
-  .section-title {
-    font-family: 'Oswald', sans-serif;
-    font-size: 13px;
-    letter-spacing: 2px;
-    color: var(--muted);
-    text-transform: uppercase;
-    margin-bottom: 14px;
-    margin-top: 28px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .section-title::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
-
-  /* ── ANIMAL GRID ── */
-  .animal-grid {
+  .wrap { width: min(1200px, 100%); margin: 0 auto; padding: clamp(16px, 3vw, 32px); }
+  .top {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 14px;
-  }
-  .animal-grid .wide { grid-column: 1 / -1; }
-
-  /* ── ANIMAL CARD ── */
-  .animal-card {
-    background: var(--card);
+    grid-template-columns: 1fr;
+    gap: 12px;
+    background: color-mix(in srgb, var(--surface) 85%, black);
     border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 16px 18px;
-    position: relative;
-    overflow: hidden;
+    border-radius: 12px;
+    padding: clamp(12px, 2.5vw, 20px);
+    margin-bottom: 18px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .22);
   }
-  .animal-card::before {
-    content: attr(data-emoji);
-    position: absolute;
-    right: 14px; top: 10px;
-    font-size: 56px;
-    opacity: 0.07;
-    line-height: 1;
-    pointer-events: none;
-  }
-  .animal-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 14px;
-  }
-  .animal-emoji { font-size: 28px; line-height: 1; }
-  .animal-name {
-    font-family: 'Oswald', sans-serif;
-    font-size: 20px;
-    font-weight: 600;
-    color: var(--gold-soft);
-    letter-spacing: 0.5px;
-  }
-  .consumption-tag {
-    margin-left: auto;
-    font-size: 10px;
-    font-family: 'Oswald', sans-serif;
-    letter-spacing: 1.5px;
-    padding: 2px 8px;
-    border-radius: 4px;
-    background: rgba(200,168,75,0.12);
-    color: var(--gold);
-    border: 1px solid rgba(200,168,75,0.25);
-  }
-
-  /* ── FOOD GROUP ROW ── */
-  .food-group {
-    margin-bottom: 10px;
-  }
-  .food-group:last-child { margin-bottom: 0; }
-  .fg-meta {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 4px;
-  }
-  .fg-dot {
-    width: 10px; height: 10px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-  .fg-label {
+  .title-row { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: flex-start; justify-content: space-between; }
+  .title-main { min-width: min(100%, 280px); flex: 1; }
+  .title-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; flex-shrink: 0; }
+  .doc-stats {
+    margin: 6px 0 0;
     font-size: 12px;
-    font-weight: 600;
-    color: var(--text);
-    flex: 0 0 90px;
-  }
-  .fg-pct {
-    font-family: 'Oswald', sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    min-width: 36px;
-  }
-  .fg-fills {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
-    margin-left: auto;
-  }
-  .fill-chip {
-    font-size: 10px;
-    padding: 1px 6px;
-    border-radius: 3px;
-    background: rgba(255,255,255,0.06);
-    border: 1px solid var(--border);
     color: var(--muted);
-    white-space: nowrap;
+    letter-spacing: 0.02em;
+    min-height: 1.2em;
   }
-
-  /* ── BAR ── */
-  .bar-track {
-    height: var(--bar-h);
-    background: rgba(255,255,255,0.04);
-    border-radius: 4px;
-    overflow: hidden;
-    display: flex;
-  }
-  .bar-seg {
-    height: 100%;
-    transition: width 0.3s;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .bar-seg-label {
+  .doc-stats strong { color: var(--gold-soft); font-weight: 600; }
+  .doc-stats .stat-sep { margin: 0 8px; opacity: 0.4; user-select: none; }
+  h1 {
+    margin: 0;
     font-family: 'Oswald', sans-serif;
-    font-size: 10px;
-    font-weight: 600;
-    color: rgba(0,0,0,0.6);
-    white-space: nowrap;
-    overflow: hidden;
+    font-size: clamp(22px, 4vw, 34px);
+    letter-spacing: 0.6px;
+    color: var(--gold-soft);
   }
-
-  /* STACKED BAR (full width per animal) */
-  .stacked-bar-section { margin-top: 14px; }
-  .stacked-bar-track {
-    height: 28px;
-    background: rgba(255,255,255,0.04);
-    border-radius: 6px;
-    overflow: hidden;
-    display: flex;
-  }
-  .stacked-bar-seg {
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .stacked-bar-seg span {
-    font-family: 'Oswald', sans-serif;
-    font-size: 11px;
-    font-weight: 700;
-    color: rgba(0,0,0,0.65);
-  }
-
-  /* ── LEGEND ── */
-  .legend {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px 20px;
-    margin-top: 18px;
-    padding: 14px 16px;
-    background: var(--surface);
+  .subtitle { margin: 0; color: var(--muted); font-size: 14px; }
+  .infotext {
     border: 1px solid var(--border);
     border-radius: 8px;
+    background: linear-gradient(180deg, #222c17, #1a2212);
+    padding: 8px 12px;
+    color: #bdc8a7;
+    font-size: 12px;
+    line-height: 1.4;
   }
-  .legend-item {
+  .sample-pick {
     display: flex;
     align-items: center;
     gap: 6px;
-    font-size: 12px;
+    font-size: 13px;
     color: var(--muted);
+    margin-right: -4px;
   }
-  .legend-dot {
-    width: 10px; height: 10px; border-radius: 50%;
+  .controls {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px;
+    align-items: stretch;
   }
-  .legend-fills { font-size: 11px; color: rgba(138,144,112,0.7); }
-
-  /* ── RECIPE BOX ── */
-  .recipe-card {
+  .btn, .file-label, select {
+    width: 100%;
+    min-height: 42px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: #202a15;
+    color: var(--text);
+    padding: 10px 12px;
+    font: inherit;
+  }
+  .lang-switch {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: #202a15;
+    padding: 6px;
+  }
+  .lang-btn {
+    min-width: 40px;
+    height: 30px;
+    border-radius: 7px;
+    border: 1px solid #465632;
+    background: #1a2212;
+    color: var(--text);
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+    transition: border-color .16s ease, transform .16s ease, background .16s ease;
+  }
+  .lang-btn:hover { border-color: var(--gold); transform: translateY(-1px); }
+  .lang-btn.is-active {
+    border-color: var(--gold);
+    background: rgba(200, 168, 75, .18);
+  }
+  .btn, .file-label { cursor: pointer; transition: border-color .18s ease, transform .18s ease, background .18s ease; }
+  .btn:hover, .file-label:hover { border-color: var(--gold); transform: translateY(-1px); }
+  .btn:active, .file-label:active { transform: translateY(0); }
+  .file-label input { display: none; }
+  .drop {
+    border: 1.5px dashed #53643b;
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+    color: var(--muted);
+    transition: border-color .2s ease, background .2s ease;
+  }
+  .drop.active { border-color: var(--gold); background: rgba(200, 168, 75, .08); color: var(--gold-soft); }
+  .status {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #1c2314;
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+  .status.ok { border-color: color-mix(in srgb, var(--ok) 45%, var(--border)); }
+  .status.warn { border-color: color-mix(in srgb, var(--warn) 45%, var(--border)); }
+  .status.error { border-color: color-mix(in srgb, var(--error) 45%, var(--border)); }
+  .grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+  @media (min-width: 920px) { .grid.grid-two { grid-template-columns: 1.15fr 1fr; } }
+  .panel {
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 16px 18px;
+    border-radius: 12px;
+    padding: 14px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, .2);
   }
-  .recipe-title {
+  .panel h2 {
+    margin: 0 0 10px;
     font-family: 'Oswald', sans-serif;
-    font-size: 15px;
     color: var(--gold-soft);
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    letter-spacing: .6px;
+    font-size: 22px;
   }
-  .recipe-grid {
+  .main-panel--animals {
+    container-type: inline-size;
+    container-name: animal-panel;
+  }
+  .animals {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
+    gap: 10px;
+    grid-template-columns: 1fr;
   }
-  .recipe-ing {
-    background: rgba(255,255,255,0.03);
+  @container animal-panel (min-width: 520px) {
+    .animals {
+      grid-template-columns: minmax(0, 1.14fr) minmax(0, 0.86fr);
+    }
+  }
+  .animal {
     border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--card-strong);
+    padding: 12px;
+  }
+  .animal-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+  .animal-title { margin: 0; font-size: 19px; font-family: 'Oswald', sans-serif; color: var(--gold-soft); }
+  .pill {
+    font-size: 11px;
+    letter-spacing: .8px;
+    border: 1px solid #566741;
+    color: #b9cc9c;
+    border-radius: 999px;
+    padding: 3px 8px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .fg-row {
+    position: relative;
+    margin-bottom: 7px;
+    padding: 5px 8px 6px 10px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--border) 35%, transparent);
+  }
+  .fg-row::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
     border-radius: 6px;
-    padding: 8px 12px;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .fg-row--parallel::before {
+    left: var(--fg-left, 0%);
+    width: var(--fg-width, 100%);
+    background: color-mix(in srgb, var(--fg-tint, var(--gold-soft)) 7%, var(--card-strong));
+  }
+  .fg-row--serial::before {
+    left: 0;
+    width: var(--fg-serial-width, 100%);
+    min-width: 4px;
+    background: color-mix(in srgb, var(--fg-tint, var(--gold-soft)) var(--fg-mix-pct, 22%), var(--card-strong));
+  }
+  .fg-row > * { position: relative; z-index: 1; }
+  .fg-meta { display: flex; flex-wrap: wrap; gap: 7px; align-items: baseline; margin-bottom: 4px; font-size: 12px; }
+  .fg-name { font-weight: 600; color: var(--text); }
+  .fg-pct { color: var(--gold-soft); font-family: 'Oswald', sans-serif; }
+  .fg-eat { color: var(--muted); }
+  .bar {
+    width: 100%;
+    height: 18px;
+    border-radius: 6px;
+    border: 1px solid #3f502b;
+    background: #192111;
+    overflow: hidden;
+  }
+  .bar > span {
+    display: block;
+    height: 100%;
+    background: linear-gradient(90deg, #98c75c, #5cae56);
+    transition: width .45s ease;
+  }
+  .stack-bar {
+    width: 100%;
+    height: 20px;
+    border-radius: 7px;
+    border: 1px solid #3f502b;
+    background: #192111;
+    overflow: hidden;
+    display: flex;
+    margin: 8px 0 10px;
+  }
+  .stack-seg {
+    height: 100%;
+    min-width: 2px;
+    position: relative;
     display: flex;
     align-items: center;
+    justify-content: center;
+    color: #0f160c;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+    border-right: 1px solid rgba(0,0,0,.25);
+  }
+  .stack-seg:last-child { border-right: 0; }
+  .stack-label {
+    padding: 1px 4px;
+    border-radius: 3px;
+    background: rgba(248, 255, 240, .45);
+    text-shadow: 0 1px 0 rgba(255,255,255,.25);
+  }
+  .group-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    border-radius: 999px;
+    font-size: 11px;
+    line-height: 1;
+    padding: 2px 7px;
+    border: 1px solid color-mix(in srgb, currentColor 45%, #2d3a1f);
+    background: rgba(255,255,255,.03);
+  }
+  .fg-icon, .chip-icon { font-size: 12px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 5px; }
+  .fg-subgroup {
+    margin-left: 18px;
+    margin-top: 4px;
+    padding: 6px 8px;
+    border-left: 2px solid color-mix(in srgb, var(--border) 55%, transparent);
+    background: rgba(0, 0, 0, 0.14);
+    border-radius: 0 8px 8px 0;
+  }
+  .fg-subgroup-label {
+    display: block;
+    font-size: 10px;
+    letter-spacing: .6px;
+    color: #95a680;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+  .chip {
+    font-size: 10px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 2px 7px;
+    background: rgba(255,255,255,.03);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .list-table { width: 100%; border-collapse: collapse; font-size: 13px; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .list-table th, .list-table td {
+    text-align: left;
+    border-bottom: 1px solid #374726;
+    padding: 6px 4px;
+    vertical-align: top;
+  }
+  .list-table th {
+    color: #d8e2c5;
+    font-weight: 600;
+    background: var(--table-head);
+    letter-spacing: .3px;
+  }
+  .list-table tbody tr:nth-child(odd) td { background: var(--table-row); }
+  .list-table tbody tr:nth-child(even) td { background: var(--table-row-alt); }
+  .row-head {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+    color: var(--gold-soft);
+  }
+  .muted { color: var(--muted); }
+  .small { font-size: 12px; }
+  .calc-grid {
+    display: grid;
     gap: 10px;
   }
-  .recipe-ing-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-  .recipe-ing-name { font-size: 12px; font-weight: 600; flex: 1; }
-  .recipe-ing-range {
-    font-family: 'Oswald', sans-serif;
-    font-size: 12px;
-    color: var(--gold);
+  .calc-controls {
+    display: grid;
+    gap: 8px;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    margin-bottom: 10px;
   }
-
-  /* ── INFO NOTE ── */
-  .note {
-    margin-top: 20px;
-    padding: 12px 16px;
-    background: rgba(200,168,75,0.06);
-    border-left: 3px solid var(--gold);
-    border-radius: 0 6px 6px 0;
-    font-size: 12px;
+  .calc-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .calc-field label {
+    font-size: 11px;
     color: var(--muted);
-    line-height: 1.6;
+    text-transform: uppercase;
+    letter-spacing: .5px;
   }
-  .note strong { color: var(--gold-soft); }
-
-  /* ── FOOTER ── */
-  .footer {
-    margin-top: 24px;
-    padding-top: 16px;
-    border-top: 1px solid var(--border);
+  .calc-field input, .calc-field select {
+    border: 1px solid var(--border);
+    background: #1a2212;
+    color: var(--text);
+    border-radius: 8px;
+    padding: 8px 10px;
+    font: inherit;
+    font-size: 13px;
+  }
+  .calc-row-select {
+    max-width: 200px;
+    font-size: 11px;
+    padding: 4px 6px;
+  }
+  .slider-card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--table-row);
+    padding: 10px;
+    margin-bottom: 8px;
+  }
+  .slider-card.is-locked {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 1px rgba(200,168,75,.2) inset;
+  }
+  .slider-head {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+  .slider-hint {
     font-size: 11px;
     color: var(--muted);
   }
-  .footer span { letter-spacing: 0.5px; }
+  .slider-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .slider-controls input[type="range"] {
+    flex: 1;
+  }
+  .slider-lock-btn {
+    border: 1px solid var(--border);
+    background: #1a2212;
+    color: var(--text);
+    border-radius: 6px;
+    font-size: 12px;
+    padding: 2px 6px;
+    cursor: pointer;
+  }
+  .slider-accent {
+    margin-top: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.08);
+    overflow: hidden;
+  }
+  .slider-accent-fill {
+    height: 100%;
+  }
+  .bale-picks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    max-width: 260px;
+  }
+  .bale-pick {
+    border: 1px solid var(--border);
+    background: #1a2212;
+    color: var(--text);
+    border-radius: 999px;
+    padding: 2px 7px;
+    font-size: 11px;
+    cursor: pointer;
+    line-height: 1.2;
+  }
+  .bale-pick.is-active {
+    border-color: var(--gold);
+    color: var(--gold-soft);
+    background: rgba(200,168,75,.14);
+  }
+  .bale-size-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 4px;
+  }
+  .bale-size-label {
+    min-width: 74px;
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .bale-token {
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 2px 8px;
+    font-size: 11px;
+    cursor: pointer;
+    user-select: none;
+    background: #1a2212;
+    color: var(--text);
+  }
+  .bale-token .count {
+    color: var(--gold-soft);
+    font-weight: 700;
+  }
+  .bale-token.is-disabled {
+    opacity: .35;
+    cursor: not-allowed;
+    filter: grayscale(.35);
+  }
+  .bale-group-title {
+    font-size: 10px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    margin: 6px 0 2px 0;
+  }
+  .bale-groups-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    width: 100%;
+  }
+  .bale-group-col {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 6px;
+    background: rgba(255,255,255,.02);
+  }
+  .bale-group-col.is-round {
+    border-color: #4f5f7b;
+  }
+  .bale-group-col.is-square {
+    border-color: #6c5b3c;
+  }
+  .bale-group-title .icon {
+    margin-right: 4px;
+  }
+  .bale-warn {
+    font-size: 11px;
+    color: var(--warn);
+    margin-top: 4px;
+  }
+  .calc-status {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.01));
+    padding: 10px 12px;
+    margin: 0 0 10px 0;
+  }
+  .calc-status-main {
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--text);
+  }
+  .calc-status-row {
+    margin-top: 8px;
+    font-size: 13px;
+    line-height: 1.4;
+  }
+  .calc-pill {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 2px 8px;
+    margin-right: 6px;
+    font-size: 12px;
+    letter-spacing: .2px;
+  }
+  .calc-pill-ok {
+    border-color: rgba(99,212,113,.55);
+    color: var(--ok);
+    background: rgba(99,212,113,.12);
+  }
+  .calc-pill-warn {
+    border-color: rgba(255,200,87,.55);
+    color: var(--warn);
+    background: rgba(255,200,87,.12);
+  }
+  .calc-pill-error {
+    border-color: rgba(255,107,107,.55);
+    color: var(--error);
+    background: rgba(255,107,107,.12);
+  }
+  .calc-kv {
+    color: var(--muted);
+    margin-right: 6px;
+  }
+  .calc-val {
+    color: var(--gold-soft);
+    font-weight: 700;
+    margin-right: 12px;
+  }
+  .combo-rail {
+    position: relative;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    overflow: hidden;
+    height: 40px;
+    display: flex;
+    background: #172013;
+  }
+  .combo-seg {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #0f130b;
+    font-weight: 700;
+    text-shadow: 0 1px 0 rgba(255,255,255,.15);
+  }
+  .combo-handle {
+    position: absolute;
+    top: 2px;
+    width: 14px;
+    height: 36px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.9);
+    border: 1px solid rgba(20, 24, 14, .6);
+    transform: translateX(-50%);
+    cursor: ew-resize;
+    box-shadow: 0 1px 4px rgba(0,0,0,.35);
+    z-index: 3;
+  }
+  .combo-handle::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 7px;
+    bottom: 7px;
+    width: 2px;
+    transform: translateX(-50%);
+    background: rgba(20, 24, 14, .55);
+  }
+  .combo-legend {
+    margin-top: 8px;
+    display: grid;
+    gap: 6px;
+  }
+  .calc-mode {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text);
+    font-size: 13px;
+  }
+  .calc-result {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .calc-result table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+  .calc-result th, .calc-result td {
+    border-bottom: 1px solid #374726;
+    padding: 7px 6px;
+    vertical-align: top;
+  }
+  .calc-result th {
+    background: var(--table-head);
+    color: #d8e2c5;
+    text-align: left;
+  }
+  .calc-result tbody tr:nth-child(odd) td { background: var(--table-row); }
+  .calc-result tbody tr:nth-child(even) td { background: var(--table-row-alt); }
 </style>
 </head>
 <body>
+  <main class="wrap">
+    <section class="top">
+      <div class="title-row">
+        <div class="title-main">
+          <h1 id="app-title">FS25 Tierernahrung Explorer</h1>
+          <p class="subtitle" id="app-subtitle">Upload einer animalicFood.xml und visualisiere Animals, Mixtures und Recipes.</p>
+          <p id="doc-stats" class="doc-stats" aria-live="polite" aria-atomic="true"></p>
+        </div>
+        <div class="title-meta">
+          <div class="pill" id="schema-pill">animalFood.xsd 1.17</div>
+          <a id="builder-link" href="fs25_animalic_food_builder.html" style="margin-top:10px;font-size:13px;color:var(--gold-soft);text-decoration:none;border-bottom:1px solid color-mix(in srgb, var(--gold) 40%, transparent);"></a>
+        </div>
+      </div>
 
-<!-- ═══════════ HEADER ═══════════ -->
-<div class="header">
-  <div class="header-icon">🌾</div>
-  <div class="header-text">
-    <h1>FS25 — Tierernährung</h1>
-    <p>Angepasste animalFood.xml · Alle Tiere im PARALLEL-Modus</p>
-  </div>
-  <div class="badge">Custom Config</div>
-</div>
+      <div class="infotext" id="info-text">
+        Dieses Tool visualisiert die Gewichte aus <code>animalicFood.xml</code> fur Tiere, Mischungen und Rezepte.
+      </div>
 
-<!-- ═══════════ TIERE ═══════════ -->
-<div class="section-title">🐾 Tiere & ihre Futtergruppen</div>
+      <div class="controls">
+        <label class="file-label" id="upload-label">
+          <span id="upload-text">XML hochladen</span>
+          <input id="xml-file" type="file" accept=".xml,text/xml,application/xml">
+        </label>
+        <label class="sample-pick" for="sample-select"><span id="sample-pick-label">Beispiel</span></label>
+        <select id="sample-select" aria-describedby="sample-pick-label">
+          <option value="animalic" selected data-i18n-opt="sampleOptAnimalic">FS25_Animalic</option>
+          <option value="vanilla" data-i18n-opt="sampleOptVanilla">Vanilla</option>
+          <option value="mittellandkanal" data-i18n-opt="sampleOptMittelland">Am Mittellandkanal</option>
+          <option value="harterleiten" data-i18n-opt="sampleOptHarterleiten">Harterleiten</option>
+        </select>
+        <button class="btn" id="sample-btn" type="button">Sample laden</button>
+        <div class="lang-switch" aria-label="Language">
+          <button type="button" class="lang-btn" data-lang="de" title="Deutsch">🇩🇪</button>
+          <button type="button" class="lang-btn" data-lang="en" title="English">🇬🇧</button>
+          <button type="button" class="lang-btn" data-lang="fr" title="Français">🇫🇷</button>
+        </div>
+      </div>
 
-<div class="animal-grid">
+      <div class="drop" id="drop-zone">XML hierher ziehen (Drag & Drop)</div>
+      <div class="status" id="status-box">Bereit.</div>
+    </section>
 
-  <!-- COW -->
-  <div class="animal-card" data-emoji="🐄">
-    <div class="animal-header">
-      <span class="animal-emoji">🐄</span>
-      <span class="animal-name">Kuh</span>
-      <span class="consumption-tag">PARALLEL</span>
-    </div>
+    <section class="grid">
+      <div class="panel main-panel--animals">
+        <h2 id="animals-title">Tiere</h2>
+        <div id="animals-root" class="animals"></div>
+      </div>
+    </section>
 
-    <div class="food-group">
-      <div class="fg-meta">
-        <div class="fg-dot" style="background:var(--silage)"></div>
-        <div class="fg-label">Silage</div>
-        <div class="fg-pct" style="color:var(--silage)">40 %</div>
-        <div class="fg-fills">
-          <span class="fill-chip">Silage</span>
-        </div>
+    <section class="grid grid-two" style="margin-top:14px;">
+      <div class="panel">
+        <h2 id="mixtures-title">Mischungen</h2>
+        <div id="mixtures-root" class="small"></div>
       </div>
-    </div>
-    <div class="food-group">
-      <div class="fg-meta">
-        <div class="fg-dot" style="background:var(--hay)"></div>
-        <div class="fg-label">Heu</div>
-        <div class="fg-pct" style="color:var(--hay)">30 %</div>
-        <div class="fg-fills">
-          <span class="fill-chip">Heu</span>
-        </div>
+      <div class="panel">
+        <h2 id="recipes-title">Rezepte</h2>
+        <div id="recipes-root" class="small"></div>
       </div>
-    </div>
-    <div class="food-group">
-      <div class="fg-meta">
-        <div class="fg-dot" style="background:var(--grass)"></div>
-        <div class="fg-label">Gras</div>
-        <div class="fg-pct" style="color:var(--grass)">20 %</div>
-        <div class="fg-fills">
-          <span class="fill-chip">Gras</span>
-        </div>
-      </div>
-    </div>
-    <div class="food-group">
-      <div class="fg-meta">
-        <div class="fg-dot" style="background:var(--bulk)"></div>
-        <div class="fg-label">Mineral</div>
-        <div class="fg-pct" style="color:var(--bulk)">10 %</div>
-        <div class="fg-fills">
-          <span class="fill-chip">Mineralfutter</span>
-          <span class="fill-chip">Rübenschnitzel</span>
-        </div>
-      </div>
-    </div>
-    <div class="stacked-bar-section">
-      <div class="stacked-bar-track">
-        <div class="stacked-bar-seg" style="width:40%;background:var(--silage)"><span>Silage 40%</span></div>
-        <div class="stacked-bar-seg" style="width:30%;background:var(--hay)"><span>Heu 30%</span></div>
-        <div class="stacked-bar-seg" style="width:20%;background:var(--grass)"><span>Gras 20%</span></div>
-        <div class="stacked-bar-seg" style="width:10%;background:var(--bulk)"><span>10%</span></div>
-      </div>
-    </div>
-  </div>
+    </section>
 
-  <!-- SHEEP -->
-  <div class="animal-card" data-emoji="🐑">
-    <div class="animal-header">
-      <span class="animal-emoji">🐑</span>
-      <span class="animal-name">Schaf</span>
-      <span class="consumption-tag">PARALLEL</span>
-    </div>
+    <section class="panel" style="margin-top:14px;">
+      <h2 id="calc-title">Mixer Calculator</h2>
+      <p class="small muted" id="calc-subtitle"></p>
+      <div class="calc-grid">
+        <div class="calc-controls">
+          <div class="calc-field">
+            <label for="calc-recipe" id="calc-recipe-label">Recipe</label>
+            <select id="calc-recipe"></select>
+          </div>
+          <div class="calc-field">
+            <label for="calc-target" id="calc-target-label">Target liters</label>
+            <input id="calc-target" type="number" min="1" step="100" value="45000">
+          </div>
+          <div class="calc-field">
+            <label for="calc-default-bale" id="calc-bale-label">Default bale liters</label>
+            <input id="calc-default-bale" type="number" min="1" step="100" value="5500">
+          </div>
+          <div class="calc-field">
+            <label for="calc-bale-xml" id="calc-bale-xml-label">Bale XML</label>
+            <input id="calc-bale-xml" type="file" accept=".xml,text/xml,application/xml" multiple>
+          </div>
+        </div>
+        <label class="calc-mode">
+          <input id="calc-partial" type="checkbox">
+          <span id="calc-partial-label">Show partial-bale advisory</span>
+        </label>
+        <div id="calc-root" class="calc-result"></div>
+      </div>
+    </section>
+  </main>
 
-    <div class="food-group">
-      <div class="fg-meta">
-        <div class="fg-dot" style="background:var(--grass)"></div>
-        <div class="fg-label">Gras</div>
-        <div class="fg-pct" style="color:var(--grass)">50 %</div>
-        <div class="fg-fills">
-          <span class="fill-chip">Gras</span>
-        </div>
-      </div>
-    </div>
-    <div class="food-group">
-      <div class="fg-meta">
-        <div class="fg-dot" style="background:var(--hay)"></div>
-        <div class="fg-label">Heu</div>
-        <div class="fg-pct" style="color:var(--hay)">50 %</div>
-        <div class="fg-fills">
-          <span class="fill-chip">Heu</span>
-        </div>
-      </div>
-    </div>
-    <div class="stacked-bar-section">
-      <div class="stacked-bar-track">
-        <div class="stacked-bar-seg" style="width:50%;background:var(--grass)"><span>Gras 50%</span></div>
-        <div class="stacked-bar-seg" style="width:50%;background:var(--hay)"><span>Heu 50%</span></div>
-      </div>
-    </div>
-  </div>
+<script>
+(() => {
+  /** Offline fallback = same as public/samples/animalicFood.xml (FS25_Animalic mod). */
+  const ANIMALIC_EMBEDDED_XML = `<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<animalFood xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://validation.gdn.giants-software.com/xml/fs25/1.17.0.0/animalFood.xsd">
+	<animals>
+		<animal animalType="COW" consumptionType="PARALLEL">
+			<foodGroup title="$l10n_fillTypeGroup_hay" productionWeight="0.3" eatWeight="0.3" fillTypes="DRYGRASS_WINDROW"/>
+			<foodGroup title="$l10n_fillTypeGroup_silage" productionWeight="0.4" eatWeight="0.4" fillTypes="SILAGE"/>
+			<foodGroup title="$l10n_fillTypeGroup_grass" productionWeight="0.2" eatWeight="0.2" fillTypes="GRASS_WINDROW"/>
+			<foodGroup title="$l10n_fillTypeGroup_bulk" productionWeight="0.1" eatWeight="0.1" fillTypes="MINERAL_FEED SUGARBEET_CUT"/>
+		</animal>
+		<animal animalType="SHEEP" consumptionType="PARALLEL">
+			<foodGroup title="$l10n_fillTypeGroup_grass" productionWeight="0.5" eatWeight="0.5" fillTypes="GRASS_WINDROW"/>
+			<foodGroup title="$l10n_fillTypeGroup_hay" productionWeight="0.5" eatWeight="0.5" fillTypes="DRYGRASS_WINDROW"/>
+		</animal>
+		<animal animalType="PIG" consumptionType="PARALLEL">
+			<foodGroup title="$l10n_fillTypeGroup_base" productionWeight="0.5" eatWeight="0.5" fillTypes="MAIZE SORGHUM"/>
+			<foodGroup title="$l10n_fillTypeGroup_grain" productionWeight="0.2" eatWeight="0.2" fillTypes="WHEAT BARLEY"/>
+			<foodGroup title="$l10n_fillTypeGroup_protein" productionWeight="0.2" eatWeight="0.2" fillTypes="SOYBEAN CANOLA SUNFLOWER"/>
+			<foodGroup title="$l10n_fillTypeGroup_earth" productionWeight="0.1" eatWeight="0.1" fillTypes="POTATO SUGARBEET SUGARBEET_CUT CARROT PARSNIP BEETROOT"/>
+		</animal>
+		<animal animalType="HORSE" consumptionType="PARALLEL">
+			<foodGroup title="$l10n_fillTypeGroup_bulk" productionWeight="0.4" eatWeight="0.4" fillTypes="OAT SORGHUM"/>
+			<foodGroup title="$l10n_fillTypeGroup_hay" productionWeight="0.3" eatWeight="0.3" fillTypes="DRYGRASS_WINDROW"/>
+			<foodGroup title="$l10n_fillTypeGroup_grass" productionWeight="0.2" eatWeight="0.2" fillTypes="GRASS_WINDROW"/>
+			<foodGroup title="$l10n_fillTypeGroup_earth" productionWeight="0.1" eatWeight="0.1" fillTypes="SUGARBEET_CUT CARROT PARSNIP BEETROOT"/>
+		</animal>
+		<animal animalType="CHICKEN" consumptionType="PARALLEL">
+			<foodGroup title="$l10n_fillTypeGroup_grain" productionWeight="0.4" eatWeight="0.4" fillTypes="WHEAT BARLEY SORGHUM"/>
+			<foodGroup title="$l10n_fillTypeGroup_protein" productionWeight="0.3" eatWeight="0.3" fillTypes="MAIZE SUGARBEET_CUT CARROT PARSNIP BEETROOT BREAD"/>
+			<foodGroup title="$l10n_fillTypeGroup_grass" productionWeight="0.3" eatWeight="0.3" fillTypes="GRASS_WINDROW DRYGRASS_WINDROW"/>
+		</animal>
+	</animals>
+	<mixtures>
+		<mixture animalType="PIG" fillType="PIGFOOD">
+			<ingredient fillTypes="MAIZE SORGHUM" weight="0.5"/>
+			<ingredient fillTypes="WHEAT BARLEY" weight="0.2"/>
+			<ingredient fillTypes="SOYBEAN CANOLA SUNFLOWER" weight="0.2"/>
+			<ingredient fillTypes="POTATO SUGARBEET SUGARBEET_CUT CARROT PARSNIP BEETROOT" weight="0.1"/>
+		</mixture>
+		<mixture animalType="COW" fillType="FORAGE">
+			<ingredient fillTypes="DRYGRASS_WINDROW" weight="0.3"/>
+			<ingredient fillTypes="SILAGE" weight="0.4"/>
+			<ingredient fillTypes="GRASS_WINDROW" weight="0.2"/>
+			<ingredient fillTypes="MINERAL_FEED SUGARBEET_CUT" weight="0.1"/>
+		</mixture>
+	</mixtures>
+	<recipes>
+		<recipe fillType="FORAGE">
+			<ingredient name="dryGrass" title="$l10n_fillType_dryGrass" fillTypes="DRYGRASS_WINDROW" minPercentage="25" maxPercentage="50"/>
+			<ingredient name="silage" title="$l10n_fillType_silage" fillTypes="SILAGE" minPercentage="35" maxPercentage="50"/>
+			<ingredient name="straw" title="$l10n_fillType_straw" fillTypes="STRAW" minPercentage="15" maxPercentage="30"/>
+			<ingredient name="mineralFeed" title="$l10n_fillType_mineralFeed" fillTypes="MINERAL_FEED SUGARBEET_CUT" minPercentage="0" maxPercentage="10"/>
+		</recipe>
+	</recipes>
+</animalFood>`;
 
-  <!-- PIG -->
-  <div class="animal-card" data-emoji="🐷">
-    <div class="animal-header">
-      <span class="animal-emoji">🐷</span>
-      <span class="animal-name">Schwein</span>
-      <span class="consumption-tag">PARALLEL</span>
-    </div>
+  /** Offline fallback = same as public/samples/animalFood-vanilla.xml (dataS character/animalFood.xml). */
+  const VANILLA_EMBEDDED_XML = `<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<animalFood>
+	<animals>
+		<animal animalType="COW" consumptionType="SERIAL">
+			<foodGroup title="$l10n_fillTypeGroup_forage" productionWeight="1.00" fillTypes="FORAGE"/>
+			<foodGroup title="$l10n_fillTypeGroup_hay" productionWeight="0.80" fillTypes="DRYGRASS_WINDROW"/>
+			<foodGroup title="$l10n_fillTypeGroup_silage" productionWeight="0.80" fillTypes="SILAGE"/>
+			<foodGroup title="$l10n_fillTypeGroup_grass" productionWeight="0.40" fillTypes="GRASS_WINDROW"/>
+		</animal>
+		<animal animalType="SHEEP" consumptionType="SERIAL">
+			<foodGroup title="$l10n_fillTypeGroup_grass" productionWeight="1.00" fillTypes="GRASS_WINDROW DRYGRASS_WINDROW"/>
+		</animal>
+		<animal animalType="PIG" consumptionType="PARALLEL">
+			<foodGroup title="$l10n_fillTypeGroup_base" productionWeight="0.50" eatWeight="0.50" fillTypes="MAIZE SORGHUM"/>
+			<foodGroup title="$l10n_fillTypeGroup_grain" productionWeight="0.25" eatWeight="0.25" fillTypes="WHEAT BARLEY"/>
+			<foodGroup title="$l10n_fillTypeGroup_protein" productionWeight="0.20" eatWeight="0.20" fillTypes="SOYBEAN CANOLA SUNFLOWER"/>
+			<foodGroup title="$l10n_fillTypeGroup_earth" productionWeight="0.05" eatWeight="0.05" fillTypes="POTATO SUGARBEET CARROT PARSNIP BEETROOT"/>
+		</animal>
+		<animal animalType="HORSE" consumptionType="PARALLEL">
+			<foodGroup title="$l10n_fillTypeGroup_bulk" productionWeight="0.60" eatWeight="0.25" fillTypes="OAT SORGHUM"/>
+			<foodGroup title="$l10n_fillTypeGroup_hay" productionWeight="0.40" eatWeight="0.75" fillTypes="DRYGRASS_WINDROW"/>
+			<foodGroup title="$l10n_fillTypeGroup_earth" productionWeight="0.05" eatWeight="0.05" fillTypes="CARROT PARSNIP BEETROOT"/>
+		</animal>
+		<animal animalType="CHICKEN" consumptionType="SERIAL">
+			<foodGroup title="$l10n_fillTypeGroup_grain" productionWeight="1.00" fillTypes="WHEAT BARLEY SORGHUM"/>
+		</animal>
+	</animals>
+	<mixtures>
+		<mixture animalType="PIG" fillType="PIGFOOD">
+			<ingredient fillTypes="MAIZE SORGHUM" weight="0.5"/>
+			<ingredient fillTypes="WHEAT BARLEY" weight="0.25"/>
+			<ingredient fillTypes="SOYBEAN CANOLA SUNFLOWER" weight="0.2"/>
+			<ingredient fillTypes="POTATO SUGARBEET CARROT PARSNIP BEETROOT" weight="0.05"/>
+		</mixture>
+	</mixtures>
+	<recipes>
+		<recipe fillType="FORAGE">
+			<ingredient name="dryGrass" title="$l10n_fillType_dryGrass" fillTypes="DRYGRASS_WINDROW" minPercentage="20" maxPercentage="75"/>
+			<ingredient name="silage" title="$l10n_fillType_silage" fillTypes="SILAGE" minPercentage="20" maxPercentage="75"/>
+			<ingredient name="straw" title="$l10n_fillType_straw" fillTypes="STRAW" minPercentage="0" maxPercentage="30"/>
+			<ingredient name="mineralFeed" title="$l10n_fillType_mineralFeed" fillTypes="MINERAL_FEED" minPercentage="0" maxPercentage="7"/>
+		</recipe>
+	</recipes>
+</animalFood>`;
 
-    <div class="food-group">
-      <div class="fg-meta">
-        <div class="fg-dot" style="background:var(--base)"></div>
-        <div class="fg-label">Grundfutter</div>
-        <div class="fg-pct" style="color:var(--base)">50 %</div>
-        <div class="fg-fills">
-          <span class="fill-chip">Mais</span>
-          <span class="fill-chip">Sorghum</span>
-        </div>
-      </div>
-    </div>
-    <div class="food-group">
-      <div class="fg-meta">
-        <div class="fg-dot" style="background:var(--grain)"></div>
-        <div class="fg-label">Getreide</div>
-        <div class="fg-pct" style="color:var(--grain)">20 %</div>
-        <div class="fg-fills">
-          <span class="fill-chip">Weizen</span>
-          <span class="fill-chip">Gerste</span>
-        </div>
-      </div>
-    </div>
-    <div class="food-group">
-      <div class="fg-meta">
-        <div class="fg-dot" style="background:var(--protein)"></div>
-        <div class="fg-label">Protein</div>
-        <div class="fg-pct" style="color:var(--protein)">20 %</div>
-        <div class="fg-fills">
-          <span class="fill-chip">Soja</span>
-          <span class="fill-chip">Raps</span>
-          <span class="fill-chip">Sonnenblume</span>
-        </div>
-      </div>
-    </div>
-    <div class="food-group">
-      <div class="fg-meta">
-        <div class="fg-dot" style="background:var(--earth)"></div>
-        <div class="fg-label">Wurzeln</div>
-        <div class="fg-pct" style="color:var(--earth)">10 %</div>
-        <div class="fg-fills">
-          <span class="fill-chip">Kartoffel</span>
-          <span class="fill-chip">Zuckerrübe</span>
-          <span class="fill-chip">Rübenschnitzel</span>
-          <span class="fill-chip">Karotte</span>
-          <span class="fill-chip">Pastinake</span>
-          <span class="fill-chip">Rote Bete</span>
-        </div>
-      </div>
-    </div>
-    <div class="stacked-bar-section">
-      <div class="stacked-bar-track">
-        <div class="stacked-bar-seg" style="width:50%;background:var(--base)"><span>Grundfutter 50%</span></div>
-        <div class="stacked-bar-seg" style="width:20%;background:var(--grain)"><span>Getreide 20%</span></div>
-        <div class="stacked-bar-seg" style="width:20%;background:var(--protein)"><span>Protein 20%</span></div>
-        <div class="stacked-bar-seg" style="width:10%;background:var(--earth)"><span>10%</span></div>
-      </div>
-    </div>
-  </div>
+  const MITTELLAND_EMBEDDED_XML = `<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<!-- Example map mod: FS25 Am Mittellandkanal — extended cereals, alfalfa/clover chain, custom FORAGE bands. For testing the explorer only. -->
+<animalFood>
+    <animals>
+        <animal animalType="COW" consumptionType="SERIAL">
+            <foodGroup title="$l10n_fillTypeGroup_forage"   productionWeight="1.00"                         fillTypes="FORAGE"/>
+            <foodGroup title="$l10n_fillTypeGroup_silage"   productionWeight="0.90"                         fillTypes="SILAGE ALFALFA_FERMENTED CLOVER_FERMENTED"/>
+            <foodGroup title="$l10n_fillTypeGroup_hay"      productionWeight="0.60"                         fillTypes="DRYGRASS_WINDROW DRYALFALFA_WINDROW DRYCLOVER_WINDROW"/>
+            <foodGroup title="$l10n_fillTypeGroup_grass"    productionWeight="0.80"                         fillTypes="GRASS_WINDROW ALFALFA_WINDROW CLOVER_WINDROW"/>
+        </animal>
+        <animal animalType="SHEEP" consumptionType="PARALLEL">
+            <foodGroup title="$l10n_fillTypeGroup_grass"    productionWeight="0.85"     eatWeight="0.85"    fillTypes="GRASS_WINDROW DRYGRASS_WINDROW ALFALFA_WINDROW DRYALFALFA_WINDROW CLOVER_WINDROW DRYCLOVER_WINDROW"/>
+            <foodGroup title="$l10n_fillTypeGroup_silage"   productionWeight="0.10"     eatWeight="0.10"    fillTypes="SILAGE ALFALFA_FERMENTED CLOVER_FERMENTED"/>
+            <foodGroup title="$l10n_fillTypeGroup_earth"    productionWeight="0.05"     eatWeight="0.05"    fillTypes="SUGARBEET_CUT CARROT PARSNIP BEETROOT"/>
+        </animal>
+        <animal animalType="PIG" consumptionType="PARALLEL">
+            <foodGroup title="$l10n_fillTypeGroup_base"     productionWeight="0.50"     eatWeight="0.50"    fillTypes="MAIZE SORGHUM TRITICALE"/>
+            <foodGroup title="$l10n_fillTypeGroup_grain"    productionWeight="0.25"     eatWeight="0.25"    fillTypes="WHEAT BARLEY RYE SPELT WINTERBARLEY WINTERWHEAT"/>
+            <foodGroup title="$l10n_fillTypeGroup_protein"  productionWeight="0.20"     eatWeight="0.20"    fillTypes="SOYBEAN CANOLA SUNFLOWER"/>
+            <foodGroup title="$l10n_fillTypeGroup_earth"    productionWeight="0.05"     eatWeight="0.05"    fillTypes="POTATO SUGARBEET_CUT CARROT PARSNIP BEETROOT"/>
+        </animal>
+        <animal animalType="HORSE" consumptionType="PARALLEL">
+            <foodGroup title="$l10n_fillTypeGroup_grain"    productionWeight="0.10"     eatWeight="0.20"    fillTypes="OAT SORGHUM"/>
+            <foodGroup title="$l10n_fillTypeGroup_bulk"     productionWeight="0.85"     eatWeight="0.75"    fillTypes="DRYGRASS_WINDROW GRASS_WINDROW ALFALFA_WINDROW DRYALFALFA_WINDROW CLOVER_WINDROW DRYCLOVER_WINDROW"/>
+            <foodGroup title="$l10n_fillTypeGroup_earth"    productionWeight="0.05"     eatWeight="0.05"    fillTypes="CARROT PARSNIP BEETROOT"/>
+        </animal>
+        <animal animalType="CHICKEN" consumptionType="PARALLEL">
+            <foodGroup title="$l10n_fillTypeGroup_bulk"     productionWeight="0.70"     eatWeight="0.70"    fillTypes="WHEAT BARLEY SORGHUM WINTERBARLEY WINTERWHEAT"/>
+            <foodGroup title="$l10n_fillTypeGroup_grain"    productionWeight="0.25"     eatWeight="0.25"    fillTypes="MAIZE"/>
+            <foodGroup title="$l10n_fillTypeGroup_earth"    productionWeight="0.05"     eatWeight="0.05"    fillTypes="CARROT"/>
+        </animal>
+    </animals>
+    <mixtures>
+        <mixture animalType="PIG" fillType="PIGFOOD">
+            <ingredient fillTypes="MAIZE SORGHUM TRITICALE" weight="0.5"/>
+            <ingredient fillTypes="WHEAT BARLEY RYE SPELT WINTERBARLEY WINTERWHEAT" weight="0.25"/>
+            <ingredient fillTypes="SOYBEAN CANOLA SUNFLOWER" weight="0.2"/>
+            <ingredient fillTypes="POTATO SUGARBEET_CUT CARROT PARSNIP BEETROOT" weight="0.05"/>
+        </mixture>
+        <mixture animalType="CHICKEN" fillType="CHICKENFOOD">
+            <ingredient fillTypes="WHEAT BARLEY SORGHUM" weight="0.7"/>
+            <ingredient fillTypes="MAIZE" weight="0.25"/>
+            <ingredient fillTypes="CARROT" weight="0.05"/>
+        </mixture>
+    </mixtures>
+    <recipes>
+        <recipe fillType="FORAGE">
+            <ingredient name="dryGrass" title="$l10n_fillType_dryGrass" fillTypes="DRYALFALFA_WINDROW DRYCLOVER_WINDROW DRYGRASS_WINDROW" minPercentage="20" maxPercentage="75"/>
+            <ingredient name="silage" title="$l10n_fillType_silage" fillTypes="ALFALFA_FERMENTED CLOVER_FERMENTED SUGARBEET_CUT SILAGE" minPercentage="20" maxPercentage="75"/>
+            <ingredient name="straw" title="$l10n_fillType_straw" fillTypes="STRAW" minPercentage="0" maxPercentage="30"/>
+            <ingredient name="mineralFeed" title="$l10n_fillType_mineralFeed" fillTypes="WHEAT BARLEY RYE TRITICALE SPELT WINTERBARLEY WINTERWHEAT MINERAL_FEED" minPercentage="0" maxPercentage="10"/>
+        </recipe>
+    </recipes>
+</animalFood>`;
 
-  <!-- HORSE -->
-  <div class="animal-card" data-emoji="🐴">
-    <div class="animal-header">
-      <span class="animal-emoji">🐴</span>
-      <span class="animal-name">Pferd</span>
-      <span class="consumption-tag">PARALLEL</span>
-    </div>
+  const HARTERLEITEN_EMBEDDED_XML = `<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<!-- Example map mod: FS25 Harterleiten — split silage recipe rows, GRAINGRIST/CCM, GOOSE/RABBIT, custom groups. For testing the explorer only. -->
+<animalFood>
+	<animals>
+		<animal animalType="COW" consumptionType="PARALLEL">
+			<foodGroup title="$l10n_fillTypeGroup_hay" 		productionWeight="0.3" eatWeight="0.3" fillTypes="DRYGRASS_WINDROW DRYCLOVER_WINDROW DRYALFALFA_WINDROW"/>
+			<foodGroup title="$l10n_fillTypeGroup_silage" 	productionWeight="0.4" eatWeight="0.4" fillTypes="SILAGE CLOVER_FERMENTED ALFALFA_FERMENTED GRASS_SILAGE"/>
+			<foodGroup title="$l10n_fillTypeGroup_grass" 	productionWeight="0.2" eatWeight="0.2" fillTypes="GRASS_WINDROW CLOVER_WINDROW ALFALFA_WINDROW"/>
+			<foodGroup title="$l10n_fillTypeGroup_grain" 	productionWeight="0.1" eatWeight="0.1" fillTypes="GRAINGRIST CCM"/>
+		</animal>
+		<animal animalType="SHEEP" consumptionType="PARALLEL">
+			<foodGroup title="$l10n_fillTypeGroup_grass" 	productionWeight="0.60" eatWeight="0.60" fillTypes="DRYGRASS_WINDROW CLOVER_WINDROW DRYCLOVER_WINDROW DRYALFALFA_WINDROW ALFALFA_WINDROW GRASS_WINDROW"/>
+			<foodGroup title="$l10n_fillTypeGroup_silage" 	productionWeight="0.40" eatWeight="0.40" fillTypes="SILAGE CLOVER_FERMENTED ALFALFA_FERMENTED GRASS_SILAGE"/>
+		</animal>
+		<animal animalType="PIG" consumptionType="PARALLEL">
+			<foodGroup title="Mais/Sorghum/CCM/Maiskornschrot" 		productionWeight="0.35" eatWeight="0.35" fillTypes="MAIZE SORGHUM CCM CCM_RAW"/>
+			<foodGroup title="Getreideschrot" 						productionWeight="0.25" eatWeight="0.25" fillTypes="GRAINGRIST"/>
+			<foodGroup title="Sojabohnen/Raps/Sonnenblumen" 		productionWeight="0.15" eatWeight="0.15" fillTypes="SOYBEAN CANOLA SUNFLOWER"/>
+			<foodGroup title="Erdfrüchte" 							productionWeight="0.25" eatWeight="0.25" fillTypes="POTATO SUGARBEET CARROT PARSNIP BEETROOT"/>
+		</animal>
+		<animal animalType="HORSE" consumptionType="PARALLEL">
+			<foodGroup title="Hafer/Weizen/Sorghum" 		productionWeight="0.40" eatWeight="0.25" fillTypes="OAT SORGHUM"/>
+			<foodGroup title="Gras/Heu/Klee/Kleeheu" 		productionWeight="0.55" eatWeight="0.70" fillTypes="GRASS_WINDROW DRYGRASS_WINDROW CLOVER_WINDROW DRYCLOVER_WINDROW"/>
+			<foodGroup title="$l10n_fillTypeGroup_earth" 	productionWeight="0.05" eatWeight="0.05" fillTypes="CARROT PARSNIP BEETROOT APPLE"/>
+		</animal>
+		<animal animalType="CHICKEN" consumptionType="PARALLEL">
+			<foodGroup title="$l10n_fillTypeGroup_grain" 	productionWeight="0.70" eatWeight="0.70" fillTypes="WHEAT BARLEY SORGHUM CCM_RAW"/>
+			<foodGroup title="Gras/Heu/Klee/Kleeheu" 		productionWeight="0.15" eatWeight="0.15" fillTypes="GRASS_WINDROW DRYGRASS_WINDROW CLOVER_WINDROW DRYCLOVER_WINDROW"/>
+			<foodGroup title="Salat/Karotten/"   			productionWeight="0.15" eatWeight="0.15" fillTypes="LETTUCE CARROT APPLE" />
+		</animal>
+		<animal animalType="GOOSE" consumptionType="SERIAL">
+			<foodGroup title="Maiskornschrot/Getreideschrot/Weizen/Gertse/Sonnenblumen" productionWeight="1.00" fillTypes="CCM_RAW GRAINGRIST WHEAT BARLEY SORGHUM OAT SUNFLOWER"/>
+		</animal>
+		<animal animalType="RABBIT" consumptionType="PARALLEL">
+            <foodGroup title="Gras/Heu/Klee/Kleeheu"   	 	productionWeight="0.60" eatWeight="0.60" fillTypes="GRASS_WINDROW DRYGRASS_WINDROW CLOVER_WINDROW DRYCLOVER_WINDROW" />
+            <foodGroup title="Salat/Karotten/Hasenfutter"   productionWeight="0.40" eatWeight="0.40" fillTypes="LETTUCE CARROT RABBITFOOD" />
+        </animal>
+	</animals>
+	<mixtures>
+		<mixture animalType="PIG" fillType="PIGFOOD">
+			<ingredient fillTypes="MAIZE SORGHUM CCM CCM_RAW" 					weight="0.35"/>
+			<ingredient fillTypes="GRAINGRIST" 									weight="0.25"/>
+			<ingredient fillTypes="SOYBEAN CANOLA SUNFLOWER" 					weight="0.15"/>
+			<ingredient fillTypes="POTATO SUGARBEET CARROT PARSNIP BEETROOT" 	weight="0.25"/>
+		</mixture>
+		<mixture animalType="COW" fillType="FORAGE">
+			<ingredient fillTypes="DRYGRASS_WINDROW DRYCLOVER_WINDROW DRYALFALFA_WINDROW" 	weight="0.3"/>
+			<ingredient fillTypes="SILAGE CLOVER_FERMENTED ALFALFA_FERMENTED GRASS_SILAGE" 	weight="0.4"/>
+			<ingredient fillTypes="GRASS_WINDROW CLOVER_WINDROW ALFALFA_WINDROW" 			weight="0.2"/>
+			<ingredient fillTypes="MINERAL_FEED GRAINGRIST SUGARBEET_CUT CCM" 				weight="0.1"/>
+		</mixture>
+	</mixtures>
+	<recipes>
+		<recipe fillType="FORAGE">
+			<ingredient name="dryGrass" title="$l10n_fillType_dryGrass" fillTypes="DRYGRASS_WINDROW DRYCLOVER_WINDROW DRYALFALFA_WINDROW" 	minPercentage="20" maxPercentage="75"/>
+			<ingredient name="silage" title="$l10n_fillType_silage" fillTypes="SILAGE GRASS_SILAGE" 										minPercentage="20" maxPercentage="75"/>
+			<ingredient name="silage" title="$l10n_fillType_silage" fillTypes="CLOVER_FERMENTED ALFALFA_FERMENTED" 							minPercentage="20" maxPercentage="75"/>
+			<ingredient name="mineralFeed" title="$l10n_fillType_mineralFeed" fillTypes="MINERAL_FEED GRAINGRIST CCM" 						minPercentage="0" maxPercentage="7"/>
+		</recipe>
+	</recipes>
+</animalFood>`;
 
-    <div class="food-group">
-      <div class="fg-meta">
-        <div class="fg-dot" style="background:var(--bulk)"></div>
-        <div class="fg-label">Kraftfutter</div>
-        <div class="fg-pct" style="color:var(--bulk)">40 %</div>
-        <div class="fg-fills">
-          <span class="fill-chip">Hafer</span>
-          <span class="fill-chip">Sorghum</span>
-        </div>
-      </div>
-    </div>
-    <div class="food-group">
-      <div class="fg-meta">
-        <div class="fg-dot" style="background:var(--hay)"></div>
-        <div class="fg-label">Heu</div>
-        <div class="fg-pct" style="color:var(--hay)">30 %</div>
-        <div class="fg-fills">
-          <span class="fill-chip">Heu</span>
-        </div>
-      </div>
-    </div>
-    <div class="food-group">
-      <div class="fg-meta">
-        <div class="fg-dot" style="background:var(--grass)"></div>
-        <div class="fg-label">Gras</div>
-        <div class="fg-pct" style="color:var(--grass)">20 %</div>
-        <div class="fg-fills">
-          <span class="fill-chip">Gras</span>
-        </div>
-      </div>
-    </div>
-    <div class="food-group">
-      <div class="fg-meta">
-        <div class="fg-dot" style="background:var(--earth)"></div>
-        <div class="fg-label">Wurzeln</div>
-        <div class="fg-pct" style="color:var(--earth)">10 %</div>
-        <div class="fg-fills">
-          <span class="fill-chip">Rübenschnitzel</span>
-          <span class="fill-chip">Karotte</span>
-          <span class="fill-chip">Pastinake</span>
-          <span class="fill-chip">Rote Bete</span>
-        </div>
-      </div>
-    </div>
-    <div class="stacked-bar-section">
-      <div class="stacked-bar-track">
-        <div class="stacked-bar-seg" style="width:40%;background:var(--bulk)"><span>Kraftfutter 40%</span></div>
-        <div class="stacked-bar-seg" style="width:30%;background:var(--hay)"><span>Heu 30%</span></div>
-        <div class="stacked-bar-seg" style="width:20%;background:var(--grass)"><span>Gras 20%</span></div>
-        <div class="stacked-bar-seg" style="width:10%;background:var(--earth)"><span>10%</span></div>
-      </div>
-    </div>
-  </div>
+  /** FS25 base-game bale capacities (data/objects/bales). Merged with uploaded bale *.xml. */
+  const FS25_DEFAULT_BALE_CATALOG = {
+    GRASS_WINDROW: [{ liters: 500, label: 'Sq120' }, { liters: 3500, label: 'R125' }, { liters: 5000, label: 'Sq180' }, { liters: 5500, label: 'R150' }, { liters: 6000, label: 'Sq220' }, { liters: 6500, label: 'Sq240' }, { liters: 7000, label: 'Sq120 packed' }, { liters: 7500, label: 'R180' }],
+    DRYGRASS_WINDROW: [{ liters: 600, label: 'Sq120' }, { liters: 4500, label: 'R125' }, { liters: 6000, label: 'Sq180' }, { liters: 6500, label: 'R150' }, { liters: 7250, label: 'Sq220' }, { liters: 8000, label: 'Sq240' }, { liters: 8400, label: 'Sq120 packed' }, { liters: 9000, label: 'R180' }],
+    STRAW: [{ liters: 700, label: 'Sq120' }, { liters: 5000, label: 'R125' }, { liters: 7000, label: 'Sq180' }, { liters: 7500, label: 'R150' }, { liters: 8250, label: 'Sq220' }, { liters: 9000, label: 'Sq240' }, { liters: 9800, label: 'Sq120 packed' }, { liters: 11000, label: 'R180' }],
+    SILAGE: [{ liters: 3500, label: 'R125' }, { liters: 5000, label: 'Sq180' }, { liters: 5500, label: 'R150' }, { liters: 6000, label: 'Sq220' }, { liters: 6500, label: 'Sq240' }, { liters: 7500, label: 'R180' }],
+    CHAFF: [{ liters: 3500, label: 'R125' }, { liters: 5500, label: 'R150' }, { liters: 7500, label: 'R180' }],
+    SUGARBEET_CUT: [{ liters: 3500, label: 'R125' }, { liters: 5500, label: 'R150' }, { liters: 7500, label: 'R180' }],
+    FORAGE: [{ liters: 3500, label: 'R125' }, { liters: 5500, label: 'R150' }, { liters: 7500, label: 'R180' }],
+    MINERAL_FEED: [{ liters: 1000, label: 'Pallet est.' }, { liters: 2000, label: 'Pallet est. L' }],
+    WOODCHIPS: [{ liters: 2000, label: 'Biomass R125' }],
+    COTTON: [{ liters: 10000, label: 'Cotton rnd' }, { liters: 20000, label: 'Cotton sq' }],
+  };
 
-  <!-- CHICKEN (wide) -->
-  <div class="animal-card wide" data-emoji="🐔">
-    <div class="animal-header">
-      <span class="animal-emoji">🐔</span>
-      <span class="animal-name">Huhn</span>
-      <span class="consumption-tag">PARALLEL</span>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
-      <div class="food-group">
-        <div class="fg-meta">
-          <div class="fg-dot" style="background:var(--grain)"></div>
-          <div class="fg-label">Getreide</div>
-          <div class="fg-pct" style="color:var(--grain)">40 %</div>
-        </div>
-        <div class="fg-fills" style="margin-top:4px">
-          <span class="fill-chip">Weizen</span>
-          <span class="fill-chip">Gerste</span>
-          <span class="fill-chip">Sorghum</span>
-        </div>
-      </div>
-      <div class="food-group">
-        <div class="fg-meta">
-          <div class="fg-dot" style="background:var(--protein)"></div>
-          <div class="fg-label">Protein</div>
-          <div class="fg-pct" style="color:var(--protein)">30 %</div>
-        </div>
-        <div class="fg-fills" style="margin-top:4px">
-          <span class="fill-chip">Mais</span>
-          <span class="fill-chip">Rübenschnitzel</span>
-          <span class="fill-chip">Karotte</span>
-          <span class="fill-chip">Pastinake</span>
-          <span class="fill-chip">Rote Bete</span>
-          <span class="fill-chip">Brot</span>
-        </div>
-      </div>
-      <div class="food-group">
-        <div class="fg-meta">
-          <div class="fg-dot" style="background:var(--grass)"></div>
-          <div class="fg-label">Grünfutter</div>
-          <div class="fg-pct" style="color:var(--grass)">30 %</div>
-        </div>
-        <div class="fg-fills" style="margin-top:4px">
-          <span class="fill-chip">Gras</span>
-          <span class="fill-chip">Heu</span>
-        </div>
-      </div>
-    </div>
-    <div class="stacked-bar-section">
-      <div class="stacked-bar-track">
-        <div class="stacked-bar-seg" style="width:40%;background:var(--grain)"><span>Getreide 40%</span></div>
-        <div class="stacked-bar-seg" style="width:30%;background:var(--protein)"><span>Protein 30%</span></div>
-        <div class="stacked-bar-seg" style="width:30%;background:var(--grass)"><span>Grünfutter 30%</span></div>
-      </div>
-    </div>
-  </div>
+  /** Mod fill types often use the same bale capacities as these base-game types (EU maps / crop packs). */
+  const FS25_MOD_BALE_ALIASES = {
+    DRYALFALFA_WINDROW: 'DRYGRASS_WINDROW',
+    DRYCLOVER_WINDROW: 'DRYGRASS_WINDROW',
+    ALFALFA_WINDROW: 'GRASS_WINDROW',
+    CLOVER_WINDROW: 'GRASS_WINDROW',
+    ALFALFA_FERMENTED: 'SILAGE',
+    CLOVER_FERMENTED: 'SILAGE',
+    GRASS_SILAGE: 'SILAGE',
+  };
 
-</div><!-- /animal-grid -->
+  const UI = {
+    de: { appTitle: 'FS25 Tierernahrung Explorer', appSubtitle: 'Upload einer animalicFood.xml und visualisiere Animals, Mixtures und Recipes.', infoText: 'Dieses Tool visualisiert die Gewichte aus animalicFood.xml fur Tiere, Mischungen und Rezepte. Uploaden, Sprache wechseln und direkt vergleichen.', upload: 'XML hochladen', sample: 'Sample laden', drop: 'XML hierher ziehen (Drag & Drop)', ready: 'Bereit.', builderLink: 'XML-Assistent (Felder & Download)', animals: 'Tiere', mixtures: 'Mischungen', recipes: 'Rezepte', loaded: 'Datei geladen:', loadedSample: 'Sample XML geladen.', parseError: 'XML konnte nicht gelesen werden.', invalidRoot: 'Kein <animalFood>-Root gefunden.', noAnimals: 'Keine Tiere im XML gefunden.', noMixtures: 'Keine Mischungen vorhanden.', noRecipes: 'Keine Rezepte vorhanden.', consumption: 'Fressmodus', prod: 'Prod', eat: 'Eat', totalProd: 'Gesamt ProductionWeight', totalEat: 'Gesamt EatWeight', warningTotals: 'Hinweis: Gewichte weichen von 1.0 ab.', serialProdNote: 'SERIAL: Gruppen nacheinander von oben nach unten. productionWeight gilt pro Gruppe, nicht als Anteil an 100 %.', files: 'Fill Types', weightPct: 'Gewicht %', animalCount: 'Tiere', mixtureCount: 'Mischungen', recipeCount: 'Rezepte', calcTitle: 'Mixer Rechner', calcSubtitle: 'Mixer-Waggon nutzt Rezepte; Mischungen teilen FORAGE am Trog. Soll-Liter aus Rezept min/max (Mitte, auf 100% normiert). Ganze Ballen primar.', calcRecipe: 'Rezept', calcTarget: 'Ziel Liter', calcBale: 'Standard Ballen Liter', calcPartial: 'Teilballen Hinweis anzeigen', calcNoRecipe: 'Keine Rezepte verfugbar.', calcRecipeBand: 'Rezept %', calcIngredient: 'Zutat', calcTargetLiters: 'Soll (L)', calcPlanLiters: 'Plan (L)', calcFillType: 'FillType', calcBaleLiters: 'Ballen (L)', calcWholeBales: 'Ganze', calcActualLiters: 'Ist (L)', calcDelta: 'Delta (L)', calcPartialBales: 'Teilballen', calcTotal: 'Gesamt', calcScenario: 'Szenario', calcFillups: 'Mogliche Fullungen', calcRemainder: 'Rest (L)', calcTopUpSuggestion: 'Luckenfuller (Rest unter Ziel, rezeptkonform)', calcTopUpNone: 'Keine passende Ein-Ballen-Erweiterung.', calcBaleXml: 'Ballen-XML', calcBaleSize: 'Ballen-Grosse', calcBaleCount: 'Ballen', calcPctMix: 'Anteil', calcRecipeOk: 'Rezept ok', calcRecipeBad: 'Rezept verletzt', calcHeadroom: 'Frei bis Ziel', calcOverCap: 'Uber Kapazitat', calcMaxExtra: 'Max. +Ballen', calcGapTitle: 'Ziel & Rezept', calcCustomBale: 'Andere (Standard-Liter)', calcPlanHint: 'Soll-Anteil (Mitte)', samplePickLabel: 'Datenquelle', sampleOptAnimalic: 'FS25_Animalic (animalicFood.xml)', sampleOptVanilla: 'Vanilla (animalFood.xml)', sampleOptMittelland: 'Am Mittellandkanal', sampleOptHarterleiten: 'Harterleiten', loadedEmbedAnimalic: 'animalicFood.xml (Snapshot, offline)', loadedEmbedVanilla: 'animalFood Vanilla (Snapshot, offline)', loadedEmbedMittelland: 'animalFood Mittellandkanal (Snapshot, offline)', loadedEmbedHarterleiten: 'animalFood Harterleiten (Snapshot, offline)', sampleFetchError: 'Beispiel-XML konnte nicht geladen werden. Seite per HTTP oeffnen (nicht file://) oder Pfad pruefen.' },
+    en: { appTitle: 'FS25 Animal Food Explorer', appSubtitle: 'Upload an animalicFood.xml and visualize animals, mixtures, and recipes.', infoText: 'This tool visualizes weights from animalicFood.xml for animals, mixtures, and recipes. Upload, switch language, and compare instantly.', upload: 'Upload XML', sample: 'Load sample', drop: 'Drop XML file here (drag & drop)', ready: 'Ready.', builderLink: 'Guided XML builder', animals: 'Animals', mixtures: 'Mixtures', recipes: 'Recipes', loaded: 'File loaded:', loadedSample: 'Sample XML loaded.', parseError: 'Failed to parse XML.', invalidRoot: 'No <animalFood> root found.', noAnimals: 'No animals found in XML.', noMixtures: 'No mixtures found.', noRecipes: 'No recipes found.', consumption: 'Consumption', prod: 'Prod', eat: 'Eat', totalProd: 'Total ProductionWeight', totalEat: 'Total EatWeight', warningTotals: 'Warning: weights differ from 1.0.', serialProdNote: 'SERIAL: groups are used one after another, top to bottom. productionWeight is per group, not shares of 100%.', files: 'Fill Types', weightPct: 'Weight %', animalCount: 'Animals', mixtureCount: 'Mixtures', recipeCount: 'Recipes', calcTitle: 'Mixer Calculator', calcSubtitle: 'Mixer wagon uses recipes; mixtures split FORAGE at the trough. Target liters from each recipe min/max band (midpoint, normalized to 100%). Whole bales primary.', calcRecipe: 'Recipe', calcTarget: 'Target liters', calcBale: 'Default bale liters', calcPartial: 'Show partial-bale advisory', calcNoRecipe: 'No recipes available.', calcRecipeBand: 'Recipe %', calcIngredient: 'Ingredient', calcTargetLiters: 'Target (L)', calcPlanLiters: 'Planned (L)', calcFillType: 'Fill type', calcBaleLiters: 'Bale (L)', calcWholeBales: 'Whole', calcActualLiters: 'Actual (L)', calcDelta: 'Delta (L)', calcPartialBales: 'Partial', calcTotal: 'Total', calcScenario: 'Scenario', calcFillups: 'Possible fillups', calcRemainder: 'Remainder (L)', calcTopUpSuggestion: 'Gap fillers (under capacity, recipe-safe)', calcTopUpNone: 'No single-bale extension fits.', calcBaleXml: 'Bale XML', calcBaleSize: 'Bale size', calcBaleCount: 'Bales', calcPctMix: 'Share', calcRecipeOk: 'Recipe OK', calcRecipeBad: 'Recipe violated', calcHeadroom: 'Headroom to target', calcOverCap: 'Over capacity', calcMaxExtra: 'Max +bales', calcGapTitle: 'Target & recipe', calcCustomBale: 'Custom (default L)', calcPlanHint: 'Target share (mid)', samplePickLabel: 'Data source', sampleOptAnimalic: 'FS25_Animalic (animalicFood.xml)', sampleOptVanilla: 'Vanilla (animalFood.xml)', sampleOptMittelland: 'Am Mittellandkanal', sampleOptHarterleiten: 'Harterleiten', loadedEmbedAnimalic: 'animalicFood.xml (embedded snapshot, offline)', loadedEmbedVanilla: 'animalFood vanilla (embedded snapshot, offline)', loadedEmbedMittelland: 'animalFood Mittellandkanal (embedded snapshot, offline)', loadedEmbedHarterleiten: 'animalFood Harterleiten (embedded snapshot, offline)', sampleFetchError: 'Could not load sample XML. Open this page over HTTP (not file://) or check the path.' },
+    fr: { appTitle: 'FS25 Explorateur alimentation animale', appSubtitle: 'Chargez un fichier animalicFood.xml et visualisez animaux, melanges et recettes.', infoText: 'Cet outil visualise les poids de animalicFood.xml pour animaux, melanges et recettes. Importez, changez la langue et comparez instantanement.', upload: 'Importer XML', sample: 'Charger exemple', drop: 'Deposez le fichier XML ici (glisser-deposer)', ready: 'Pret.', builderLink: 'Assistant XML (explications & telechargement)', animals: 'Animaux', mixtures: 'Melanges', recipes: 'Recettes', loaded: 'Fichier charge :', loadedSample: 'Exemple XML charge.', parseError: 'Impossible de lire le XML.', invalidRoot: 'Racine <animalFood> introuvable.', noAnimals: 'Aucun animal trouve dans le XML.', noMixtures: 'Aucun melange disponible.', noRecipes: 'Aucune recette disponible.', consumption: 'Consommation', prod: 'Prod', eat: 'Eat', totalProd: 'Total ProductionWeight', totalEat: 'Total EatWeight', warningTotals: 'Attention : les poids different de 1.0.', serialProdNote: 'SERIAL : groupes successivement de haut en bas. productionWeight par groupe, pas des parts sur 100 %.', files: 'Types de remplissage', weightPct: 'Poids %', animalCount: 'Animaux', mixtureCount: 'Melanges', recipeCount: 'Recettes', calcTitle: 'Calculateur de melange', calcSubtitle: 'Melangeuse: recettes; melanges: repartition a la mangeoire. Litres cibles depuis min/max (milieu, normalise a 100%). Balles entieres en priorite.', calcRecipe: 'Recette', calcTarget: 'Litres cibles', calcBale: 'Litres balle par defaut', calcPartial: 'Afficher le conseil balle partielle', calcNoRecipe: 'Aucune recette disponible.', calcRecipeBand: 'Recette %', calcIngredient: 'Ingredient', calcTargetLiters: 'Cible (L)', calcPlanLiters: 'Plan (L)', calcFillType: 'Type', calcBaleLiters: 'Balle (L)', calcWholeBales: 'Entieres', calcActualLiters: 'Reel (L)', calcDelta: 'Ecart (L)', calcPartialBales: 'Partiel', calcTotal: 'Total', calcScenario: 'Scenario', calcFillups: 'Remplissages possibles', calcRemainder: 'Reste (L)', calcTopUpSuggestion: 'Combler le creux (sous capacite, recette ok)', calcTopUpNone: 'Aucune extension 1 balle.', calcBaleXml: 'XML balles', calcBaleSize: 'Taille balle', calcBaleCount: 'Balles', calcPctMix: 'Part', calcRecipeOk: 'Recette ok', calcRecipeBad: 'Recette refusee', calcHeadroom: 'Marge sous cible', calcOverCap: 'Depassement', calcMaxExtra: 'Max +balles', calcGapTitle: 'Cible & recette', calcCustomBale: 'Autre (L par defaut)', calcPlanHint: 'Cible part (milieu)', samplePickLabel: 'Source', sampleOptAnimalic: 'FS25_Animalic (animalicFood.xml)', sampleOptVanilla: 'Vanilla (animalFood.xml)', sampleOptMittelland: 'Am Mittellandkanal', sampleOptHarterleiten: 'Harterleiten', loadedEmbedAnimalic: 'animalicFood.xml (snapshot integre, hors ligne)', loadedEmbedVanilla: 'animalFood vanilla (snapshot integre, hors ligne)', loadedEmbedMittelland: 'animalFood Mittellandkanal (snapshot integre, hors ligne)', loadedEmbedHarterleiten: 'animalFood Harterleiten (snapshot integre, hors ligne)', sampleFetchError: 'Impossible de charger l\'exemple XML. Ouvrir la page en HTTP (pas file://) ou verifier le chemin.' }
+  };
 
-<!-- ═══════════ FORAGE REZEPT ═══════════ -->
-<div class="section-title">🧪 Mischrezept — Grassilage (FORAGE)</div>
+  const L10N = {
+    de: { fillTypeGroup_base: 'Basisfutter', fillTypeGroup_bulk: 'Basisfutter', fillTypeGroup_earth: 'Wurzelfruchte', fillTypeGroup_forage: 'Totalmischration', fillTypeGroup_grain: 'Getreide', fillTypeGroup_grass: 'Gras', fillTypeGroup_hay: 'Heu', fillTypeGroup_protein: 'Protein', fillTypeGroup_silage: 'Silage', fillType_barley: 'Gerste', fillType_beetRoot: 'Rote Beete', fillType_bread: 'Brot', fillType_canola: 'Raps', fillType_carrot: 'Karotte', fillType_dryGrass: 'Heu', fillType_grass: 'Gras', fillType_maize: 'Mais', fillType_mineralFeed: 'Mineralfutter', fillType_oat: 'Hafer', fillType_parsnip: 'Pastinake', fillType_potato: 'Kartoffel', fillType_silage: 'Silage', fillType_sorghum: 'Sorghum', fillType_soybean: 'Sojabohnen', fillType_straw: 'Stroh', fillType_sugarBeet: 'Zuckerruben', fillType_sugarBeetCut: 'Zuckerrubenschnitzel', fillType_sunflower: 'Sonnenblumen', fillType_wheat: 'Weizen' },
+    en: { fillTypeGroup_base: 'Base food', fillTypeGroup_bulk: 'Base food', fillTypeGroup_earth: 'Root crops', fillTypeGroup_forage: 'Total Mixed Ration', fillTypeGroup_grain: 'Grain', fillTypeGroup_grass: 'Grass', fillTypeGroup_hay: 'Hay', fillTypeGroup_protein: 'Protein', fillTypeGroup_silage: 'Silage', fillType_barley: 'Barley', fillType_beetRoot: 'Red Beet', fillType_bread: 'Bread', fillType_canola: 'Canola', fillType_carrot: 'Carrot', fillType_dryGrass: 'Hay', fillType_grass: 'Grass', fillType_maize: 'Maize', fillType_mineralFeed: 'Mineral Feed', fillType_oat: 'Oat', fillType_parsnip: 'Parsnip', fillType_potato: 'Potato', fillType_silage: 'Silage', fillType_sorghum: 'Sorghum', fillType_soybean: 'Soybean', fillType_straw: 'Straw', fillType_sugarBeet: 'Sugar Beet', fillType_sugarBeetCut: 'Cut Sugar Beet', fillType_sunflower: 'Sunflower', fillType_wheat: 'Wheat' },
+    fr: { fillTypeGroup_base: 'Aliments de base', fillTypeGroup_bulk: 'Aliments de base', fillTypeGroup_earth: 'Tubercules', fillTypeGroup_forage: 'Ration totale melangee', fillTypeGroup_grain: 'Cereales', fillTypeGroup_grass: 'Herbe', fillTypeGroup_hay: 'Foin', fillTypeGroup_protein: 'Proteines', fillTypeGroup_silage: 'Ensilage', fillType_barley: 'Orge', fillType_beetRoot: 'Betterave rouge', fillType_bread: 'Pain', fillType_canola: 'Colza', fillType_carrot: 'Carotte', fillType_dryGrass: 'Foin', fillType_grass: 'Herbe', fillType_maize: 'Mais', fillType_mineralFeed: 'Aliment mineral', fillType_oat: 'Avoine', fillType_parsnip: 'Panais', fillType_potato: 'Pomme de terre', fillType_silage: 'Ensilage', fillType_sorghum: 'Sorgho', fillType_soybean: 'Soja', fillType_straw: 'Paille', fillType_sugarBeet: 'Betterave sucriere', fillType_sugarBeetCut: 'Betterave sucriere coupee', fillType_sunflower: 'Tournesol', fillType_wheat: 'Ble' }
+  };
 
-<div class="recipe-card">
-  <div class="recipe-title">
-    🐄 Kuh-Silage selbst herstellen — Mischungsverhältnis
-  </div>
-  <div class="recipe-grid">
-    <div class="recipe-ing">
-      <div class="recipe-ing-dot" style="background:var(--silage)"></div>
-      <div class="recipe-ing-name">Silage</div>
-      <div class="recipe-ing-range">35 – 50 %</div>
-    </div>
-    <div class="recipe-ing">
-      <div class="recipe-ing-dot" style="background:var(--hay)"></div>
-      <div class="recipe-ing-name">Heu (Trockengras)</div>
-      <div class="recipe-ing-range">25 – 50 %</div>
-    </div>
-    <div class="recipe-ing">
-      <div class="recipe-ing-dot" style="background:#c8c8c8"></div>
-      <div class="recipe-ing-name">Stroh</div>
-      <div class="recipe-ing-range">15 – 30 %</div>
-    </div>
-    <div class="recipe-ing">
-      <div class="recipe-ing-dot" style="background:var(--bulk)"></div>
-      <div class="recipe-ing-name">Mineralfutter / Rübenschnitzel</div>
-      <div class="recipe-ing-range">0 – 10 %</div>
-    </div>
-  </div>
-</div>
+  const ANIMALS = {
+    COW: { de: 'Kuh', en: 'Cow', fr: 'Vache', emoji: '🐄' },
+    SHEEP: { de: 'Schaf', en: 'Sheep', fr: 'Mouton', emoji: '🐑' },
+    PIG: { de: 'Schwein', en: 'Pig', fr: 'Cochon', emoji: '🐖' },
+    HORSE: { de: 'Pferd', en: 'Horse', fr: 'Cheval', emoji: '🐎' },
+    CHICKEN: { de: 'Huhn', en: 'Chicken', fr: 'Poulet', emoji: '🐔' },
+    GOOSE: { de: 'Gans', en: 'Goose', fr: 'Oie', emoji: '🪿' },
+    RABBIT: { de: 'Kaninchen', en: 'Rabbit', fr: 'Lapin', emoji: '🐰' },
+  };
 
-<!-- ═══════════ NOTE ═══════════ -->
-<div class="note">
-  <strong>ℹ️ Wie funktioniert PARALLEL?</strong>
-  Alle Futtergruppen werden <strong>gleichzeitig</strong> gefressen. Jede Gruppe trägt ihren Anteil zur Produktionsleistung bei — also am besten immer <strong>alle Futtergruppen</strong> befüllt halten! Fehlt eine Gruppe, sinkt die Produktion entsprechend. Die Gewichtungen gelten für <strong>Produktion UND Fressverhalten</strong> gleichermaßen.
-</div>
+  const GROUP_THEME = {
+    hay: { icon: '🌾', color: 'var(--hay)' },
+    silage: { icon: '🟩', color: 'var(--silage)' },
+    grass: { icon: '🌿', color: 'var(--grass)' },
+    bulk: { icon: '🧺', color: 'var(--bulk)' },
+    base: { icon: '🌽', color: 'var(--base)' },
+    grain: { icon: '🌾', color: 'var(--grain)' },
+    protein: { icon: '🫘', color: 'var(--protein)' },
+    earth: { icon: '🥕', color: 'var(--earth)' },
+    forage: { icon: '🥣', color: 'var(--gold-soft)' },
+    default: { icon: '📦', color: 'var(--gold-soft)' }
+  };
 
-<!-- ═══════════ FOOTER ═══════════ -->
-<div class="footer">
-  <span>🌱 Farming Simulator 25 — Aekzl Custom Config · 2026.04.03</span>
-  <span>animalFood.xml v1.0</span>
-</div>
+  const FILLTYPE_ICON = {
+    DRYGRASS_WINDROW: '🌾',
+    SILAGE: '🟩',
+    GRASS_WINDROW: '🌿',
+    MAIZE: '🌽',
+    WHEAT: '🌾',
+    BARLEY: '🌾',
+    SORGHUM: '🌾',
+    OAT: '🌾',
+    SOYBEAN: '🫘',
+    CANOLA: '🌼',
+    SUNFLOWER: '🌻',
+    POTATO: '🥔',
+    SUGARBEET: '🍠',
+    SUGARBEET_CUT: '🧊',
+    CARROT: '🥕',
+    PARSNIP: '🥕',
+    BEETROOT: '🫜',
+    BREAD: '🍞',
+    MINERAL_FEED: '🧂',
+    STRAW: '🟨',
+    FORAGE: '🥣',
+    PIGFOOD: '🐖',
+    DRYALFALFA_WINDROW: '🌾',
+    DRYCLOVER_WINDROW: '🌾',
+    ALFALFA_WINDROW: '🌿',
+    CLOVER_WINDROW: '🌿',
+    ALFALFA_FERMENTED: '🟩',
+    CLOVER_FERMENTED: '🟩',
+    GRASS_SILAGE: '🟩',
+    GRAINGRIST: '🌾',
+    CCM: '🌽',
+    CCM_RAW: '🌽',
+    LETTUCE: '🥬',
+    APPLE: '🍎',
+    RABBITFOOD: '🐰',
+  };
 
+  const STATE = { lang: 'de', data: null, calc: { mode: 'bulk', selectedRecipe: '', showPartial: false, defaultBaleLiters: 5500, targetLiters: 45000, ingredientConfig: {}, bulkLiters: {}, bulkLocks: {}, bulkLockValues: {}, uploadedBaleRows: [], draggingBoundary: null } };
+  const el = {
+    file: document.getElementById('xml-file'),
+    sampleBtn: document.getElementById('sample-btn'),
+    sampleSelect: document.getElementById('sample-select'),
+    samplePickLabel: document.getElementById('sample-pick-label'),
+    langButtons: document.querySelectorAll('[data-lang]'),
+    drop: document.getElementById('drop-zone'),
+    status: document.getElementById('status-box'),
+    animals: document.getElementById('animals-root'),
+    docStats: document.getElementById('doc-stats'),
+    mixtures: document.getElementById('mixtures-root'),
+    recipes: document.getElementById('recipes-root'),
+    hAnimals: document.getElementById('animals-title'),
+    hMix: document.getElementById('mixtures-title'),
+    hRecipes: document.getElementById('recipes-title'),
+    appTitle: document.getElementById('app-title'),
+    appSubtitle: document.getElementById('app-subtitle'),
+    builderLink: document.getElementById('builder-link'),
+    uploadText: document.getElementById('upload-text'),
+    infoText: document.getElementById('info-text'),
+    calcTitle: document.getElementById('calc-title'),
+    calcSubtitle: document.getElementById('calc-subtitle'),
+    calcRecipeLabel: document.getElementById('calc-recipe-label'),
+    calcTargetLabel: document.getElementById('calc-target-label'),
+    calcBaleLabel: document.getElementById('calc-bale-label'),
+    calcPartialLabel: document.getElementById('calc-partial-label'),
+    calcRecipe: document.getElementById('calc-recipe'),
+    calcTarget: document.getElementById('calc-target'),
+    calcDefaultBale: document.getElementById('calc-default-bale'),
+    calcBaleXml: document.getElementById('calc-bale-xml'),
+    calcBaleXmlLabel: document.getElementById('calc-bale-xml-label'),
+    calcPartial: document.getElementById('calc-partial'),
+    calcRoot: document.getElementById('calc-root'),
+  };
+
+  function t(k) { return (UI[STATE.lang] && UI[STATE.lang][k]) || UI.en[k] || k; }
+  function fmtNum(n) { const x = Number(n || 0); return Number.isFinite(x) ? x.toFixed(3).replace(/\.000$/, '') : '0'; }
+  function parseFloatSafe(v, fallback = 0) { const n = Number(v); return Number.isFinite(n) ? n : fallback; }
+  function splitTokens(s) { return String(s || '').trim().split(/\s+/).filter(Boolean); }
+  function resolveToken(raw) {
+    if (!raw) return '-';
+    const langMap = L10N[STATE.lang] || L10N.en;
+    const cleaned = raw.replace(/^\$l10n_/, '');
+    const direct = langMap[cleaned] || langMap[raw.replace(/^\$/, '')];
+    if (direct) return direct;
+    if (raw.startsWith('$l10n_')) return cleaned.replace(/_/g, ' ');
+    return raw;
+  }
+  function resolveFillType(ft) {
+    const token = String(ft || '');
+    const langMap = L10N[STATE.lang] || L10N.en;
+    const exact = langMap['fillType_' + token];
+    if (exact) return exact;
+    const camel = token.toLowerCase().replace(/([a-z])([A-Z])/g, '$1_$2');
+    const snake = langMap['fillType_' + camel];
+    if (snake) return snake;
+    return token.replace(/_/g, ' ');
+  }
+
+  function normalizeGroupKey(title) {
+    const t0 = String(title || '').replace(/^\$l10n_/, '').toLowerCase();
+    if (t0.includes('filltypegroup_')) return t0.split('filltypegroup_')[1];
+    return t0;
+  }
+
+  function getGroupTheme(title) {
+    const key = normalizeGroupKey(title);
+    return GROUP_THEME[key] || GROUP_THEME.default;
+  }
+
+  function getFillIcon(fillType) {
+    return FILLTYPE_ICON[String(fillType || '').toUpperCase()] || '📦';
+  }
+
+  function getFillTypeColor(fillType) {
+    const key = String(fillType || '').toUpperCase();
+    const map = {
+      DRYGRASS_WINDROW: 'var(--hay)',
+      DRYALFALFA_WINDROW: 'var(--hay)',
+      DRYCLOVER_WINDROW: 'var(--hay)',
+      SILAGE: 'var(--silage)',
+      ALFALFA_FERMENTED: 'var(--silage)',
+      CLOVER_FERMENTED: 'var(--silage)',
+      GRASS_SILAGE: 'var(--silage)',
+      GRASS_WINDROW: 'var(--grass)',
+      ALFALFA_WINDROW: 'var(--grass)',
+      CLOVER_WINDROW: 'var(--grass)',
+      STRAW: 'var(--grain)',
+      GRAINGRIST: 'var(--grain)',
+      CCM: 'var(--base)',
+      CCM_RAW: 'var(--base)',
+      MINERAL_FEED: 'var(--bulk)',
+      SUGARBEET_CUT: 'var(--earth)',
+      CHAFF: 'var(--base)',
+      FORAGE: 'var(--gold-soft)',
+      LETTUCE: 'var(--grass)',
+      APPLE: 'var(--earth)',
+      RABBITFOOD: 'var(--bulk)',
+    };
+    return map[key] || 'var(--gold-soft)';
+  }
+
+  function parseAnimalFood(xmlString) {
+    const parser = new DOMParser();
+    const xml = parser.parseFromString(xmlString, 'application/xml');
+    if (xml.querySelector('parsererror')) throw new Error(t('parseError'));
+    const root = xml.querySelector('animalFood');
+    if (!root) throw new Error(t('invalidRoot'));
+
+    const animals = Array.from(root.querySelectorAll('animals > animal')).map((node) => ({
+      animalType: node.getAttribute('animalType') || 'UNKNOWN',
+      consumptionType: node.getAttribute('consumptionType') || 'SERIAL',
+      foodGroups: Array.from(node.querySelectorAll(':scope > foodGroup')).map((fg) => ({
+        title: fg.getAttribute('title') || '',
+        productionWeight: parseFloatSafe(fg.getAttribute('productionWeight'), 0),
+        eatWeight: parseFloatSafe(fg.getAttribute('eatWeight'), 1),
+        fillTypes: splitTokens(fg.getAttribute('fillTypes')),
+      }))
+    }));
+
+    const mixtures = Array.from(root.querySelectorAll('mixtures > mixture')).map((node) => ({
+      animalType: node.getAttribute('animalType') || '',
+      fillType: node.getAttribute('fillType') || '',
+      ingredients: Array.from(node.querySelectorAll(':scope > ingredient')).map((ing) => ({
+        weight: parseFloatSafe(ing.getAttribute('weight'), 0),
+        fillTypes: splitTokens(ing.getAttribute('fillTypes')),
+      })),
+    }));
+
+    const recipes = Array.from(root.querySelectorAll('recipes > recipe')).map((node) => ({
+      fillType: node.getAttribute('fillType') || '',
+      ingredients: Array.from(node.querySelectorAll(':scope > ingredient')).map((ing) => ({
+        name: ing.getAttribute('name') || '',
+        title: ing.getAttribute('title') || '',
+        minPercentage: parseFloatSafe(ing.getAttribute('minPercentage'), 0),
+        maxPercentage: parseFloatSafe(ing.getAttribute('maxPercentage'), 0),
+        fillTypes: splitTokens(ing.getAttribute('fillTypes')),
+      })),
+    }));
+
+    return { animals, mixtures, recipes };
+  }
+
+  function setStatus(msg, kind = '') {
+    el.status.textContent = msg;
+    el.status.className = 'status' + (kind ? ' ' + kind : '');
+  }
+
+  function renderSummary(data) {
+    if (!el.docStats) return;
+    const a = data.animals.length;
+    const m = data.mixtures.length;
+    const r = data.recipes.length;
+    el.docStats.innerHTML = `<strong>${a}</strong><span class="stat-sep">·</span><strong>${m}</strong><span class="stat-sep">·</span><strong>${r}</strong>`;
+    el.docStats.setAttribute('aria-label', `${a} ${t('animalCount')}, ${m} ${t('mixtureCount')}, ${r} ${t('recipeCount')}`);
+  }
+
+  function renderAnimals(data) {
+    if (!data.animals.length) { el.animals.innerHTML = `<p class="muted">${t('noAnimals')}</p>`; return; }
+    el.animals.innerHTML = data.animals.map((animal) => {
+      const labels = ANIMALS[animal.animalType] || { de: animal.animalType, en: animal.animalType, fr: animal.animalType, emoji: '🐾' };
+      const name = labels[STATE.lang] || labels.en;
+      const isParallel = String(animal.consumptionType || '').toUpperCase() === 'PARALLEL';
+      const totalProd = animal.foodGroups.reduce((a, g) => a + g.productionWeight, 0);
+      const totalEat = animal.foodGroups.reduce((a, g) => a + g.eatWeight, 0);
+      const warn = isParallel && (Math.abs(totalProd - 1) > 0.001 || Math.abs(totalEat - 1) > 0.001);
+      const denom = totalProd > 0 ? totalProd : 1;
+      const maxSerialPw = Math.max(...animal.foodGroups.map((g) => g.productionWeight), 1e-9);
+      let stackBarHtml = '';
+      if (isParallel) {
+        const stack = animal.foodGroups.map((g) => {
+          const theme = getGroupTheme(g.title);
+          const titleBase = resolveToken(g.title);
+          const pct = Math.max(0, (g.productionWeight / denom) * 100);
+          const label = pct >= 9 ? `<span class="stack-label">${pct.toFixed(1)}%</span>` : '';
+          return `<span class="stack-seg" style="width:${pct}%; background:${theme.color};" title="${titleBase}: ${pct.toFixed(1)}%">${label}</span>`;
+        }).join('');
+        stackBarHtml = `<div class="stack-bar">${stack}</div>`;
+      }
+      let accBarLeft = 0;
+      const groups = animal.foodGroups.map((g, idx) => {
+        const pctParallel = Math.max(0, (g.productionWeight / denom) * 100);
+        const segW = pctParallel;
+        const segLeft = accBarLeft;
+        if (isParallel) accBarLeft += pctParallel;
+        const prodCell = isParallel ? `${pctParallel.toFixed(1)}%` : `${Number(Number(g.productionWeight).toFixed(2))}`;
+        const theme = getGroupTheme(g.title);
+        const rowClass = isParallel ? 'fg-row fg-row--parallel' : 'fg-row fg-row--serial';
+        const serialNorm = g.productionWeight / maxSerialPw;
+        const serialWidthPct = Math.max(0, Math.min(100, serialNorm * 100));
+        const mixPct = isParallel ? null : Math.round(12 + serialNorm * 26);
+        const rowStyle = isParallel
+          ? `style="--fg-left:${segLeft}%; --fg-width:${segW}%; --fg-tint:${theme.color};"`
+          : `style="--fg-tint:${theme.color}; --fg-serial-width:${serialWidthPct.toFixed(2)}%; --fg-mix-pct:${mixPct}%;"`;
+        return `<div class="${rowClass}" ${rowStyle}>
+          <div class="fg-meta">
+            <span class="group-badge" style="color:${theme.color};">
+              <span class="fg-icon">${theme.icon}</span>
+              <span class="fg-name">${resolveToken(g.title)}</span>
+            </span>
+            <span class="fg-pct">${prodCell}</span>
+            ${isParallel ? `<span class="fg-eat">${t('eat')}: ${(g.eatWeight * 100).toFixed(1)}%</span>` : ''}
+          </div>
+          <div class="fg-subgroup">
+            <span class="fg-subgroup-label">${t('files')}</span>
+            <div class="chips">${(g.fillTypes.map((f) => `<span class="chip"><span class="chip-icon">${getFillIcon(f)}</span>${resolveFillType(f)}</span>`).join('')) || '<span class="chip">-</span>'}</div>
+          </div>
+        </div>`;
+      }).join('');
+      return `<article class="animal">
+        <div class="animal-head">
+          <h3 class="animal-title">${labels.emoji} ${name}</h3>
+          <span class="pill">${t('consumption')}: ${animal.consumptionType}</span>
+        </div>
+        ${stackBarHtml}
+        ${groups}
+        <div class="small muted" style="margin-top:8px;">
+          ${isParallel ? `${t('totalProd')}: ${(totalProd * 100).toFixed(1)}% | ${t('totalEat')}: ${(totalEat * 100).toFixed(1)}%` : t('serialProdNote')}
+          ${warn ? `<div style="color:var(--warn); margin-top:4px;">${t('warningTotals')}</div>` : ''}
+        </div>
+      </article>`;
+    }).join('');
+  }
+
+  function renderMixtures(data) {
+    if (!data.mixtures.length) { el.mixtures.innerHTML = `<p class="muted">${t('noMixtures')}</p>`; return; }
+    el.mixtures.innerHTML = data.mixtures.map((m) => `<div style="margin-bottom:14px;">
+      <div style="margin-bottom:8px;" class="row-head">${getFillIcon(m.fillType)} <strong>${resolveFillType(m.fillType) || '-'}</strong> <span class="muted">(${m.fillType || '-'} | ${m.animalType || '-'})</span></div>
+      <table class="list-table"><thead><tr><th>${t('weightPct')}</th><th>${t('files')}</th></tr></thead><tbody>
+      ${m.ingredients.map((ing) => `<tr><td>${(ing.weight * 100).toFixed(1)}%</td><td>${ing.fillTypes.map((f) => `${getFillIcon(f)} ${resolveFillType(f)}`).join(', ')}</td></tr>`).join('')}
+      </tbody></table></div>`).join('');
+  }
+
+  function renderRecipes(data) {
+    if (!data.recipes.length) { el.recipes.innerHTML = `<p class="muted">${t('noRecipes')}</p>`; return; }
+    el.recipes.innerHTML = data.recipes.map((r) => `<div style="margin-bottom:14px;">
+      <div style="margin-bottom:8px;" class="row-head">${getFillIcon(r.fillType)} <strong>${resolveFillType(r.fillType)}</strong> <span class="muted">(${r.fillType})</span></div>
+      <table class="list-table"><thead><tr><th>${t('calcIngredient')}</th><th>Min</th><th>Max</th><th>${t('files')}</th></tr></thead><tbody>
+      ${r.ingredients.map((ing) => `<tr><td>${resolveToken(ing.title || ing.name || '-')}</td><td>${fmtNum(ing.minPercentage)}%</td><td>${fmtNum(ing.maxPercentage)}%</td><td>${ing.fillTypes.map((f) => `${getFillIcon(f)} ${resolveFillType(f)}`).join(', ')}</td></tr>`).join('')}
+      </tbody></table></div>`).join('');
+  }
+
+  function escapeHtml(s) {
+    return String(s || '').replace(/[&<>"']/g, (m) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
+  }
+
+  function getRecipeKey(r) {
+    return r.fillType || 'UNKNOWN';
+  }
+
+  function ensureCalcSelection(data) {
+    if (!data || !data.recipes || !data.recipes.length) {
+      STATE.calc.selectedRecipe = '';
+      return;
+    }
+    const keys = data.recipes.map(getRecipeKey);
+    if (!keys.includes(STATE.calc.selectedRecipe)) {
+      STATE.calc.selectedRecipe = keys[0];
+    }
+  }
+
+  function getIngredientConfigKey(recipeKey, idx) {
+    return `${recipeKey}::${idx}`;
+  }
+
+  /** Midpoint of each ingredient min/max %, normalized so shares sum to 1 (mixer recipe bands). */
+  function recipeMidNormalizedShares(ingredients) {
+    const mids = ingredients.map((ing) => {
+      const mn = Math.max(0, Number(ing.minPercentage) || 0);
+      const mx = Math.max(0, Number(ing.maxPercentage) || 0);
+      return (mn + mx) / 2;
+    });
+    const sum = mids.reduce((a, b) => a + b, 0);
+    if (sum <= 0) {
+      const n = ingredients.length || 1;
+      return ingredients.map(() => 1 / n);
+    }
+    return mids.map((m) => m / sum);
+  }
+
+  function clamp(n, lo, hi) {
+    return Math.max(lo, Math.min(hi, n));
+  }
+
+  function projectToBoundsWithSum(target, desired, mins, maxs) {
+    const x = desired.map((v, i) => clamp(v, mins[i], maxs[i]));
+    let diff = target - x.reduce((a, b) => a + b, 0);
+    let guard = 0;
+    while (Math.abs(diff) > 0.5 && guard < 200) {
+      guard += 1;
+      if (diff > 0) {
+        const room = x.map((v, i) => maxs[i] - v);
+        const totalRoom = room.reduce((a, b) => a + Math.max(0, b), 0);
+        if (totalRoom <= 0) break;
+        x.forEach((v, i) => {
+          if (room[i] > 0) x[i] += (room[i] / totalRoom) * diff;
+        });
+      } else {
+        const room = x.map((v, i) => v - mins[i]);
+        const totalRoom = room.reduce((a, b) => a + Math.max(0, b), 0);
+        if (totalRoom <= 0) break;
+        x.forEach((v, i) => {
+          if (room[i] > 0) x[i] += (room[i] / totalRoom) * diff;
+        });
+      }
+      for (let i = 0; i < x.length; i++) x[i] = clamp(x[i], mins[i], maxs[i]);
+      diff = target - x.reduce((a, b) => a + b, 0);
+    }
+    return x;
+  }
+
+  function projectSliceToSum(values, mins, maxs, indices, targetSum) {
+    const d = indices.map((ix) => values[ix]);
+    const lo = indices.map((ix) => mins[ix]);
+    const hi = indices.map((ix) => maxs[ix]);
+    const projected = projectToBoundsWithSum(targetSum, d, lo, hi);
+    const out = values.slice();
+    indices.forEach((ix, k) => { out[ix] = projected[k]; });
+    return out;
+  }
+
+  function rebalanceWithLocks(values, mins, maxs, locks, target, lockedSnapshot = {}) {
+    const out = values.slice();
+    const lockedIdx = values.map((_, i) => i).filter((i) => !!locks[i]);
+    const freeIdx = values.map((_, i) => i).filter((i) => !locks[i]);
+    const lockedValues = {};
+    lockedIdx.forEach((i) => {
+      const snap = Number(lockedSnapshot[i]);
+      lockedValues[i] = Number.isFinite(snap) ? clamp(snap, mins[i], maxs[i]) : clamp(values[i], mins[i], maxs[i]);
+      out[i] = lockedValues[i];
+    });
+    const fixedSum = lockedIdx.reduce((s, i) => s + out[i], 0);
+    if (!freeIdx.length) return out;
+    const freeMin = freeIdx.reduce((s, i) => s + mins[i], 0);
+    const freeMax = freeIdx.reduce((s, i) => s + maxs[i], 0);
+    const freeTarget = clamp(target - fixedSum, freeMin, freeMax);
+    const projected = projectSliceToSum(out, mins, maxs, freeIdx, freeTarget);
+    lockedIdx.forEach((i) => { projected[i] = lockedValues[i]; });
+    return projected;
+  }
+
+  function isMineralIngredient(ingredient) {
+    return ingredient.fillTypes.some((f) => String(f).toUpperCase() === 'MINERAL_FEED');
+  }
+
+  function parseBaleXmlString(xmlString) {
+    const doc = new DOMParser().parseFromString(xmlString, 'application/xml');
+    if (doc.querySelector('parsererror')) return [];
+    const root = doc.querySelector('bale');
+    if (!root) return [];
+    return Array.from(root.querySelectorAll('fillTypes > fillType')).map((n) => ({
+      fillType: String(n.getAttribute('name') || '').toUpperCase(),
+      liters: parseFloatSafe(n.getAttribute('capacity'), 0),
+      label: 'XML',
+    })).filter((x) => x.fillType && x.liters > 0);
+  }
+
+  function buildMergedBaleCatalog() {
+    const map = {};
+    function add(ft, liters, label) {
+      if (!(liters > 0)) return;
+      const k = String(ft || '').toUpperCase();
+      if (!map[k]) map[k] = [];
+      if (!map[k].some((o) => o.liters === liters)) map[k].push({ liters, label });
+    }
+    Object.entries(FS25_DEFAULT_BALE_CATALOG).forEach(([ft, arr]) => {
+      arr.forEach((o) => add(ft, o.liters, o.label));
+    });
+    (STATE.calc.uploadedBaleRows || []).forEach((r) => add(r.fillType, r.liters, r.label || 'Upload'));
+    Object.entries(FS25_MOD_BALE_ALIASES).forEach(([modKey, baseKey]) => {
+      if (map[modKey] && map[modKey].length) return;
+      const src = map[baseKey];
+      if (src && src.length) map[modKey] = src.map((o) => ({ liters: o.liters, label: o.label }));
+    });
+    Object.keys(map).forEach((k) => { map[k].sort((a, b) => a.liters - b.liters); });
+    return map;
+  }
+
+  function unionBaleOptionsForIngredient(ingredient, catalog, fallbackLiters) {
+    const fts = (ingredient.fillTypes || []).map((f) => String(f).toUpperCase());
+    const byVol = new Map();
+    fts.forEach((ft) => {
+      (catalog[ft] || []).forEach((o) => {
+        if (!byVol.has(o.liters)) byVol.set(o.liters, new Set());
+        byVol.get(o.liters).add(String(o.label || ''));
+      });
+    });
+    if (byVol.size === 0) {
+      return [{ liters: Math.max(1, fallbackLiters), label: '—' }];
+    }
+    return Array.from(byVol.entries())
+      .map(([liters, labels]) => ({ liters, label: Array.from(labels).filter(Boolean).sort().join(' / ') || '—' }))
+      .sort((a, b) => a.liters - b.liters);
+  }
+
+  const RECIPE_EPS = 0.12;
+
+  function recipeFeasible(litersVec, ingredients) {
+    const T = litersVec.reduce((a, b) => a + b, 0);
+    if (T <= 1e-6) return true;
+    for (let i = 0; i < ingredients.length; i++) {
+      const mn = Math.max(0, Number(ingredients[i].minPercentage) || 0);
+      const mx = Math.max(0, Number(ingredients[i].maxPercentage) || 100);
+      const p = (100 * litersVec[i]) / T;
+      if (p < mn - RECIPE_EPS || p > mx + RECIPE_EPS) return false;
+    }
+    return true;
+  }
+
+  function recipeViolationLines(litersVec, ingredients) {
+    const T = litersVec.reduce((a, b) => a + b, 0);
+    if (T <= 1e-6) return [];
+    const lines = [];
+    for (let i = 0; i < ingredients.length; i++) {
+      const mn = Math.max(0, Number(ingredients[i].minPercentage) || 0);
+      const mx = Math.max(0, Number(ingredients[i].maxPercentage) || 100);
+      const p = (100 * litersVec[i]) / T;
+      if (p < mn - RECIPE_EPS || p > mx + RECIPE_EPS) {
+        const name = resolveToken(ingredients[i].title || ingredients[i].name || `#${i + 1}`);
+        lines.push(`${name}: ${p.toFixed(1)}% (Rezept ${mn}–${mx}%)`);
+      }
+    }
+    return lines;
+  }
+
+  function canStillReachRecipeAtTarget(currentLiters, ingredients, targetCap) {
+    const currSum = currentLiters.reduce((a, b) => a + b, 0);
+    if (currSum > targetCap + 0.5) return false;
+    const T = targetCap;
+    const lowers = ingredients.map((ing, i) => {
+      const mn = Math.max(0, Number(ing.minPercentage) || 0);
+      return Math.max(currentLiters[i] || 0, (mn / 100) * T);
+    });
+    const uppers = ingredients.map((ing) => {
+      const mx = Math.max(0, Number(ing.maxPercentage) || 100);
+      return (mx / 100) * T;
+    });
+    const lowSum = lowers.reduce((a, b) => a + b, 0);
+    const upSum = uppers.reduce((a, b) => a + b, 0);
+    return lowSum <= T + 0.5 && upSum >= T - 0.5;
+  }
+
+  function maxExtraWholeBales(idx, baleVol, litersVec, ingredients, targetCap) {
+    if (!(baleVol > 0)) return 0;
+    const L = litersVec.slice();
+    let n = 0;
+    while (n < 400) {
+      L[idx] += baleVol;
+      const T = L.reduce((a, b) => a + b, 0);
+      if (T > targetCap + 0.5) break;
+      if (!recipeFeasible(L, ingredients)) break;
+      n++;
+    }
+    return n;
+  }
+
+  function headroomSingleBaleSuggestions(litersVec, ingredients, targetCap, catalog, fallbackLiters) {
+    const T0 = litersVec.reduce((a, b) => a + b, 0);
+    const H = targetCap - T0;
+    if (H < 1) return [];
+    const out = [];
+    for (let i = 0; i < ingredients.length; i++) {
+      const opts = unionBaleOptionsForIngredient(ingredients[i], catalog, fallbackLiters);
+      for (const o of opts) {
+        if (o.liters > H + 0.5) continue;
+        const L2 = litersVec.slice();
+        L2[i] += o.liters;
+        if (!recipeFeasible(L2, ingredients)) continue;
+        const ft = ingredients[i].fillTypes[0] || '';
+        out.push({ idx: i, liters: o.liters, label: resolveFillType(ft), ft });
+      }
+    }
+    const seen = new Set();
+    return out.filter((s) => {
+      const k = `${s.idx}|${s.liters}`;
+      if (seen.has(k)) return false;
+      seen.add(k);
+      return true;
+    });
+  }
+
+  function getIngredientConfig(recipeKey, idx, ingredient, fallbackBale, defaultTargetLiters) {
+    const key = getIngredientConfigKey(recipeKey, idx);
+    const catalog = buildMergedBaleCatalog();
+    const opts = unionBaleOptionsForIngredient(ingredient, catalog, fallbackBale);
+    const firstLiters = opts[0].liters;
+    if (!STATE.calc.ingredientConfig[key]) {
+      const b0 = Math.max(1, firstLiters);
+      const defCount = 0;
+      STATE.calc.ingredientConfig[key] = {
+        count: defCount,
+        baleLiters: b0,
+        useCustomBale: false,
+        baleCounts: {},
+      };
+    }
+    const cfg = STATE.calc.ingredientConfig[key];
+    if (!cfg.baleCounts) cfg.baleCounts = {};
+    if (cfg.plannedOverride != null) {
+      const b = Math.max(1, Number(cfg.baleLiters) || firstLiters);
+      cfg.count = Math.max(0, Math.ceil(Number(cfg.plannedOverride) / b));
+      cfg.baleCounts[String(b)] = Math.max(0, Math.floor(cfg.count));
+      delete cfg.plannedOverride;
+    }
+    if (cfg.useCustomBale) cfg.baleLiters = Math.max(1, fallbackBale);
+    else {
+      const match = opts.find((o) => o.liters === cfg.baleLiters);
+      if (!match) {
+        cfg.baleLiters = firstLiters;
+        cfg.useCustomBale = false;
+      }
+    }
+    cfg.count = Math.max(0, Math.floor(Number(cfg.count) || 0));
+    return cfg;
+  }
+
+  function renderCalculator(data) {
+    if (!data || !data.recipes.length) {
+      el.calcRecipe.innerHTML = '';
+      el.calcRoot.innerHTML = `<p class="small muted">${t('calcNoRecipe')}</p>`;
+      return;
+    }
+
+    ensureCalcSelection(data);
+    const selectedKey = STATE.calc.selectedRecipe;
+    el.calcRecipe.innerHTML = data.recipes.map((r) => {
+      const key = getRecipeKey(r);
+      const label = `${resolveFillType(r.fillType)} (${r.fillType || '-'})`;
+      return `<option value="${escapeHtml(key)}"${key === selectedKey ? ' selected' : ''}>${escapeHtml(label)}</option>`;
+    }).join('');
+
+    const selected = data.recipes.find((r) => getRecipeKey(r) === selectedKey) || data.recipes[0];
+    if (!selected) {
+      el.calcRoot.innerHTML = `<p class="small muted">${t('calcNoRecipe')}</p>`;
+      return;
+    }
+
+    const calcIngredients = selected.ingredients;
+    const baleIngredients = calcIngredients.filter((ing) => !isMineralIngredient(ing));
+    if (!calcIngredients.length) {
+      el.calcRoot.innerHTML = `<p class="small muted">${t('calcNoRecipe')}</p>`;
+      return;
+    }
+
+    const targetLiters = Math.max(1, Number(STATE.calc.targetLiters) || 1);
+    const defaultBaleLiters = Math.max(1, Number(STATE.calc.defaultBaleLiters) || 1);
+    const showPartial = !!STATE.calc.showPartial;
+    const catalog = buildMergedBaleCatalog();
+    const shares = recipeMidNormalizedShares(calcIngredients);
+    const mode = STATE.calc.mode === 'bulk' ? 'bulk' : 'bales';
+
+    const rows = calcIngredients.map((ing, idx) => {
+      const defaultTarget = targetLiters * shares[idx];
+      const fillType = ing.fillTypes[0] || 'UNKNOWN';
+      const ingName = resolveToken(ing.title || ing.name || `#${idx + 1}`);
+      const band = `${fmtNum(ing.minPercentage)}–${fmtNum(ing.maxPercentage)}%`;
+      const opts = unionBaleOptionsForIngredient(ing, catalog, defaultBaleLiters);
+      const cfg = getIngredientConfig(selectedKey, idx, ing, defaultBaleLiters, defaultTarget);
+      const bale = Math.max(1, Number(cfg.baleLiters) || defaultBaleLiters);
+      const count = Math.max(0, Math.floor(Number(cfg.count) || 0));
+      const sizeCounts = {};
+      opts.forEach((o) => {
+        const k = String(Math.round(o.liters));
+        sizeCounts[k] = Math.max(0, Math.floor(Number(cfg.baleCounts[k]) || 0));
+      });
+      const actualBale = opts.reduce((sum, o) => {
+        const k = String(Math.round(o.liters));
+        return sum + (Number(sizeCounts[k]) || 0) * Math.round(o.liters);
+      }, 0);
+      const bulkKey = getIngredientConfigKey(selectedKey, idx);
+      if (typeof STATE.calc.bulkLiters[bulkKey] !== 'number') {
+        STATE.calc.bulkLiters[bulkKey] = isMineralIngredient(ing) ? 0 : Math.round(defaultTarget);
+      }
+      const minL = Math.round((Number(ing.minPercentage) || 0) * targetLiters / 100);
+      const maxL = Math.round((Number(ing.maxPercentage) || 100) * targetLiters / 100);
+      const bulkLiters = Math.max(minL, Math.min(maxL, Number(STATE.calc.bulkLiters[bulkKey]) || 0));
+      STATE.calc.bulkLiters[bulkKey] = bulkLiters;
+      return { idx, ing, ingName, band, fillType, fillTypeLabel: resolveFillType(fillType), targetShareL: defaultTarget, bale, count, actualBale, bulkLiters, opts, sizeCounts };
+    });
+
+    const litersVec = mode === 'bulk' ? rows.map((r) => r.bulkLiters) : rows.filter((r) => !isMineralIngredient(r.ing)).map((r) => r.actualBale);
+    const totalActual = litersVec.reduce((a, b) => a + b, 0);
+    const recipeIngredientsForMode = mode === 'bulk' ? calcIngredients : baleIngredients;
+    const recipeOk = recipeFeasible(litersVec, recipeIngredientsForMode);
+    const violations = recipeViolationLines(litersVec, recipeIngredientsForMode);
+    const headroom = totalActual <= targetLiters ? targetLiters - totalActual : 0;
+    const overCap = totalActual > targetLiters ? totalActual - targetLiters : 0;
+    const pctMix = (idx) => (totalActual > 0 ? ((100 * litersVec[idx]) / totalActual).toFixed(1) : '—');
+
+    const baleRows = rows.filter((r) => !isMineralIngredient(r.ing));
+    const baleLitersVec = baleRows.map((r) => r.actualBale);
+    const gapSuggestions = headroomSingleBaleSuggestions(baleLitersVec, baleIngredients, targetLiters, catalog, defaultBaleLiters);
+    const gapText = gapSuggestions.length
+      ? gapSuggestions.map((s) => `${escapeHtml(resolveToken(baleIngredients[s.idx].title || baleIngredients[s.idx].name || '-'))} +1×${Math.round(s.liters)}L`).join(' · ')
+      : t('calcTopUpNone');
+
+    const tabs = `<div style="display:flex; gap:8px; margin:0 0 10px 0;">
+      <button type="button" data-calc-mode="bulk" class="btn"${mode === 'bulk' ? ' style="border-color:var(--gold); color:var(--gold-soft);"' : ''}>Bulk goods</button>
+      <button type="button" data-calc-mode="bales" class="btn"${mode === 'bales' ? ' style="border-color:var(--gold); color:var(--gold-soft);"' : ''}>Bales</button>
+    </div>`;
+
+    let bulkTable = '';
+    if (mode === 'bulk') {
+      const mins = rows.map((r) => Math.round((Number(r.ing.minPercentage) || 0) * targetLiters / 100));
+      const maxs = rows.map((r) => Math.round((Number(r.ing.maxPercentage) || 100) * targetLiters / 100));
+      const current = rows.map((r) => r.bulkLiters);
+      const lockFlags = rows.map((r) => !!STATE.calc.bulkLocks[getIngredientConfigKey(selectedKey, r.idx)]);
+      const lockValues = {};
+      rows.forEach((r, i) => {
+        const k = getIngredientConfigKey(selectedKey, r.idx);
+        if (lockFlags[i]) lockValues[i] = Number(STATE.calc.bulkLockValues[k]);
+      });
+      const balanced = rebalanceWithLocks(current, mins, maxs, lockFlags, targetLiters, lockValues);
+      rows.forEach((r, i) => {
+        const key = getIngredientConfigKey(selectedKey, r.idx);
+        STATE.calc.bulkLiters[key] = balanced[i];
+        r.bulkLiters = balanced[i];
+      });
+      const segHtml = rows.map((r, i) => {
+        const pct = targetLiters > 0 ? (100 * r.bulkLiters / targetLiters) : 0;
+        const c = getFillTypeColor(r.fillType);
+        return `<div class="combo-seg" style="width:${pct}%; background:${c};">${escapeHtml(r.ingName)} ${pct.toFixed(1)}%</div>`;
+      }).join('');
+      const handles = rows.slice(0, -1).map((r, i) => {
+        const left = rows.slice(0, i + 1).reduce((a, x) => a + x.bulkLiters, 0);
+        const pct = targetLiters > 0 ? (100 * left / targetLiters) : 0;
+        const leftLocked = !!STATE.calc.bulkLocks[getIngredientConfigKey(selectedKey, rows[i].idx)];
+        const rightLocked = !!STATE.calc.bulkLocks[getIngredientConfigKey(selectedKey, rows[i + 1].idx)];
+        const blocked = leftLocked || rightLocked;
+        return `<div class="combo-handle" data-bulk-boundary="${i}" style="left:${pct}%; opacity:${blocked ? '.35' : '1'}; pointer-events:${blocked ? 'none' : 'auto'};" title="${escapeHtml(rows[i].ingName)} ↔ ${escapeHtml(rows[i + 1].ingName)}"></div>`;
+      }).join('');
+      const inputs = rows.map((r, i) => {
+        const lockKey = getIngredientConfigKey(selectedKey, r.idx);
+        const locked = !!STATE.calc.bulkLocks[lockKey];
+        const color = getFillTypeColor(r.fillType);
+        const pct = targetLiters > 0 ? (100 * r.bulkLiters / targetLiters) : 0;
+        return `<div class="slider-card${locked ? ' is-locked' : ''}">
+        <div class="slider-head">
+          <div>${getFillIcon(r.fillType)} <strong>${escapeHtml(r.ingName)}</strong></div>
+          <div class="slider-hint">${t('calcRecipeBand')}: ${escapeHtml(r.band)} | min ${mins[i]}L - max ${maxs[i]}L</div>
+        </div>
+        <div class="slider-controls">
+          <input data-bulk-input="${r.idx}" type="number" min="${mins[i]}" max="${maxs[i]}" step="10" value="${Math.round(r.bulkLiters)}" style="width:120px" ${locked ? 'disabled' : ''}>
+          <button type="button" class="slider-lock-btn" data-bulk-lock="${r.idx}" title="${locked ? 'Unlock' : 'Lock'}">${locked ? '🔒' : '🔓'}</button>
+          <span class="slider-hint">${pctMix(r.idx)}%</span>
+        </div>
+        <div class="slider-accent"><div class="slider-accent-fill" style="width:${pct}%; background:${color};"></div></div>
+      </div>`;
+      }).join('');
+      bulkTable = `<div>
+        <div class="combo-rail" data-bulk-rail="1">${segHtml}${handles}</div>
+        <div class="combo-legend">
+          ${rows.slice(0, -1).map((r, i) => `<div class="slider-hint">${escapeHtml(rows[i].ingName)} ↔ ${escapeHtml(rows[i + 1].ingName)}</div>`).join('')}
+        </div>
+        <div style="margin-top:10px;">${inputs}</div>
+      </div>`;
+    }
+
+    const balesRows = baleRows.map((r, bi) => {
+      const options = r.opts.map((o) => {
+        const liters = Math.round(o.liters);
+        const k = String(liters);
+        const c = Math.max(0, Number(r.sizeCounts[k]) || 0);
+        const next = baleLitersVec.slice();
+        next[bi] += liters;
+        const allowAdd = next.reduce((a, b) => a + b, 0) <= targetLiters + 0.5 && canStillReachRecipeAtTarget(next, baleIngredients, targetLiters);
+        const kind = /sq|square/i.test(o.label) ? 'square' : (/^R|round/i.test(o.label) ? 'round' : 'other');
+        const tokenIcon = kind === 'round' ? '⭕' : (kind === 'square' ? '⬛' : '📦');
+        const tokenBars = c > 0 ? `${'▮'.repeat(Math.min(c, 12))}${c > 12 ? '…' : ''}` : '—';
+        return { kind, html: `<div class="bale-size-row">
+          <span class="bale-size-label">${liters}L</span>
+          <span class="bale-token${allowAdd ? '' : ' is-disabled'}" data-bale-token="${r.idx}" data-bale-liters="${liters}" data-bale-allow-add="${allowAdd ? '1' : '0'}" title="Left click: +1 | Right click: -1">${tokenIcon} <span class="count">${c}</span> ${tokenBars}</span>
+        </div>` };
+      });
+      const roundRows = options.filter((x) => x.kind === 'round').map((x) => x.html).join('');
+      const squareRows = options.filter((x) => x.kind === 'square').map((x) => x.html).join('');
+      const otherRows = options.filter((x) => x.kind === 'other').map((x) => x.html).join('');
+      const leftCol = `${roundRows ? `<div class="bale-group-col is-round"><div class="bale-group-title"><span class="icon">⭕</span>Round Bales</div>${roundRows}</div>` : ''}${!roundRows && otherRows ? `<div class="bale-group-col"><div class="bale-group-title"><span class="icon">📦</span>Other</div>${otherRows}</div>` : ''}`;
+      const rightCol = `${squareRows ? `<div class="bale-group-col is-square"><div class="bale-group-title"><span class="icon">⬛</span>Square Bales</div>${squareRows}</div>` : ''}${roundRows && otherRows ? `<div class="bale-group-col"><div class="bale-group-title"><span class="icon">📦</span>Other</div>${otherRows}</div>` : ''}`;
+      const sizeRows = `<div class="bale-groups-grid"><div>${leftCol || '<div class="bale-group-col"><div class="bale-group-title">Round Bales</div><div class="slider-hint">none</div></div>'}</div><div>${rightCol || '<div class="bale-group-col"><div class="bale-group-title">Square Bales</div><div class="slider-hint">none</div></div>'}</div></div>`;
+      const noAddPossible = !options.some((x) => /data-bale-allow-add="1"/.test(x.html));
+      return `<tr>
+        <td>${escapeHtml(r.ingName)}</td>
+        <td>${escapeHtml(r.band)}</td>
+        <td>${getFillIcon(r.fillType)} ${escapeHtml(r.fillTypeLabel)}</td>
+        <td><div class="bale-picks">${sizeRows}${noAddPossible ? `<div class="bale-warn">No valid bale can be added right now.</div>` : ''}</div></td>
+        <td>—</td>
+        ${showPartial ? `<td>${fmtNum(r.targetShareL / r.bale)}</td>` : ''}
+        <td>${Math.round(r.actualBale)}</td>
+        <td>${pctMix(r.idx)}%</td>
+      </tr>`;
+    }).join('');
+    const balesTable = `<table>
+      <thead><tr><th>${t('calcIngredient')}</th><th>${t('calcRecipeBand')}</th><th>${t('calcFillType')}</th><th>${t('calcBaleSize')}</th><th>${t('calcBaleCount')}</th>${showPartial ? `<th>${t('calcPartialBales')}</th>` : ''}<th>${t('calcActualLiters')}</th><th>${t('calcPctMix')}</th></tr></thead>
+      <tbody>${balesRows}</tbody></table>`;
+
+    const fitPill = recipeOk
+      ? `<span class="calc-pill calc-pill-ok">${t('calcRecipeOk')}</span>`
+      : `<span class="calc-pill calc-pill-error">${t('calcRecipeBad')}</span>`;
+    const capPill = overCap > 0
+      ? `<span class="calc-pill calc-pill-error">${t('calcOverCap')}: ${Math.round(overCap)}L</span>`
+      : `<span class="calc-pill calc-pill-ok">${t('calcHeadroom')}: ${Math.round(headroom)}L</span>`;
+    const gapRowClass = gapSuggestions.length ? 'calc-pill-ok' : 'calc-pill-warn';
+    const statusPanel = mode === 'bales' ? `<div class="calc-status">
+        <div class="calc-status-main">
+          <span class="calc-kv">${t('calcGapTitle')}:</span>
+          <span class="calc-val">${Math.round(totalActual)}L / ${Math.round(targetLiters)}L</span>
+          ${capPill}
+          ${fitPill}
+        </div>
+        ${violations.length ? `<div class="calc-status-row"><span class="calc-pill calc-pill-error">Issues</span> ${violations.map((v) => escapeHtml(v)).join('; ')}</div>` : ''}
+        <div class="calc-status-row">
+          <span class="calc-pill ${gapRowClass}">${t('calcTopUpSuggestion')}</span>
+          ${gapText}
+        </div>
+      </div>` : '';
+
+    el.calcRoot.innerHTML = `${tabs}
+      ${statusPanel}
+      ${mode === 'bulk' ? bulkTable : balesTable}
+      `;
+  }
+
+  function syncSampleSelectI18n() {
+    if (el.samplePickLabel) el.samplePickLabel.textContent = t('samplePickLabel');
+    if (el.sampleSelect) {
+      el.sampleSelect.querySelectorAll('option[data-i18n-opt]').forEach((opt) => {
+        const k = opt.getAttribute('data-i18n-opt');
+        if (k) opt.textContent = t(k);
+      });
+    }
+  }
+
+  function applyUiLanguage() {
+    syncSampleSelectI18n();
+    el.appTitle.textContent = t('appTitle');
+    el.appSubtitle.textContent = t('appSubtitle');
+    if (el.builderLink) el.builderLink.textContent = t('builderLink');
+    el.infoText.textContent = t('infoText');
+    el.uploadText.textContent = t('upload');
+    if (el.sampleBtn) el.sampleBtn.textContent = t('sample');
+    el.drop.textContent = t('drop');
+    el.hAnimals.textContent = t('animals');
+    el.hMix.textContent = t('mixtures');
+    el.hRecipes.textContent = t('recipes');
+    el.calcTitle.textContent = t('calcTitle');
+    el.calcSubtitle.textContent = t('calcSubtitle');
+    el.calcRecipeLabel.textContent = t('calcRecipe');
+    el.calcTargetLabel.textContent = t('calcTarget');
+    el.calcBaleLabel.textContent = t('calcBale');
+    el.calcPartialLabel.textContent = t('calcPartial');
+    if (el.calcBaleXmlLabel) el.calcBaleXmlLabel.textContent = t('calcBaleXml');
+    el.langButtons.forEach((btn) => {
+      const isActive = btn.getAttribute('data-lang') === STATE.lang;
+      btn.classList.toggle('is-active', isActive);
+    });
+    if (STATE.data) {
+      renderSummary(STATE.data);
+      renderAnimals(STATE.data);
+      renderMixtures(STATE.data);
+      renderRecipes(STATE.data);
+      renderCalculator(STATE.data);
+    }
+  }
+
+  function consumeXml(xmlText, sourceLabel) {
+    try {
+      const parsed = parseAnimalFood(xmlText);
+      STATE.data = parsed;
+      renderSummary(parsed);
+      renderAnimals(parsed);
+      renderMixtures(parsed);
+      renderRecipes(parsed);
+      renderCalculator(parsed);
+      setStatus(`${t('loaded')} ${sourceLabel}`, 'ok');
+    } catch (err) {
+      setStatus((err && err.message) || t('parseError'), 'error');
+      STATE.data = null;
+      el.animals.innerHTML = '';
+      if (el.docStats) {
+        el.docStats.innerHTML = '';
+        el.docStats.removeAttribute('aria-label');
+      }
+      el.mixtures.innerHTML = '';
+      el.recipes.innerHTML = '';
+      el.calcRoot.innerHTML = '';
+    }
+  }
+
+  el.file.addEventListener('change', async (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    const txt = await file.text();
+    consumeXml(txt, file.name);
+  });
+
+  const SAMPLE_XML_URLS = {
+    animalic: 'samples/animalicFood.xml',
+    vanilla: 'samples/animalFood-vanilla.xml',
+    mittellandkanal: 'samples/animalFood-mittellandkanal.xml',
+    harterleiten: 'samples/animalFood-harterleiten.xml',
+  };
+  const DEFAULT_ANIMALFOOD_SAMPLE_KEY = 'animalic';
+
+  async function tryFetchSampleRel(rel) {
+    const url = new URL(rel, window.location.href);
+    const res = await fetch(url.href);
+    if (!res.ok) throw new Error(String(res.status));
+    return res.text();
+  }
+
+  async function loadAnimalFoodSample(key) {
+    if (key === 'animalic') {
+      const rel = SAMPLE_XML_URLS.animalic;
+      try {
+        const txt = await tryFetchSampleRel(rel);
+        consumeXml(txt, rel);
+        return true;
+      } catch (err) {
+        consumeXml(ANIMALIC_EMBEDDED_XML, t('loadedEmbedAnimalic'));
+        return true;
+      }
+    }
+    if (key === 'vanilla') {
+      const rel = SAMPLE_XML_URLS.vanilla;
+      try {
+        const txt = await tryFetchSampleRel(rel);
+        consumeXml(txt, rel);
+        return true;
+      } catch (err) {
+        consumeXml(VANILLA_EMBEDDED_XML, t('loadedEmbedVanilla'));
+        return true;
+      }
+    }
+    if (key === 'mittellandkanal') {
+      const rel = SAMPLE_XML_URLS.mittellandkanal;
+      try {
+        const txt = await tryFetchSampleRel(rel);
+        consumeXml(txt, rel);
+        return true;
+      } catch (err) {
+        consumeXml(MITTELLAND_EMBEDDED_XML, t('loadedEmbedMittelland'));
+        return true;
+      }
+    }
+    if (key === 'harterleiten') {
+      const rel = SAMPLE_XML_URLS.harterleiten;
+      try {
+        const txt = await tryFetchSampleRel(rel);
+        consumeXml(txt, rel);
+        return true;
+      } catch (err) {
+        consumeXml(HARTERLEITEN_EMBEDDED_XML, t('loadedEmbedHarterleiten'));
+        return true;
+      }
+    }
+    const rel = SAMPLE_XML_URLS[key];
+    if (!rel) return false;
+    try {
+      const txt = await tryFetchSampleRel(rel);
+      consumeXml(txt, rel);
+      return true;
+    } catch (err) {
+      return false;
+    }
+  }
+
+  el.sampleBtn.addEventListener('click', async () => {
+    const pick = (el.sampleSelect && el.sampleSelect.value) || DEFAULT_ANIMALFOOD_SAMPLE_KEY;
+    const ok = await loadAnimalFoodSample(pick);
+    if (!ok) setStatus(t('sampleFetchError'), 'error');
+  });
+  el.calcRecipe.addEventListener('change', () => {
+    STATE.calc.selectedRecipe = el.calcRecipe.value || '';
+    if (STATE.data) renderCalculator(STATE.data);
+  });
+  el.calcTarget.addEventListener('input', () => {
+    STATE.calc.targetLiters = Math.max(1, Number(el.calcTarget.value) || 1);
+    if (STATE.data) renderCalculator(STATE.data);
+  });
+  el.calcDefaultBale.addEventListener('input', () => {
+    STATE.calc.defaultBaleLiters = Math.max(1, Number(el.calcDefaultBale.value) || 1);
+    if (STATE.data) renderCalculator(STATE.data);
+  });
+  el.calcPartial.addEventListener('change', () => {
+    STATE.calc.showPartial = el.calcPartial.checked;
+    if (STATE.data) renderCalculator(STATE.data);
+  });
+  function updateCalcIngredient(idx, fn) {
+    if (!STATE.data) return;
+    const selectedKey = STATE.calc.selectedRecipe;
+    if (!selectedKey) return;
+    const selected = STATE.data.recipes.find((r) => getRecipeKey(r) === selectedKey);
+    if (!selected || !selected.ingredients[idx]) return;
+    const key = getIngredientConfigKey(selectedKey, idx);
+    const shares = recipeMidNormalizedShares(selected.ingredients);
+    const defaultTarget = STATE.calc.targetLiters * shares[idx];
+    const cfg = getIngredientConfig(selectedKey, idx, selected.ingredients[idx], STATE.calc.defaultBaleLiters, defaultTarget);
+    fn(cfg);
+    STATE.calc.ingredientConfig[key] = cfg;
+    renderCalculator(STATE.data);
+  }
+
+  function moveBulkBoundaryTo(i, boundaryLiters) {
+    if (!STATE.data) return;
+    const selectedKey = STATE.calc.selectedRecipe;
+    if (!selectedKey) return;
+    const selected = STATE.data.recipes.find((r) => getRecipeKey(r) === selectedKey);
+    if (!selected || i < 0 || i >= selected.ingredients.length - 1) return;
+    const mins = selected.ingredients.map((ing) => Math.round((Number(ing.minPercentage) || 0) * STATE.calc.targetLiters / 100));
+    const maxs = selected.ingredients.map((ing) => Math.round((Number(ing.maxPercentage) || 100) * STATE.calc.targetLiters / 100));
+    const values = selected.ingredients.map((_, ix) => {
+      const key = getIngredientConfigKey(selectedKey, ix);
+      return Math.max(mins[ix], Math.min(maxs[ix], Number(STATE.calc.bulkLiters[key]) || mins[ix]));
+    });
+    const lockFlags = selected.ingredients.map((_, ix) => !!STATE.calc.bulkLocks[getIngredientConfigKey(selectedKey, ix)]);
+    const lockValues = {};
+    selected.ingredients.forEach((_, ix) => {
+      const k = getIngredientConfigKey(selectedKey, ix);
+      if (lockFlags[ix]) lockValues[ix] = Number(STATE.calc.bulkLockValues[k]);
+    });
+    const leftIdx = selected.ingredients.map((_, ix) => ix).filter((ix) => ix <= i);
+    const rightIdx = selected.ingredients.map((_, ix) => ix).filter((ix) => ix > i);
+
+    const minLeft = leftIdx.reduce((s, ix) => s + mins[ix], 0);
+    const maxLeft = leftIdx.reduce((s, ix) => s + maxs[ix], 0);
+    const minRight = rightIdx.reduce((s, ix) => s + mins[ix], 0);
+    const maxRight = rightIdx.reduce((s, ix) => s + maxs[ix], 0);
+    const globalMin = Math.max(minLeft, STATE.calc.targetLiters - maxRight);
+    const globalMax = Math.min(maxLeft, STATE.calc.targetLiters - minRight);
+    const wantedLeft = clamp(boundaryLiters, globalMin, globalMax);
+    const wantedRight = STATE.calc.targetLiters - wantedLeft;
+
+    let out = projectSliceToSum(values, mins, maxs, leftIdx, wantedLeft);
+    out = projectSliceToSum(out, mins, maxs, rightIdx, wantedRight);
+    out = rebalanceWithLocks(out, mins, maxs, lockFlags, STATE.calc.targetLiters, lockValues);
+
+    out.forEach((v, ix) => {
+      const key = getIngredientConfigKey(selectedKey, ix);
+      STATE.calc.bulkLiters[key] = v;
+    });
+    renderCalculator(STATE.data);
+  }
+
+  el.calcRoot.addEventListener('input', (e) => {
+    const target = e.target;
+    if (!(target instanceof HTMLInputElement) || !STATE.data) return;
+    const bulkSliderIdx = target.getAttribute('data-bulk-slider');
+    const bulkInputIdx = target.getAttribute('data-bulk-input');
+    const bulkIdx = bulkSliderIdx != null ? bulkSliderIdx : bulkInputIdx;
+    if (bulkIdx != null) {
+      const idx = Number(bulkIdx);
+      if (!Number.isFinite(idx)) return;
+      const selectedKey = STATE.calc.selectedRecipe;
+      if (!selectedKey) return;
+      const selected = STATE.data.recipes.find((r) => getRecipeKey(r) === selectedKey);
+      if (!selected || !selected.ingredients[idx]) return;
+      const minL = Math.round((Number(selected.ingredients[idx].minPercentage) || 0) * STATE.calc.targetLiters / 100);
+      const maxL = Math.round((Number(selected.ingredients[idx].maxPercentage) || 100) * STATE.calc.targetLiters / 100);
+      const key = getIngredientConfigKey(selectedKey, idx);
+      const next = Math.max(minL, Math.min(maxL, Number(target.value) || 0));
+      STATE.calc.bulkLiters[key] = next;
+      renderCalculator(STATE.data);
+      return;
+    }
+    const countIdx = target.getAttribute('data-calc-count');
+    if (countIdx == null) return;
+    const idx = Number(countIdx);
+    if (!Number.isFinite(idx)) return;
+    updateCalcIngredient(idx, (cfg) => {
+      cfg.count = Math.max(0, Math.floor(Number(target.value) || 0));
+    });
+  });
+
+  el.calcRoot.addEventListener('change', (e) => {
+    const target = e.target;
+    if (!(target instanceof HTMLSelectElement) || !STATE.data) return;
+    const sel = target.getAttribute('data-calc-bale-select');
+    if (sel == null) return;
+    const idx = Number(sel);
+    if (!Number.isFinite(idx)) return;
+    updateCalcIngredient(idx, (cfg) => {
+      if (target.value === 'custom') {
+        cfg.useCustomBale = true;
+        cfg.baleLiters = Math.max(1, Number(STATE.calc.defaultBaleLiters) || 1);
+      } else {
+        cfg.useCustomBale = false;
+        cfg.baleLiters = Math.max(1, Number(target.value) || 1);
+      }
+    });
+  });
+  el.calcRoot.addEventListener('click', (e) => {
+    const target = e.target;
+    if (!(target instanceof HTMLElement) || !STATE.data) return;
+    const mode = target.getAttribute('data-calc-mode');
+    if (mode === 'bulk' || mode === 'bales') {
+      STATE.calc.mode = mode;
+      renderCalculator(STATE.data);
+      return;
+    }
+    const tokenEl = target.closest('[data-bale-token]');
+    if (tokenEl instanceof HTMLElement) {
+      if (tokenEl.getAttribute('data-bale-allow-add') !== '1') {
+        setStatus('Blocked: this bale would make a valid target mix impossible.', 'error');
+        return;
+      }
+      const idx = Number(tokenEl.getAttribute('data-bale-token'));
+      const liters = Number(tokenEl.getAttribute('data-bale-liters'));
+      if (!Number.isFinite(idx) || !Number.isFinite(liters)) return;
+      updateCalcIngredient(idx, (cfg) => {
+        const k = String(Math.round(liters));
+        if (!cfg.baleCounts) cfg.baleCounts = {};
+        cfg.baleCounts[k] = Math.max(0, Math.floor(Number(cfg.baleCounts[k]) || 0) + 1);
+      });
+      return;
+    }
+    const lockIdx = target.getAttribute('data-bulk-lock');
+    if (lockIdx != null) {
+      const idx = Number(lockIdx);
+      if (!Number.isFinite(idx)) return;
+      const selectedKey = STATE.calc.selectedRecipe;
+      if (!selectedKey) return;
+      const key = getIngredientConfigKey(selectedKey, idx);
+      const nextLocked = !STATE.calc.bulkLocks[key];
+      STATE.calc.bulkLocks[key] = nextLocked;
+      if (nextLocked) {
+        STATE.calc.bulkLockValues[key] = Number(STATE.calc.bulkLiters[key]) || 0;
+      } else {
+        delete STATE.calc.bulkLockValues[key];
+      }
+      renderCalculator(STATE.data);
+    }
+  });
+  el.calcRoot.addEventListener('contextmenu', (e) => {
+    const target = e.target;
+    if (!(target instanceof HTMLElement) || !STATE.data) return;
+    const tokenEl = target.closest('[data-bale-token]');
+    if (!(tokenEl instanceof HTMLElement)) return;
+    e.preventDefault();
+    const idx = Number(tokenEl.getAttribute('data-bale-token'));
+    const liters = Number(tokenEl.getAttribute('data-bale-liters'));
+    if (!Number.isFinite(idx) || !Number.isFinite(liters)) return;
+    updateCalcIngredient(idx, (cfg) => {
+      const k = String(Math.round(liters));
+      if (!cfg.baleCounts) cfg.baleCounts = {};
+      cfg.baleCounts[k] = Math.max(0, Math.floor(Number(cfg.baleCounts[k]) || 0) - 1);
+    });
+  });
+  el.calcRoot.addEventListener('pointerdown', (e) => {
+    const target = e.target;
+    if (!(target instanceof HTMLElement) || !STATE.data) return;
+    const idx = target.getAttribute('data-bulk-boundary');
+    if (idx == null) return;
+    const i = Number(idx);
+    if (!Number.isFinite(i)) return;
+    STATE.calc.draggingBoundary = i;
+    target.setPointerCapture(e.pointerId);
+    e.preventDefault();
+  });
+  el.calcRoot.addEventListener('pointermove', (e) => {
+    if (!STATE.data) return;
+    if (STATE.calc.mode !== 'bulk') return;
+    const i = STATE.calc.draggingBoundary;
+    if (i == null) return;
+    const rail = el.calcRoot.querySelector('[data-bulk-rail="1"]');
+    if (!(rail instanceof HTMLElement)) return;
+    const rect = rail.getBoundingClientRect();
+    if (rect.width <= 0) return;
+    const x = clamp(e.clientX - rect.left, 0, rect.width);
+    const boundaryLiters = (x / rect.width) * STATE.calc.targetLiters;
+    moveBulkBoundaryTo(i, boundaryLiters);
+    e.preventDefault();
+  });
+  el.calcRoot.addEventListener('pointerup', () => {
+    STATE.calc.draggingBoundary = null;
+  });
+  el.calcRoot.addEventListener('pointercancel', () => {
+    STATE.calc.draggingBoundary = null;
+  });
+
+  if (el.calcBaleXml) {
+    el.calcBaleXml.addEventListener('change', async (e) => {
+      const inp = e.target;
+      const files = inp.files;
+      if (!files || !files.length) return;
+      let n = 0;
+      for (let i = 0; i < files.length; i++) {
+        try {
+          const txt = await files[i].text();
+          const rows = parseBaleXmlString(txt);
+          STATE.calc.uploadedBaleRows.push(...rows);
+          n += rows.length;
+        } catch (_) {}
+      }
+      inp.value = '';
+      if (STATE.data) renderCalculator(STATE.data);
+      setStatus(n ? `${n} bale capacities merged` : 'No bale entries parsed', n ? 'ok' : 'error');
+    });
+  }
+  el.langButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      STATE.lang = btn.getAttribute('data-lang') || 'de';
+      applyUiLanguage();
+      if (!STATE.data) setStatus(t('ready'));
+    });
+  });
+
+  ['dragenter', 'dragover'].forEach((evt) => {
+    el.drop.addEventListener(evt, (e) => { e.preventDefault(); el.drop.classList.add('active'); });
+  });
+  ['dragleave', 'drop'].forEach((evt) => {
+    el.drop.addEventListener(evt, (e) => { e.preventDefault(); el.drop.classList.remove('active'); });
+  });
+  el.drop.addEventListener('drop', async (e) => {
+    const file = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+    if (!file) return;
+    const txt = await file.text();
+    consumeXml(txt, file.name);
+  });
+
+  applyUiLanguage();
+  (async () => {
+    if (el.sampleSelect) el.sampleSelect.value = DEFAULT_ANIMALFOOD_SAMPLE_KEY;
+    await loadAnimalFoodSample(DEFAULT_ANIMALFOOD_SAMPLE_KEY);
+  })();
+})();
+</script>
 </body>
 </html>

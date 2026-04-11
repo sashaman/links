@@ -1,0 +1,2388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FS25 animalFood.xml — template builder</title>
+<meta name="description" content="Guided editor for FS25 animalFood / animalicFood.xml: field explanations, live XML, download.">
+<meta name="theme-color" content="#c8a84b">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #151a10;
+    --surface: #1e2614;
+    --card: #252f16;
+    --card-strong: #2b361b;
+    --border: #3a4a22;
+    --gold: #c8a84b;
+    --gold-soft: #e6c97a;
+    --text: #e8e0cc;
+    --muted: #8a9070;
+    --ok: #63d471;
+    --warn: #ffc857;
+    --error: #ff6b6b;
+    --link: #9bc86a;
+    --table-head: #2f3c1d;
+    --table-row: #202915;
+    --table-row-alt: #1b2312;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: radial-gradient(circle at 20% 0%, #1f2813 0%, var(--bg) 40%);
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    font-size: 15px;
+    line-height: 1.45;
+  }
+  .wrap {
+    width: min(1200px, 100%);
+    margin: 0 auto;
+    padding: clamp(16px, 3vw, 32px);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(20px, 3.5vw, 32px);
+  }
+  h1 {
+    margin: 0 0 6px;
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(24px, 4vw, 32px);
+    letter-spacing: 0.5px;
+    color: var(--gold-soft);
+  }
+  .top h1 {
+    margin: 0;
+    font-size: clamp(22px, 4vw, 34px);
+    letter-spacing: 0.6px;
+  }
+  h2 {
+    margin: 0 0 12px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 20px;
+    color: var(--gold-soft);
+    letter-spacing: 0.4px;
+  }
+  h3 { margin: 0 0 8px; font-size: 15px; font-weight: 600; color: #d8e2c5; }
+  .subtitle { margin: 0 0 16px; color: var(--muted); font-size: 14px; }
+  .top .subtitle { margin: 6px 0 0; }
+  a { color: var(--link); }
+  a:hover { text-decoration: underline; }
+  .top {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    background: color-mix(in srgb, var(--surface) 85%, black);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: clamp(12px, 2.5vw, 20px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+  }
+  .title-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 16px;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+  .title-main { min-width: min(100%, 280px); flex: 1; }
+  .title-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+  .title-meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px 12px;
+  }
+  .infotext {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: linear-gradient(180deg, #222c17, #1a2212);
+    padding: 8px 12px;
+    color: #bdc8a7;
+    font-size: 12px;
+    line-height: 1.45;
+    margin: 0;
+  }
+  .infotext code {
+    font-size: 11px;
+    background: rgba(0, 0, 0, 0.25);
+    padding: 1px 5px;
+    border-radius: 4px;
+  }
+  .builder-explorer-link {
+    display: inline-block;
+    margin-top: 6px;
+    font-size: 13px;
+    color: var(--gold-soft);
+    text-decoration: none;
+    border-bottom: 1px solid color-mix(in srgb, var(--gold) 40%, transparent);
+  }
+  .builder-explorer-link:hover {
+    color: var(--gold);
+    text-decoration: none;
+  }
+  .builder-infotext {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: linear-gradient(180deg, #222c17, #1a2212);
+    padding: 10px 14px;
+    margin-top: 8px;
+    color: #bdc8a7;
+    font-size: 13px;
+    line-height: 1.45;
+  }
+  .builder-infotext code {
+    font-size: 12px;
+    background: rgba(0, 0, 0, 0.25);
+    padding: 1px 5px;
+    border-radius: 4px;
+  }
+  .pill {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    border: 1px solid #566741;
+    color: #b9cc9c;
+    border-radius: 999px;
+    padding: 3px 8px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    display: inline-block;
+  }
+  .panel {
+    --panel-rail: color-mix(in srgb, var(--gold-soft) 42%, var(--border));
+    position: relative;
+    background: linear-gradient(
+      165deg,
+      color-mix(in srgb, var(--card) 100%, #fff) 0%,
+      var(--card) 42%,
+      color-mix(in srgb, var(--card-strong) 22%, var(--card)) 100%
+    );
+    border: 1px solid color-mix(in srgb, var(--border) 85%, #000);
+    border-radius: 12px;
+    padding: 17px 20px 18px 22px;
+    margin-bottom: 0;
+    box-shadow:
+      inset 0 1px 0 color-mix(in srgb, #fff 6%, transparent),
+      0 10px 28px rgba(0, 0, 0, 0.26),
+      0 2px 0 color-mix(in srgb, var(--border) 25%, transparent);
+  }
+  .panel::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--panel-rail) 90%, #fff),
+      color-mix(in srgb, var(--panel-rail) 45%, var(--border))
+    );
+    border-radius: 12px 0 0 12px;
+    opacity: 0.92;
+    pointer-events: none;
+  }
+  .panel-animals {
+    --panel-rail: #6ab04c;
+  }
+  .panel-mixtures {
+    --panel-rail: #5b9bd5;
+  }
+  .panel-recipes {
+    --panel-rail: #d4a843;
+  }
+  .panel-intro-preset {
+    --panel-rail: color-mix(in srgb, var(--gold-soft) 38%, var(--border));
+  }
+  .panel h2 {
+    margin: 0 0 10px;
+    font-family: 'Oswald', sans-serif;
+    color: var(--gold-soft);
+    letter-spacing: 0.06em;
+    font-size: 22px;
+  }
+  .panel-section-head h2 {
+    margin-bottom: 6px;
+  }
+  .panel-section-head {
+    margin: 0 0 14px;
+    padding: 0 0 12px;
+    border-bottom: 1px solid color-mix(in srgb, var(--border) 45%, transparent);
+  }
+  .help-block {
+    background: linear-gradient(180deg, #222c17, #1a2212);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin: 10px 0 0;
+    font-size: 13px;
+    color: #bdc8a7;
+  }
+  .help-block code { font-size: 12px; background: rgba(0,0,0,.25); padding: 1px 5px; border-radius: 4px; }
+  details.field-help { margin: 6px 0 10px; }
+  details.field-help > summary {
+    cursor: pointer;
+    font-size: 12px;
+    color: var(--gold);
+    user-select: none;
+    list-style: none;
+  }
+  details.field-help > summary::-webkit-details-marker { display: none; }
+  details.field-help > summary::before { content: '▸ '; }
+  details.field-help[open] > summary::before { content: '▾ '; }
+  .field-help .body { margin-top: 8px; padding-left: 4px; border-left: 2px solid var(--border); }
+  label.f {
+    display: block;
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 4px;
+    margin-top: 10px;
+  }
+  label.f:first-of-type { margin-top: 0; }
+  input[type="text"], input[type="number"], select, textarea {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: #1a2212;
+    color: var(--text);
+    padding: 8px 10px;
+    font: inherit;
+  }
+  textarea.code { font-family: ui-monospace, monospace; font-size: 12px; min-height: 220px; resize: vertical; }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 640px) { .row2 { grid-template-columns: 1fr; } }
+  .btn-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+  .btn {
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: #202a15;
+    color: var(--text);
+    padding: 10px 16px;
+    font: inherit;
+    cursor: pointer;
+    transition: border-color .15s ease, transform .15s ease;
+  }
+  .btn:hover { border-color: var(--gold); transform: translateY(-1px); }
+  .btn.primary { border-color: color-mix(in srgb, var(--gold) 55%, var(--border)); background: rgba(200, 168, 75, .12); }
+  .btn.danger { border-color: color-mix(in srgb, var(--error) 40%, var(--border)); color: #ffb3b3; }
+  .btn.btn-compact { padding: 5px 10px; font-size: 12px; }
+  .main-panel--animals {
+    container-type: inline-size;
+    container-name: animal-panel;
+  }
+  .animals-editor {
+    display: grid;
+    gap: 12px;
+    grid-template-columns: 1fr;
+  }
+  @container animal-panel (min-width: 520px) {
+    .animals-editor {
+      grid-template-columns: minmax(0, 1.14fr) minmax(0, 0.86fr);
+    }
+  }
+  .animal {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--card-strong);
+    padding: 0 12px 12px;
+    margin-bottom: 0;
+  }
+  .animal-sticky {
+    position: sticky;
+    top: 0;
+    z-index: 12;
+    margin: 0 -12px 0;
+    padding: 12px 12px 10px;
+    background: linear-gradient(180deg, color-mix(in srgb, var(--card-strong) 98%, #000) 0%, color-mix(in srgb, var(--card-strong) 94%, transparent) 85%, transparent 100%);
+    border-bottom: 1px solid color-mix(in srgb, var(--border) 40%, transparent);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+  .animal-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+  .animal-head-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    min-width: 0;
+  }
+  .animal-title {
+    margin: 0;
+    font-size: 19px;
+    font-family: 'Oswald', sans-serif;
+    color: var(--gold-soft);
+    letter-spacing: 0.03em;
+  }
+  .animal-controls {
+    margin-bottom: 8px;
+  }
+  .animal-fg-cap {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    color: #95a680;
+    text-transform: uppercase;
+    margin: 4px 0 8px;
+    padding-top: 4px;
+    border-top: 1px dashed color-mix(in srgb, var(--border) 50%, transparent);
+  }
+  .animal-fg-list { min-height: 8px; }
+  .fg-editor {
+    position: relative;
+    margin-bottom: 8px;
+    padding: 10px 10px 10px 14px;
+    border-radius: 8px;
+    border: 1px solid color-mix(in srgb, var(--border) 35%, transparent);
+    overflow: hidden;
+    background: color-mix(in srgb, var(--card-strong) 85%, #000);
+  }
+  .fg-editor::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 5px;
+    background: var(--fg-accent, var(--gold-soft));
+    border-radius: 8px 0 0 8px;
+    opacity: 0.88;
+    pointer-events: none;
+  }
+  .fg-editor-inner { position: relative; z-index: 1; padding-left: 6px; }
+  .fg-editor-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+  .fg-editor-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .fg-editor-label .mini { font-size: 10px; color: var(--muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; }
+  .editor-card {
+    container-type: inline-size;
+    container-name: editor-card;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--card-strong);
+    padding: 0 12px 12px;
+    margin-bottom: 12px;
+  }
+  .editor-card-sticky {
+    position: sticky;
+    top: 0;
+    z-index: 11;
+    margin: 0 -12px 0;
+    padding: 12px 12px 10px;
+    background: linear-gradient(180deg, color-mix(in srgb, var(--card-strong) 98%, #000) 0%, color-mix(in srgb, var(--card-strong) 92%, transparent) 88%, transparent 100%);
+    border-bottom: 1px solid color-mix(in srgb, var(--border) 40%, transparent);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.32);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+  .editor-card-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+  .editor-card-title {
+    margin: 0;
+    font-size: 17px;
+    font-family: 'Oswald', sans-serif;
+    color: var(--gold-soft);
+  }
+  .editor-card-sub {
+    margin: 4px 0 0;
+    font-size: 12px;
+    color: var(--muted);
+    font-family: ui-monospace, monospace;
+  }
+  .editor-ing-cap {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    color: #95a680;
+    text-transform: uppercase;
+    margin: 8px 0 8px;
+    padding-top: 6px;
+    border-top: 1px dashed color-mix(in srgb, var(--border) 45%, transparent);
+  }
+  .mix-ing-list,
+  .rec-ing-list {
+    display: grid;
+    gap: 12px;
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+  @container editor-card (min-width: 520px) {
+    .mix-ing-list,
+    .rec-ing-list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  .mix-ing-editor,
+  .rec-ing-editor {
+    position: relative;
+    min-width: 0;
+    margin-bottom: 0;
+    padding: 12px 12px 14px 18px;
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--border) 42%, transparent);
+    overflow: hidden;
+    background: color-mix(in srgb, var(--card-strong) 88%, #000);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.22);
+  }
+  .mix-ing-editor::before,
+  .rec-ing-editor::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 5px;
+    background: var(--fg-accent, var(--gold-soft));
+    border-radius: 10px 0 0 10px;
+    opacity: 0.9;
+    pointer-events: none;
+  }
+  .mix-ing-editor > *,
+  .rec-ing-editor > * {
+    position: relative;
+    z-index: 1;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 12px;
+  }
+  .card-head {
+    display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .card-title { font-weight: 600; color: var(--gold-soft); }
+  .nested { margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--border); }
+  .status {
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 13px;
+    margin-top: 12px;
+  }
+  .status.ok { border: 1px solid color-mix(in srgb, var(--ok) 45%, var(--border)); background: rgba(99, 212, 113, .08); }
+  .status.warn { border: 1px solid color-mix(in srgb, var(--warn) 45%, var(--border)); background: rgba(255, 200, 87, .08); }
+  .muted { color: var(--muted); font-size: 13px; }
+  .intro { font-size: 14px; color: #c9d4b5; margin-bottom: 8px; }
+  ul.tight { margin: 6px 0; padding-left: 1.2em; }
+  ul.tight li { margin: 4px 0; }
+  .l10n-hint {
+    font-size: 12px;
+    color: var(--muted);
+    font-family: ui-monospace, monospace;
+    margin-top: 6px;
+    padding: 6px 8px;
+    background: rgba(0,0,0,.2);
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    word-break: break-all;
+  }
+  .l10n-hint kbd { color: var(--gold-soft); font-weight: 500; }
+  .btn-inline {
+    margin-top: 6px;
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: #1a2212;
+    color: var(--muted);
+    cursor: pointer;
+    font: inherit;
+  }
+  .btn-inline:hover { border-color: var(--gold); color: var(--text); }
+  .preset-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 12px;
+    align-items: flex-end;
+    margin-top: 4px;
+  }
+  .preset-row .preset-field { flex: 1; min-width: min(100%, 260px); }
+  .preset-row .btn { flex-shrink: 0; }
+  .lang-switch {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: #202a15;
+    padding: 6px;
+  }
+  .lang-btn {
+    min-width: 40px;
+    height: 30px;
+    border-radius: 7px;
+    border: 1px solid #465632;
+    background: #1a2212;
+    color: var(--text);
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+    transition: border-color 0.16s ease, transform 0.16s ease, background 0.16s ease;
+    padding: 0;
+  }
+  .lang-btn:hover { border-color: var(--gold); transform: translateY(-1px); }
+  .lang-btn.is-active {
+    border-color: var(--gold);
+    background: rgba(200, 168, 75, 0.18);
+  }
+  .intro-preset-grid {
+    display: grid;
+    gap: clamp(16px, 2.5vw, 24px);
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+  @media (min-width: 768px) {
+    .intro-preset-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .intro-preset-col h2 { margin-top: 0; }
+  .intro-preset-col--preset {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--surface) 88%, black);
+    padding: 14px 16px;
+    box-shadow: inset 0 1px 0 color-mix(in srgb, #fff 4%, transparent);
+  }
+  .intro-preset-col--preset .preset-row { margin-top: 8px; }
+</style>
+</head>
+<body>
+  <main class="wrap">
+    <header class="top builder-top">
+      <div class="title-row">
+        <div class="title-main">
+          <h1 id="i18n-h1">animalFood.xml builder</h1>
+          <p class="subtitle" id="i18n-subtitle">Documented fields → your XML → download. For FS25 mods (e.g. <code>animalicFood.xml</code>).</p>
+        </div>
+        <div class="title-meta">
+          <div class="title-meta-row">
+            <span class="pill" id="i18n-pill">animalFood.xsd</span>
+            <div class="lang-switch" role="group" aria-label="Language">
+              <button type="button" class="lang-btn" data-lang="de" title="Deutsch" lang="de">🇩🇪</button>
+              <button type="button" class="lang-btn" data-lang="en" title="English" lang="en">🇬🇧</button>
+              <button type="button" class="lang-btn" data-lang="fr" title="Français" lang="fr">🇫🇷</button>
+            </div>
+          </div>
+          <a href="fs25_animalic_food.html" id="i18n-explorer-link" class="builder-explorer-link">Open visual explorer</a>
+        </div>
+      </div>
+      <p class="infotext" id="i18n-header-infotext"></p>
+    </header>
+
+    <section class="panel panel-intro-preset">
+      <div class="intro-preset-grid">
+        <div class="intro-preset-col intro-preset-col--about">
+          <h2 id="i18n-intro-title">How this file works</h2>
+          <div class="builder-infotext">
+            <p class="intro" id="i18n-intro-lead" style="margin:0 0 10px;color:#c9d4b5;font-size:14px;"></p>
+            <ul class="tight muted" style="margin:0;">
+              <li id="i18n-intro-li1"></li>
+              <li id="i18n-intro-li2"></li>
+              <li id="i18n-intro-li3"></li>
+            </ul>
+          </div>
+        </div>
+        <div class="intro-preset-col intro-preset-col--preset">
+          <h2 id="i18n-preset-title">Starting preset</h2>
+          <p class="muted" id="i18n-preset-lead" style="margin-top:-4px;font-size:13px;"></p>
+          <div class="preset-row">
+            <div class="preset-field">
+              <label class="f" for="preset-select" id="i18n-preset-label">Preset</label>
+              <select id="preset-select" aria-describedby="preset-hint"></select>
+            </div>
+            <button type="button" class="btn primary" id="btn-load-preset">Load preset</button>
+          </div>
+          <p id="preset-hint" class="muted" style="margin-top:10px;font-size:12px;"></p>
+          <details class="field-help" style="margin-top:10px;">
+            <summary id="i18n-preset-details-sum"></summary>
+            <div class="body help-block" id="i18n-preset-details-body"></div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel panel-animals">
+      <div class="panel-section-head">
+        <h2 id="i18n-animals-title">Animals &amp; food groups</h2>
+        <p class="muted" id="i18n-animals-blurb" style="margin:0;font-size:13px;"></p>
+      </div>
+      <div id="animals-root"></div>
+      <button type="button" class="btn" id="add-animal" style="margin-top:10px;"></button>
+
+      <div class="help-block" style="margin-top:16px;">
+        <strong id="i18n-field-ref-title">Field reference</strong>
+        <details class="field-help" style="margin-top:8px;">
+          <summary><code>animalType</code></summary>
+          <div class="body" id="i18n-help-animal-type"></div>
+        </details>
+        <details class="field-help">
+          <summary><code>consumptionType</code></summary>
+          <div class="body" id="i18n-help-consumption"></div>
+        </details>
+        <details class="field-help">
+          <summary><code>foodGroup</code> attributes</summary>
+          <div class="body" id="i18n-help-food-group"></div>
+        </details>
+      </div>
+    </section>
+
+    <section class="panel panel-mixtures">
+      <div class="panel-section-head">
+        <h2 id="i18n-mixtures-title">Mixtures</h2>
+        <p class="muted" id="i18n-mixtures-blurb" style="margin:0;font-size:13px;"></p>
+      </div>
+      <div id="mixtures-root"></div>
+      <button type="button" class="btn" id="add-mixture" style="margin-top:10px;"></button>
+        <details class="field-help" style="margin-top:12px;">
+        <summary id="i18n-mixtures-help-sum"></summary>
+        <div class="body help-block" id="i18n-mixtures-help-body"></div>
+      </details>
+    </section>
+
+    <section class="panel panel-recipes">
+      <div class="panel-section-head">
+        <h2 id="i18n-recipes-title">Recipes (mixer percentage bands)</h2>
+        <p class="muted" id="i18n-recipes-blurb" style="margin:0;font-size:13px;"></p>
+      </div>
+      <div id="recipes-root"></div>
+      <button type="button" class="btn" id="add-recipe" style="margin-top:10px;"></button>
+      <details class="field-help" style="margin-top:12px;">
+        <summary id="i18n-recipes-help-sum"></summary>
+        <div class="body help-block" id="i18n-recipes-help-body"></div>
+      </details>
+    </section>
+
+    <section class="panel">
+      <h2 id="i18n-output-title">Output</h2>
+      <div id="validation-msg"></div>
+      <label class="f" for="xml-out" id="i18n-xml-label">Generated XML</label>
+      <textarea id="xml-out" class="code" readonly aria-label="Generated XML"></textarea>
+      <div class="btn-row">
+        <button type="button" class="btn primary" id="btn-download"></button>
+        <button type="button" class="btn" id="btn-copy"></button>
+        <button type="button" class="btn danger" id="btn-clear"></button>
+      </div>
+      <p class="muted" id="i18n-output-foot" style="margin-top:12px;"></p>
+    </section>
+  </main>
+
+<script>
+(() => {
+  const SCHEMA_URL_FIXED = 'https://validation.gdn.giants-software.com/xml/fs25/1.17.0.0/animalFood.xsd';
+
+  const I18N = {
+    en: {
+      docTitle: 'FS25 animalFood.xml — template builder',
+      h1: 'animalFood.xml builder',
+      subtitle: 'Documented fields → your XML → download. For FS25 mods (e.g. <code>animalicFood.xml</code>).',
+      pillSchema: 'animalFood.xsd 1.17',
+      linkExplorer: 'Open visual explorer',
+      langAria: 'Language',
+      headerInfotext: 'Guided fields, validation hints, and live XML for FS25 <code>animalFood</code> / <code>animalicFood.xml</code>. Pair with the visual explorer to read and tune the same file.',
+      introTitle: 'How this file works',
+      introLead: 'Giants uses one <code>&lt;animalFood&gt;</code> document to define what animals eat, how mixed feeds are composed, and legal percentage ranges for mixer recipes.',
+      introLi1: '<strong>animals / foodGroup</strong> — Daily diet: which fill types count as food and how the game blends them (parallel vs serial).',
+      introLi2: '<strong>mixtures</strong> — Defines composite fill types (e.g. <code>PIGFOOD</code>, <code>FORAGE</code>): ingredient list and relative weights for the mixer wagon output.',
+      introLi3: '<strong>recipes</strong> — For a given output fill type, each ingredient slot has min/max percentage bands the mixer UI uses.',
+      presetTitle: 'Starting preset',
+      presetLead: 'Default <strong>FS25_Animalic</strong> matches <code>public/samples/animalicFood.xml</code>: loaded over HTTP when possible, otherwise an <strong>embedded copy</strong> so it works from <code>file://</code> too. Other repo samples still need HTTP.',
+      presetLabel: 'Preset',
+      btnLoadPreset: 'Load preset',
+      presetHint: 'Loading applies to <strong>all</strong> animals, mixtures, and recipes. Use the button so changing the dropdown does not erase work by accident.',
+      presetDetailsSum: 'Why one preset control here?',
+      presetDetailsBody: '<strong>Recommended:</strong> one preset for the <em>whole document</em>. It matches how the visual explorer picks samples and keeps the UI calm.<br><br><strong>Per-section dropdowns</strong> add noise and still would not cover “replace everything”. A single <strong>“insert example block”</strong> per section is usually clearer if you add shortcuts later.<br><br>The <strong>Animalic</strong> preset mirrors <code>samples/animalicFood.xml</code>; this page also embeds a copy for offline <code>file://</code> (keep embed and file in sync).',
+      presetAnimalic: 'FS25_Animalic — mod sample',
+      presetVanilla: 'Vanilla — base game style sample',
+      presetMittelland: 'Map — Am Mittellandkanal',
+      presetHarterleiten: 'Map — Harterleiten',
+      presetBlank: 'Built-in — minimal blank',
+      presetStarter: 'Built-in — one row per section',
+      animalsTitle: 'Animals & food groups',
+      animalsBlurb: 'Each animal has a consumption mode. The header stays visible while you scroll its food groups.',
+      addAnimal: '+ Add animal',
+      fieldRefTitle: 'Field reference',
+      helpAnimalType: 'Species this block configures: <code>COW</code>, <code>SHEEP</code>, <code>PIG</code>, <code>HORSE</code>, <code>CHICKEN</code> (game enums; custom animals need matching map setup).',
+      helpConsumptionType: '<strong>PARALLEL</strong> — The animal draws from <em>all</em> food groups together. <code>productionWeight</code> and <code>eatWeight</code> are shares (0–1) that normally each sum to <strong>1.0</strong> across groups.<br><br><strong>SERIAL</strong> — Groups are used in <em>order</em>. Only <code>productionWeight</code> is written per group; <code>eatWeight</code> is omitted. See vanilla <code>animalFood.xml</code> for patterns.',
+      helpFoodGroup: 'Pick a <strong>primary fill type</strong>; <code>title</code> is set to <code>$l10n_fillTypeGroup_*</code> automatically. Add more types in the optional field; use <strong>Custom…</strong> for full manual XML.<br><br><code>productionWeight</code> — Parallel: production share. Serial: tuning / order.<br><code>eatWeight</code> — Parallel only (omitted in SERIAL).<br><code>fillTypes</code> — Primary + optional extra tokens (space-separated).',
+      mixturesTitle: 'Mixtures',
+      mixturesBlurb: 'Each card header sticks while you edit ingredients.',
+      addMixture: '+ Add mixture',
+      mixturesHelpSum: 'What mixtures are for',
+      mixturesHelpBody: 'Each <code>&lt;mixture&gt;</code> ties an <code>animalType</code> to an output <code>fillType</code>. Ingredients use the same <strong>primary fill type</strong> + optional extras (no l10n on mixture lines). Weights are 0–1 and should sum to 1.0.',
+      recipesTitle: 'Recipes (mixer percentage bands)',
+      recipesBlurb: 'Recipe output and controls stay pinned above scrolling ingredient slots.',
+      addRecipe: '+ Add recipe',
+      recipesHelpSum: 'What recipe ingredients mean',
+      recipesHelpBody: 'Pick a <strong>primary fill type</strong>; <code>name</code> and <code>title</code> (<code>$l10n_fillType_*</code>) follow automatically unless you choose <strong>Edit name / title</strong>.<br><br><code>fillTypes</code> — Primary plus extra tokens.<br><code>minPercentage</code> / <code>maxPercentage</code> — Allowed range in the mixer (0–100).',
+      outputTitle: 'Output',
+      labelXml: 'Generated XML',
+      btnDownload: 'Download animalicFood.xml',
+      btnCopy: 'Copy to clipboard',
+      btnClear: 'Clear all',
+      outputFoot: 'Place the file in your mod folder (often <code>animalicFood.xml</code>) and reference it from your animal / husbandry configuration.',
+      validationOk: 'Validation hints: parallel animal weights and mixture ingredient weights look consistent (≈ 1.0).',
+      validationCheck: 'Check these:',
+      optCustom: 'Custom…',
+      optOther: 'Other…',
+      phExtraFt: 'e.g. SUGARBEET_CUT BARLEY',
+      phGoose: 'e.g. GOOSE',
+      phForage: 'e.g. FORAGE',
+      phMixOut: 'e.g. FORAGE',
+      phRecOut: 'Custom output fill type',
+      fgFoodGroup: 'Food group',
+      fgParallel: 'parallel',
+      fgSerial: 'serial',
+      remove: 'Remove',
+      primaryFill: 'Primary fill type',
+      fillTypesFull: 'fillTypes (full list)',
+      additionalFt: 'Additional fill types (optional)',
+      groupTitleHint: 'Group title:',
+      editTitleManual: 'Edit title manually',
+      titleXml: 'title (XML)',
+      useAutoTitle: 'Use auto title from fill type',
+      prodWeight: 'productionWeight (0–1)',
+      eatWeight: 'eatWeight (0–1, PARALLEL only)',
+      removeAnimal: 'Remove animal',
+      animalType: 'animalType',
+      consumptionType: 'consumptionType',
+      customAnimalType: 'Custom animal type',
+      foodGroupsCap: 'Food groups',
+      addFoodGroup: '+ Food group',
+      ingredient: 'Ingredient',
+      weightSlot: 'weight slot',
+      weight01: 'weight (0–1)',
+      mixture: 'Mixture',
+      outputFillType: 'Output fill type',
+      removeMix: 'Remove',
+      ingredientsCap: 'Ingredients',
+      addIngredient: '+ Ingredient',
+      recipe: 'Recipe',
+      recipeOutFt: 'Recipe output fill type',
+      ingSlot: 'Ingredient slot',
+      mixerPct: 'mixer %',
+      ingredientSlotsCap: 'Ingredient slots',
+      addIngSlot: '+ Ingredient slot',
+      editNameTitle: 'Edit name / title',
+      name: 'name',
+      title: 'title',
+      deriveFromFt: 'Derive from fill type',
+      minPct: 'minPercentage',
+      maxPct: 'maxPercentage',
+      recipeOutputLine: 'output',
+      copyDone: 'Copied!',
+      confirmPreset: 'Replace all animals, mixtures, and recipes with the selected preset?',
+      alertLoadFail: 'Could not load this sample. Serve this page over HTTP(S), or choose a built-in preset (minimal blank / one row per section).',
+      valAnimalProd: 'Animal #{{n}} ({{at}}): productionWeight sum ≈ {{s}} (expected 1.0)',
+      valAnimalEat: 'Animal #{{n}} ({{at}}): eatWeight sum ≈ {{s}} (expected 1.0)',
+      valMix: 'Mixture #{{n}} ({{ft}}): ingredient weight sum ≈ {{s}} (expected 1.0)',
+    },
+    de: {
+      docTitle: 'FS25 animalFood.xml — Vorlagen-Editor',
+      h1: 'animalFood.xml Builder',
+      subtitle: 'Erklärte Felder → dein XML → Download. Für FS25-Mods (z. B. <code>animalicFood.xml</code>).',
+      pillSchema: 'animalFood.xsd 1.17',
+      linkExplorer: 'Visuellen Explorer öffnen',
+      langAria: 'Sprache',
+      headerInfotext: 'Geführte Felder, Plausibilitätshinweise und Live-XML für FS25-<code>animalFood</code> / <code>animalicFood.xml</code>. Zum Lesen und Feintunen passt der visuelle Explorer dazu.',
+      introTitle: 'Wozu diese Datei',
+      introLead: 'Giants nutzt ein <code>&lt;animalFood&gt;</code>-Dokument für Futterarten, Mischfutter-Zusammensetzung und zulässige Mischwagon-Prozentbereiche.',
+      introLi1: '<strong>animals / foodGroup</strong> — Tagesration: welche Filltypes zählen und wie das Spiel sie mischt (parallel vs. seriell).',
+      introLi2: '<strong>mixtures</strong> — Zusammengesetzte Filltypes (z. B. <code>PIGFOOD</code>, <code>FORAGE</code>): Zutatenliste und Gewichte für den Mischwagon.',
+      introLi3: '<strong>recipes</strong> — Pro Ausgabe-Filltype: Zutaten-Slots mit Min/Max-Prozenten für die Mixer-UI.',
+      presetTitle: 'Start-Preset',
+      presetLead: 'Standard <strong>FS25_Animalic</strong> entspricht <code>public/samples/animalicFood.xml</code>: per HTTP laden, sonst <strong>eingebettete Kopie</strong> (auch <code>file://</code>). Andere Repo-Samples brauchen HTTP.',
+      presetLabel: 'Preset',
+      btnLoadPreset: 'Preset laden',
+      presetHint: 'Es werden <strong>alle</strong> Tiere, Mixtures und Recipes ersetzt. Nur der Button lädt — das Dropdown allein ändert nichts.',
+      presetDetailsSum: 'Warum nur ein Preset hier?',
+      presetDetailsBody: '<strong>Empfohlen:</strong> ein Preset für das <em>gesamte Dokument</em> — wie im Explorer bei den Samples, ruhige Oberfläche.<br><br><strong>Dropdowns in jedem Block</strong> erzeugen viel Lärm und ersetzen trotzdem nicht „alles“. Später eher <strong>„Beispielblock einfügen“</strong> pro Sektion.<br><br><strong>Animalic</strong> spiegelt <code>samples/animalicFood.xml</code>; die Seite enthält eine eingebettete Kopie für Offline (Embed und Datei synchron halten).',
+      presetAnimalic: 'FS25_Animalic — Mod-Sample',
+      presetVanilla: 'Vanilla — Stil Basis-Spiel',
+      presetMittelland: 'Karte — Am Mittellandkanal',
+      presetHarterleiten: 'Karte — Harterleiten',
+      presetBlank: 'Eingebaut — minimal leer',
+      presetStarter: 'Eingebaut — eine Zeile pro Sektion',
+      animalsTitle: 'Tiere & Futtermittelgruppen',
+      animalsBlurb: 'Jedes Tier hat einen Verbrauchsmodus. Der Kopf bleibt sichtbar, während du die Gruppen scrollst.',
+      addAnimal: '+ Tier hinzufügen',
+      fieldRefTitle: 'Felder-Referenz',
+      helpAnimalType: 'Art: <code>COW</code>, <code>SHEEP</code>, <code>PIG</code>, <code>HORSE</code>, <code>CHICKEN</code> (Spiel-Enums; eigene Tiere brauchen passende Map-Konfiguration).',
+      helpConsumptionType: '<strong>PARALLEL</strong> — Alle Futtermittelgruppen gleichzeitig. <code>productionWeight</code> und <code>eatWeight</code> sind Anteile (0–1), Summe je <strong>1,0</strong> über alle Gruppen.<br><br><strong>SERIAL</strong> — Gruppen nacheinander. Nur <code>productionWeight</code> pro Gruppe; <code>eatWeight</code> entfällt. Muster in Vanilla-<code>animalFood.xml</code>.',
+      helpFoodGroup: '<strong>Primärer Filltype</strong> wählen; <code>title</code> wird automatisch <code>$l10n_fillTypeGroup_*</code>. Weitere Typen im Zusatzfeld; <strong>Benutzerdefiniert…</strong> für freie <code>fillTypes</code>.<br><br><code>productionWeight</code> — Parallel: Produktionsanteil. Seriell: Feintuning / Reihenfolge.<br><code>eatWeight</code> — nur parallel (bei SERIAL weggelassen).<br><code>fillTypes</code> — Primär + weitere Tokens (Leerzeichen getrennt).',
+      mixturesTitle: 'Mixtures',
+      mixturesBlurb: 'Der Kartenkopf bleibt beim Bearbeiten der Zutaten sichtbar.',
+      addMixture: '+ Mixture hinzufügen',
+      mixturesHelpSum: 'Wozu Mixtures',
+      mixturesHelpBody: 'Jedes <code>&lt;mixture&gt;</code> verbindet <code>animalType</code> mit Ausgabe-<code>fillType</code>. Zutaten: gleicher <strong>primärer Filltype</strong> + optional Extras (keine l10n in den Zeilen). Gewichte 0–1, Summe 1,0.',
+      recipesTitle: 'Recipes (Mixer-Prozentbänder)',
+      recipesBlurb: 'Ausgabe und Steuerung bleiben über den Zutaten-Slots „kleben“.',
+      addRecipe: '+ Recipe hinzufügen',
+      recipesHelpSum: 'Bedeutung der Recipe-Zutaten',
+      recipesHelpBody: '<strong>Primärer Filltype</strong>; <code>name</code> und <code>title</code> (<code>$l10n_fillType_*</code>) automatisch, außer <strong>Name/Titel bearbeiten</strong>.<br><br><code>fillTypes</code> — Primär plus weitere Tokens.<br><code>minPercentage</code> / <code>maxPercentage</code> — Erlaubter Bereich im Mixer (0–100).',
+      outputTitle: 'Ausgabe',
+      labelXml: 'Generiertes XML',
+      btnDownload: 'animalicFood.xml herunterladen',
+      btnCopy: 'In Zwischenablage',
+      btnClear: 'Alles leeren',
+      outputFoot: 'Datei in den Mod legen (oft <code>animalicFood.xml</code>) und in Tier-/Husbandry-Konfiguration referenzieren.',
+      validationOk: 'Hinweise: Parallel-Gewichte und Mixture-Zutaten wirken konsistent (≈ 1,0).',
+      validationCheck: 'Bitte prüfen:',
+      optCustom: 'Benutzerdefiniert…',
+      optOther: 'Andere…',
+      phExtraFt: 'z. B. SUGARBEET_CUT BARLEY',
+      phGoose: 'z. B. GOOSE',
+      phForage: 'z. B. FORAGE',
+      phMixOut: 'z. B. FORAGE',
+      phRecOut: 'Eigener Ausgabe-Filltype',
+      fgFoodGroup: 'Futtermittelgruppe',
+      fgParallel: 'parallel',
+      fgSerial: 'seriell',
+      remove: 'Entfernen',
+      primaryFill: 'Primärer Filltype',
+      fillTypesFull: 'fillTypes (vollständige Liste)',
+      additionalFt: 'Weitere Filltypes (optional)',
+      groupTitleHint: 'Gruppentitel:',
+      editTitleManual: 'Titel manuell bearbeiten',
+      titleXml: 'title (XML)',
+      useAutoTitle: 'Auto-Titel vom Filltype',
+      prodWeight: 'productionWeight (0–1)',
+      eatWeight: 'eatWeight (0–1, nur PARALLEL)',
+      removeAnimal: 'Tier entfernen',
+      animalType: 'animalType',
+      consumptionType: 'consumptionType',
+      customAnimalType: 'Eigenes Tier (Text)',
+      foodGroupsCap: 'Futtermittelgruppen',
+      addFoodGroup: '+ Futtermittelgruppe',
+      ingredient: 'Zutat',
+      weightSlot: 'Gewichts-Slot',
+      weight01: 'Gewicht (0–1)',
+      mixture: 'Mixture',
+      outputFillType: 'Ausgabe-Filltype',
+      removeMix: 'Entfernen',
+      ingredientsCap: 'Zutaten',
+      addIngredient: '+ Zutat',
+      recipe: 'Recipe',
+      recipeOutFt: 'Recipe-Ausgabe-Filltype',
+      ingSlot: 'Zutaten-Slot',
+      mixerPct: 'Mixer-%',
+      ingredientSlotsCap: 'Zutaten-Slots',
+      addIngSlot: '+ Zutaten-Slot',
+      editNameTitle: 'Name / Titel bearbeiten',
+      name: 'name',
+      title: 'title',
+      deriveFromFt: 'Vom Filltype ableiten',
+      minPct: 'minPercentage',
+      maxPct: 'maxPercentage',
+      recipeOutputLine: 'Ausgabe',
+      copyDone: 'Kopiert!',
+      confirmPreset: 'Alle Tiere, Mixtures und Recipes durch das gewählte Preset ersetzen?',
+      alertLoadFail: 'Sample konnte nicht geladen werden. Seite über HTTP(S) bereitstellen oder eingebautes Preset wählen.',
+      valAnimalProd: 'Tier #{{n}} ({{at}}): Summe productionWeight ≈ {{s}} (erwartet 1,0)',
+      valAnimalEat: 'Tier #{{n}} ({{at}}): Summe eatWeight ≈ {{s}} (erwartet 1,0)',
+      valMix: 'Mixture #{{n}} ({{ft}}): Summe Zutaten-Gewichte ≈ {{s}} (erwartet 1,0)',
+    },
+    fr: {
+      docTitle: 'FS25 animalFood.xml — éditeur de modèle',
+      h1: 'Éditeur animalFood.xml',
+      subtitle: 'Champs documentés → votre XML → téléchargement. Pour les mods FS25 (ex. <code>animalicFood.xml</code>).',
+      pillSchema: 'animalFood.xsd 1.17',
+      linkExplorer: 'Ouvrir l’explorateur visuel',
+      langAria: 'Langue',
+      headerInfotext: 'Champs guidés, indications de cohérence et XML en direct pour <code>animalFood</code> / <code>animalicFood.xml</code> FS25. À utiliser avec l’explorateur visuel pour lire et ajuster le même fichier.',
+      introTitle: 'À quoi sert ce fichier',
+      introLead: 'Giants utilise un document <code>&lt;animalFood&gt;</code> pour l’alimentation, la composition des mélanges et les plages de pourcentages du mélangeur.',
+      introLi1: '<strong>animals / foodGroup</strong> — Ration : quels fillTypes comptent et comment le jeu les combine (parallèle vs série).',
+      introLi2: '<strong>mixtures</strong> — FillTypes composés (ex. <code>PIGFOOD</code>, <code>FORAGE</code>) : ingrédients et poids pour la sortie de la mélangeuse.',
+      introLi3: '<strong>recipes</strong> — Pour chaque fillType de sortie : créneaux d’ingrédients avec min/max % pour l’UI du mélangeur.',
+      presetTitle: 'Preset de départ',
+      presetLead: 'Par défaut <strong>FS25_Animalic</strong> = <code>public/samples/animalicFood.xml</code> : chargement HTTP si possible, sinon <strong>copie embarquée</strong> (y compris <code>file://</code>). Les autres échantillons du dépôt nécessitent HTTP.',
+      presetLabel: 'Preset',
+      btnLoadPreset: 'Charger le preset',
+      presetHint: 'Remplace <strong>tous</strong> les animaux, mixtures et recipes. Utilise le bouton : changer la liste seule ne fait rien.',
+      presetDetailsSum: 'Pourquoi un seul preset ici ?',
+      presetDetailsBody: '<strong>Recommandé :</strong> un preset pour <em>tout le document</em>, comme l’explorateur pour les échantillons — interface plus calme.<br><br><strong>Listes partout</strong> = bruit sans remplacer « tout ». Plus tard, plutôt un <strong>« insérer un bloc d’exemple »</strong> par section.<br><br><strong>Animalic</strong> reflète <code>samples/animalicFood.xml</code> ; la page embarque une copie hors ligne (garder embed et fichier alignés).',
+      presetAnimalic: 'FS25_Animalic — échantillon mod',
+      presetVanilla: 'Vanilla — style jeu de base',
+      presetMittelland: 'Carte — Am Mittellandkanal',
+      presetHarterleiten: 'Carte — Harterleiten',
+      presetBlank: 'Intégré — vide minimal',
+      presetStarter: 'Intégré — une ligne par section',
+      animalsTitle: 'Animaux et groupes d’aliments',
+      animalsBlurb: 'Chaque animal a un mode de consommation. L’en-tête reste visible en faisant défiler les groupes.',
+      addAnimal: '+ Ajouter un animal',
+      fieldRefTitle: 'Référence des champs',
+      helpAnimalType: 'Espèce : <code>COW</code>, <code>SHEEP</code>, <code>PIG</code>, <code>HORSE</code>, <code>CHICKEN</code> (énums du jeu ; animaux perso = config carte adaptée).',
+      helpConsumptionType: '<strong>PARALLEL</strong> — Tous les groupes en même temps. <code>productionWeight</code> et <code>eatWeight</code> sont des parts (0–1), somme <strong>1,0</strong> sur les groupes.<br><br><strong>SERIAL</strong> — Groupes dans l’ordre. Seul <code>productionWeight</code> par groupe ; pas de <code>eatWeight</code>. Voir <code>animalFood.xml</code> vanilla.',
+      helpFoodGroup: 'Choisir un <strong>fillType principal</strong> ; <code>title</code> → <code>$l10n_fillTypeGroup_*</code> auto. Types supplémentaires dans le champ optionnel ; <strong>Personnalisé…</strong> pour la liste complète.<br><br><code>productionWeight</code> — Parallèle : part de production. Série : réglage / ordre.<br><code>eatWeight</code> — Parallèle seulement (omis en SERIAL).<br><code>fillTypes</code> — Principal + jetons (séparés par des espaces).',
+      mixturesTitle: 'Mixtures',
+      mixturesBlurb: 'L’en-tête de carte reste visible pendant l’édition des ingrédients.',
+      addMixture: '+ Ajouter une mixture',
+      mixturesHelpSum: 'Rôle des mixtures',
+      mixturesHelpBody: 'Chaque <code>&lt;mixture&gt;</code> lie un <code>animalType</code> à un <code>fillType</code> de sortie. Ingrédients : même <strong>fillType principal</strong> + extras (pas de l10n sur les lignes). Poids 0–1, somme 1,0.',
+      recipesTitle: 'Recipes (bandes % mélangeur)',
+      recipesBlurb: 'La sortie et les contrôles restent épinglés au-dessus des créneaux.',
+      addRecipe: '+ Ajouter une recipe',
+      recipesHelpSum: 'Signification des ingrédients recipe',
+      recipesHelpBody: '<strong>FillType principal</strong> ; <code>name</code> et <code>title</code> (<code>$l10n_fillType_*</code>) auto sauf <strong>Modifier nom / titre</strong>.<br><br><code>fillTypes</code> — Principal + jetons supplémentaires.<br><code>minPercentage</code> / <code>maxPercentage</code> — Plage autorisée (0–100).',
+      outputTitle: 'Sortie',
+      labelXml: 'XML généré',
+      btnDownload: 'Télécharger animalicFood.xml',
+      btnCopy: 'Copier dans le presse-papiers',
+      btnClear: 'Tout effacer',
+      outputFoot: 'Placez le fichier dans le mod (souvent <code>animalicFood.xml</code>) et référencez-le depuis la config animaux / élevage.',
+      validationOk: 'Indications : poids parallèles et mixtures semblent cohérents (≈ 1,0).',
+      validationCheck: 'À vérifier :',
+      optCustom: 'Personnalisé…',
+      optOther: 'Autre…',
+      phExtraFt: 'ex. SUGARBEET_CUT BARLEY',
+      phGoose: 'ex. GOOSE',
+      phForage: 'ex. FORAGE',
+      phMixOut: 'ex. FORAGE',
+      phRecOut: 'FillType de sortie perso',
+      fgFoodGroup: 'Groupe d’aliments',
+      fgParallel: 'parallèle',
+      fgSerial: 'série',
+      remove: 'Supprimer',
+      primaryFill: 'FillType principal',
+      fillTypesFull: 'fillTypes (liste complète)',
+      additionalFt: 'FillTypes supplémentaires (optionnel)',
+      groupTitleHint: 'Titre du groupe :',
+      editTitleManual: 'Modifier le titre à la main',
+      titleXml: 'title (XML)',
+      useAutoTitle: 'Titre auto depuis le fillType',
+      prodWeight: 'productionWeight (0–1)',
+      eatWeight: 'eatWeight (0–1, PARALLEL seulement)',
+      removeAnimal: 'Supprimer l’animal',
+      animalType: 'animalType',
+      consumptionType: 'consumptionType',
+      customAnimalType: 'Type d’animal personnalisé',
+      foodGroupsCap: 'Groupes d’aliments',
+      addFoodGroup: '+ Groupe d’aliments',
+      ingredient: 'Ingrédient',
+      weightSlot: 'créneau poids',
+      weight01: 'poids (0–1)',
+      mixture: 'Mixture',
+      outputFillType: 'FillType de sortie',
+      removeMix: 'Supprimer',
+      ingredientsCap: 'Ingrédients',
+      addIngredient: '+ Ingrédient',
+      recipe: 'Recipe',
+      recipeOutFt: 'FillType de sortie (recipe)',
+      ingSlot: 'Créneau ingrédient',
+      mixerPct: '% mélangeur',
+      ingredientSlotsCap: 'Créneaux ingrédients',
+      addIngSlot: '+ Créneau ingrédient',
+      editNameTitle: 'Modifier nom / titre',
+      name: 'name',
+      title: 'title',
+      deriveFromFt: 'Dériver du fillType',
+      minPct: 'minPercentage',
+      maxPct: 'maxPercentage',
+      recipeOutputLine: 'sortie',
+      copyDone: 'Copié !',
+      confirmPreset: 'Remplacer tous les animaux, mixtures et recipes par le preset sélectionné ?',
+      alertLoadFail: 'Impossible de charger l’échantillon. Servez la page en HTTP(S) ou choisissez un preset intégré.',
+      valAnimalProd: 'Animal n°{{n}} ({{at}}) : somme productionWeight ≈ {{s}} (attendu 1,0)',
+      valAnimalEat: 'Animal n°{{n}} ({{at}}) : somme eatWeight ≈ {{s}} (attendu 1,0)',
+      valMix: 'Mixture n°{{n}} ({{ft}}) : somme des poids ≈ {{s}} (attendu 1,0)',
+    },
+  };
+
+  let uiLang = localStorage.getItem('fs25-builder-lang') || 'en';
+  if (!I18N[uiLang]) uiLang = 'en';
+
+  function t(key, params) {
+    let s = (I18N[uiLang] && I18N[uiLang][key]) || I18N.en[key] || key;
+    if (params && typeof params === 'object') {
+      Object.keys(params).forEach((k) => {
+        s = s.split(`{{${k}}}`).join(String(params[k]));
+      });
+    }
+    return s;
+  }
+
+  function applyStaticI18n() {
+    document.documentElement.lang = uiLang;
+    document.title = t('docTitle');
+    const setHtml = (id, key) => {
+      const n = document.getElementById(id);
+      if (n) n.innerHTML = t(key);
+    };
+    const setText = (id, key) => {
+      const n = document.getElementById(id);
+      if (n) n.textContent = t(key);
+    };
+    setText('i18n-h1', 'h1');
+    setHtml('i18n-subtitle', 'subtitle');
+    setText('i18n-pill', 'pillSchema');
+    setText('i18n-explorer-link', 'linkExplorer');
+    setHtml('i18n-header-infotext', 'headerInfotext');
+    setText('i18n-intro-title', 'introTitle');
+    setHtml('i18n-intro-lead', 'introLead');
+    setHtml('i18n-intro-li1', 'introLi1');
+    setHtml('i18n-intro-li2', 'introLi2');
+    setHtml('i18n-intro-li3', 'introLi3');
+    setText('i18n-preset-title', 'presetTitle');
+    setHtml('i18n-preset-lead', 'presetLead');
+    setText('i18n-preset-label', 'presetLabel');
+    document.getElementById('btn-load-preset').textContent = t('btnLoadPreset');
+    setHtml('preset-hint', 'presetHint');
+    setText('i18n-preset-details-sum', 'presetDetailsSum');
+    setHtml('i18n-preset-details-body', 'presetDetailsBody');
+    setText('i18n-animals-title', 'animalsTitle');
+    setText('i18n-animals-blurb', 'animalsBlurb');
+    document.getElementById('add-animal').textContent = t('addAnimal');
+    setText('i18n-field-ref-title', 'fieldRefTitle');
+    setHtml('i18n-help-animal-type', 'helpAnimalType');
+    setHtml('i18n-help-consumption', 'helpConsumptionType');
+    setHtml('i18n-help-food-group', 'helpFoodGroup');
+    setText('i18n-mixtures-title', 'mixturesTitle');
+    setText('i18n-mixtures-blurb', 'mixturesBlurb');
+    document.getElementById('add-mixture').textContent = t('addMixture');
+    setText('i18n-mixtures-help-sum', 'mixturesHelpSum');
+    setHtml('i18n-mixtures-help-body', 'mixturesHelpBody');
+    setText('i18n-recipes-title', 'recipesTitle');
+    setText('i18n-recipes-blurb', 'recipesBlurb');
+    document.getElementById('add-recipe').textContent = t('addRecipe');
+    setText('i18n-recipes-help-sum', 'recipesHelpSum');
+    setHtml('i18n-recipes-help-body', 'recipesHelpBody');
+    setText('i18n-output-title', 'outputTitle');
+    setText('i18n-xml-label', 'labelXml');
+    document.getElementById('xml-out').setAttribute('aria-label', t('labelXml'));
+    document.getElementById('btn-download').textContent = t('btnDownload');
+    document.getElementById('btn-copy').textContent = t('btnCopy');
+    document.getElementById('btn-clear').textContent = t('btnClear');
+    setHtml('i18n-output-foot', 'outputFoot');
+    const sel = document.getElementById('preset-select');
+    if (sel) {
+      const cur = sel.value;
+      sel.innerHTML = `
+        <option value="animalic">${t('presetAnimalic')}</option>
+        <option value="vanilla">${t('presetVanilla')}</option>
+        <option value="mittellandkanal">${t('presetMittelland')}</option>
+        <option value="harterleiten">${t('presetHarterleiten')}</option>
+        <option value="blank">${t('presetBlank')}</option>
+        <option value="starter">${t('presetStarter')}</option>`;
+      if (['animalic', 'vanilla', 'mittellandkanal', 'harterleiten', 'blank', 'starter'].includes(cur)) sel.value = cur;
+      else sel.value = 'animalic';
+    }
+    document.querySelectorAll('.lang-btn').forEach((b) => {
+      b.classList.toggle('is-active', b.getAttribute('data-lang') === uiLang);
+    });
+    const lg = document.querySelector('.lang-switch');
+    if (lg) lg.setAttribute('aria-label', t('langAria'));
+  }
+
+  function setUiLang(code) {
+    if (!I18N[code]) return;
+    uiLang = code;
+    localStorage.setItem('fs25-builder-lang', code);
+    applyStaticI18n();
+    renderAll();
+  }
+
+  /** Same content as public/samples/animalicFood.xml — keep in sync when the sample changes. */
+  const EMBEDDED_ANIMALIC_XML = `<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<!-- FS25_Animalic mod — sync from mods/FS25_Animalic/animalicFood.xml when it changes. -->
+<!-- Aekzl basegame spezial 2026.04.03.13:17 -->
+<animalFood xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://validation.gdn.giants-software.com/xml/fs25/1.17.0.0/animalFood.xsd">
+	<animals>
+		<!-- <animal animalType="COW" consumptionType="SERIAL"> -->
+			<!-- <foodGroup title="$l10n_fillTypeGroup_forage" productionWeight="1.00" fillTypes="FORAGE"/> -->
+			<!-- <foodGroup title="$l10n_fillTypeGroup_hay" productionWeight="0.80" fillTypes="DRYGRASS_WINDROW"/> -->
+			<!-- <foodGroup title="$l10n_fillTypeGroup_silage" productionWeight="0.80" fillTypes="SILAGE"/> -->
+			<!-- <foodGroup title="$l10n_fillTypeGroup_grass" productionWeight="0.40" fillTypes="GRASS_WINDROW"/> -->
+		<!-- </animal> -->
+		<animal animalType="COW" consumptionType="PARALLEL">
+			<foodGroup title="$l10n_fillTypeGroup_hay" productionWeight="0.3" eatWeight="0.3" fillTypes="DRYGRASS_WINDROW"/>
+			<foodGroup title="$l10n_fillTypeGroup_silage" productionWeight="0.4" eatWeight="0.4" fillTypes="SILAGE"/>
+			<foodGroup title="$l10n_fillTypeGroup_grass" productionWeight="0.2" eatWeight="0.2" fillTypes="GRASS_WINDROW"/>
+			<foodGroup title="$l10n_fillTypeGroup_bulk" productionWeight="0.1" eatWeight="0.1" fillTypes="MINERAL_FEED SUGARBEET_CUT"/>
+		</animal>
+		<animal animalType="SHEEP" consumptionType="PARALLEL">
+			<foodGroup title="$l10n_fillTypeGroup_grass" productionWeight="0.5" eatWeight="0.5" fillTypes="GRASS_WINDROW"/>
+			<foodGroup title="$l10n_fillTypeGroup_hay" productionWeight="0.5" eatWeight="0.5" fillTypes="DRYGRASS_WINDROW"/>
+		</animal>
+		<animal animalType="PIG" consumptionType="PARALLEL">
+			<foodGroup title="$l10n_fillTypeGroup_base" productionWeight="0.5" eatWeight="0.5" fillTypes="MAIZE SORGHUM"/>
+			<foodGroup title="$l10n_fillTypeGroup_grain" productionWeight="0.2" eatWeight="0.2" fillTypes="WHEAT BARLEY"/>
+			<foodGroup title="$l10n_fillTypeGroup_protein" productionWeight="0.2" eatWeight="0.2" fillTypes="SOYBEAN CANOLA SUNFLOWER"/>
+			<foodGroup title="$l10n_fillTypeGroup_earth" productionWeight="0.1" eatWeight="0.1" fillTypes="POTATO SUGARBEET SUGARBEET_CUT CARROT PARSNIP BEETROOT"/>
+		</animal>
+		<animal animalType="HORSE" consumptionType="PARALLEL">
+			<foodGroup title="$l10n_fillTypeGroup_bulk" productionWeight="0.4" eatWeight="0.4" fillTypes="OAT SORGHUM"/>
+			<foodGroup title="$l10n_fillTypeGroup_hay" productionWeight="0.3" eatWeight="0.3" fillTypes="DRYGRASS_WINDROW"/>
+			<foodGroup title="$l10n_fillTypeGroup_grass" productionWeight="0.2" eatWeight="0.2" fillTypes="GRASS_WINDROW"/>
+			<foodGroup title="$l10n_fillTypeGroup_earth" productionWeight="0.1" eatWeight="0.1" fillTypes="SUGARBEET_CUT CARROT PARSNIP BEETROOT"/>
+		</animal>
+		<animal animalType="CHICKEN" consumptionType="PARALLEL">
+			<foodGroup title="$l10n_fillTypeGroup_grain" productionWeight="0.4" eatWeight="0.4" fillTypes="WHEAT BARLEY SORGHUM"/>
+			<foodGroup title="$l10n_fillTypeGroup_protein" productionWeight="0.3" eatWeight="0.3" fillTypes="MAIZE SUGARBEET_CUT CARROT PARSNIP BEETROOT BREAD"/>
+			<foodGroup title="$l10n_fillTypeGroup_grass" productionWeight="0.3" eatWeight="0.3" fillTypes="GRASS_WINDROW DRYGRASS_WINDROW"/>
+		</animal>
+	</animals>
+	<mixtures>
+		<mixture animalType="PIG" fillType="PIGFOOD">
+			<ingredient fillTypes="MAIZE SORGHUM" weight="0.5"/>
+			<ingredient fillTypes="WHEAT BARLEY" weight="0.2"/>
+			<ingredient fillTypes="SOYBEAN CANOLA SUNFLOWER" weight="0.2"/>
+			<ingredient fillTypes="POTATO SUGARBEET SUGARBEET_CUT CARROT PARSNIP BEETROOT" weight="0.1"/>
+		</mixture>
+		<mixture animalType="COW" fillType="FORAGE">
+			<ingredient fillTypes="DRYGRASS_WINDROW" weight="0.3"/>
+			<ingredient fillTypes="SILAGE" weight="0.4"/>
+			<ingredient fillTypes="GRASS_WINDROW" weight="0.2"/>
+			<ingredient fillTypes="MINERAL_FEED SUGARBEET_CUT" weight="0.1"/>
+		</mixture>
+	</mixtures>
+	<recipes>
+		<recipe fillType="FORAGE">
+			<ingredient name="dryGrass" title="$l10n_fillType_dryGrass" fillTypes="DRYGRASS_WINDROW" minPercentage="25" maxPercentage="50"/>
+			<ingredient name="silage" title="$l10n_fillType_silage" fillTypes="SILAGE" minPercentage="35" maxPercentage="50"/>
+			<ingredient name="straw" title="$l10n_fillType_straw" fillTypes="STRAW" minPercentage="15" maxPercentage="30"/>
+			<ingredient name="mineralFeed" title="$l10n_fillType_mineralFeed" fillTypes="MINERAL_FEED SUGARBEET_CUT" minPercentage="0" maxPercentage="10"/>
+		</recipe>
+	</recipes>
+</animalFood>`;
+
+  let uid = 1;
+  const nid = () => `id_${uid++}`;
+
+  const state = {
+    animals: [],
+    mixtures: [],
+    recipes: [],
+  };
+
+  function escapeXmlAttr(s) {
+    return String(s ?? '')
+      .replace(/&/g, '&amp;')
+      .replace(/"/g, '&quot;')
+      .replace(/</g, '&lt;');
+  }
+
+  function fmtWeight(n) {
+    const x = Number(n);
+    if (!Number.isFinite(x)) return '0';
+    const t = x.toFixed(4).replace(/\.?0+$/, '');
+    return t === '' ? '0' : t;
+  }
+
+  function defaultFoodGroup() {
+    return { id: nid(), title: '$l10n_fillTypeGroup_hay', productionWeight: '0.5', eatWeight: '0.5', fillTypes: 'DRYGRASS_WINDROW', fgAutoL10n: true, fgCustomPrimary: false };
+  }
+
+  function defaultAnimal() {
+    return {
+      id: nid(),
+      animalType: 'COW',
+      consumptionType: 'PARALLEL',
+      groups: [defaultFoodGroup()],
+    };
+  }
+
+  function defaultMixture() {
+    return {
+      id: nid(),
+      animalType: 'PIG',
+      fillType: 'PIGFOOD',
+      ingredients: [
+        { id: nid(), fillTypes: 'MAIZE SORGHUM', weight: '0.5', ingCustomPrimary: false },
+        { id: nid(), fillTypes: 'WHEAT BARLEY', weight: '0.2', ingCustomPrimary: false },
+      ],
+    };
+  }
+
+  function defaultRecipe() {
+    return {
+      id: nid(),
+      fillType: 'FORAGE',
+      ingredients: [
+        { id: nid(), name: 'dryGrass', title: '$l10n_fillType_dryGrass', fillTypes: 'DRYGRASS_WINDROW', minPercentage: '25', maxPercentage: '50', ingAutoL10n: true, ingCustomPrimary: false },
+        { id: nid(), name: 'silage', title: '$l10n_fillType_silage', fillTypes: 'SILAGE', minPercentage: '35', maxPercentage: '50', ingAutoL10n: true, ingCustomPrimary: false },
+      ],
+    };
+  }
+
+  const ANIMAL_KINDS = ['COW', 'SHEEP', 'PIG', 'HORSE', 'CHICKEN'];
+  const OUTPUT_FILL_TYPES = ['FORAGE', 'PIGFOOD', 'CHICKENFOOD'];
+
+  /** Maps primary fill type → foodGroup $l10n_fillTypeGroup_* and recipe ingredient name / $l10n_fillType_*. */
+  const FILLTYPE_META = {
+    DRYGRASS_WINDROW: { group: 'hay', recipeName: 'dryGrass', recipeTitle: 'dryGrass' },
+    DRYALFALFA_WINDROW: { group: 'hay', recipeName: 'dryGrass', recipeTitle: 'dryGrass' },
+    DRYCLOVER_WINDROW: { group: 'hay', recipeName: 'dryGrass', recipeTitle: 'dryGrass' },
+    SILAGE: { group: 'silage', recipeName: 'silage', recipeTitle: 'silage' },
+    ALFALFA_FERMENTED: { group: 'silage', recipeName: 'silage', recipeTitle: 'silage' },
+    CLOVER_FERMENTED: { group: 'silage', recipeName: 'silage', recipeTitle: 'silage' },
+    GRASS_SILAGE: { group: 'silage', recipeName: 'silage', recipeTitle: 'silage' },
+    GRASS_WINDROW: { group: 'grass', recipeName: 'grass', recipeTitle: 'grass' },
+    ALFALFA_WINDROW: { group: 'grass', recipeName: 'grass', recipeTitle: 'grass' },
+    CLOVER_WINDROW: { group: 'grass', recipeName: 'grass', recipeTitle: 'grass' },
+    MAIZE: { group: 'base', recipeName: 'maize', recipeTitle: 'maize' },
+    SORGHUM: { group: 'base', recipeName: 'sorghum', recipeTitle: 'sorghum' },
+    CCM: { group: 'base', recipeName: 'maize', recipeTitle: 'maize' },
+    CCM_RAW: { group: 'base', recipeName: 'maize', recipeTitle: 'maize' },
+    TRITICALE: { group: 'base', recipeName: 'wheat', recipeTitle: 'wheat' },
+    WHEAT: { group: 'grain', recipeName: 'wheat', recipeTitle: 'wheat' },
+    BARLEY: { group: 'grain', recipeName: 'barley', recipeTitle: 'barley' },
+    RYE: { group: 'grain', recipeName: 'wheat', recipeTitle: 'wheat' },
+    SPELT: { group: 'grain', recipeName: 'wheat', recipeTitle: 'wheat' },
+    WINTERBARLEY: { group: 'grain', recipeName: 'barley', recipeTitle: 'barley' },
+    WINTERWHEAT: { group: 'grain', recipeName: 'wheat', recipeTitle: 'wheat' },
+    OAT: { group: 'bulk', recipeName: 'oat', recipeTitle: 'oat' },
+    SOYBEAN: { group: 'protein', recipeName: 'soybean', recipeTitle: 'soybean' },
+    CANOLA: { group: 'protein', recipeName: 'canola', recipeTitle: 'canola' },
+    SUNFLOWER: { group: 'protein', recipeName: 'sunflower', recipeTitle: 'sunflower' },
+    POTATO: { group: 'earth', recipeName: 'potato', recipeTitle: 'potato' },
+    SUGARBEET: { group: 'earth', recipeName: 'sugarBeet', recipeTitle: 'sugarBeet' },
+    SUGARBEET_CUT: { group: 'earth', recipeName: 'sugarBeetCut', recipeTitle: 'sugarBeetCut' },
+    CARROT: { group: 'earth', recipeName: 'carrot', recipeTitle: 'carrot' },
+    PARSNIP: { group: 'earth', recipeName: 'parsnip', recipeTitle: 'parsnip' },
+    BEETROOT: { group: 'earth', recipeName: 'beetRoot', recipeTitle: 'beetRoot' },
+    BREAD: { group: 'protein', recipeName: 'bread', recipeTitle: 'bread' },
+    MINERAL_FEED: { group: 'bulk', recipeName: 'mineralFeed', recipeTitle: 'mineralFeed' },
+    STRAW: { group: 'grain', recipeName: 'straw', recipeTitle: 'straw' },
+    FORAGE: { group: 'forage', recipeName: 'forage', recipeTitle: 'grass' },
+    GRAINGRIST: { group: 'grain', recipeName: 'wheat', recipeTitle: 'wheat' },
+    CHAFF: { group: 'base', recipeName: 'maize', recipeTitle: 'maize' },
+    PIGFOOD: { group: 'base', recipeName: 'maize', recipeTitle: 'maize' },
+    CHICKENFOOD: { group: 'grain', recipeName: 'wheat', recipeTitle: 'wheat' },
+    LETTUCE: { group: 'grass', recipeName: 'lettuce', recipeTitle: 'grass' },
+    APPLE: { group: 'earth', recipeName: 'apple', recipeTitle: 'carrot' },
+    RABBITFOOD: { group: 'bulk', recipeName: 'mineralFeed', recipeTitle: 'mineralFeed' },
+  };
+
+  const ALL_FILLTYPE_KEYS = Object.keys(FILLTYPE_META).sort();
+  const FILLTYPE_DATALIST_ID = 'filltype-token-suggest';
+
+  function ensureFillTypeDatalist() {
+    if (document.getElementById(FILLTYPE_DATALIST_ID)) return;
+    const dl = document.createElement('datalist');
+    dl.id = FILLTYPE_DATALIST_ID;
+    for (let i = 0; i < ALL_FILLTYPE_KEYS.length; i++) {
+      const opt = document.createElement('option');
+      opt.value = ALL_FILLTYPE_KEYS[i];
+      dl.appendChild(opt);
+    }
+    document.body.appendChild(dl);
+  }
+
+  function splitFillTokens(s) {
+    return String(s || '').trim().split(/\s+/).filter(Boolean);
+  }
+
+  function joinPrimaryAndExtra(primary, extraRaw) {
+    const extra = splitFillTokens(extraRaw);
+    const p = String(primary || '').trim();
+    const parts = p ? [p, ...extra] : extra.slice();
+    return parts.join(' ');
+  }
+
+  function expectedFoodGroupTitle(primary) {
+    const m = FILLTYPE_META[primary];
+    return m ? `$l10n_fillTypeGroup_${m.group}` : '';
+  }
+
+  function applyRecipeL10nFromPrimary(ing, primary) {
+    const m = FILLTYPE_META[primary];
+    if (m) {
+      ing.name = m.recipeName;
+      ing.title = `$l10n_fillType_${m.recipeTitle}`;
+    }
+  }
+
+  function syncFoodGroupTitle(g) {
+    if (!g.fgAutoL10n) return;
+    const primary = splitFillTokens(g.fillTypes)[0] || '';
+    const exp = expectedFoodGroupTitle(primary);
+    if (exp) g.title = exp;
+  }
+
+  function syncRecipeIngL10n(ing) {
+    if (!ing.ingAutoL10n) return;
+    const primary = splitFillTokens(ing.fillTypes)[0] || '';
+    applyRecipeL10nFromPrimary(ing, primary);
+  }
+
+  function fillTypeSelectOptions(selectedPrimary) {
+    const prim = String(selectedPrimary || '');
+    const known = !!(prim && FILLTYPE_META[prim]);
+    const useCustom = !prim || !known;
+    let h = `<option value="__custom__"${useCustom ? ' selected' : ''}>${escapeHtml(t('optCustom'))}</option>`;
+    for (let i = 0; i < ALL_FILLTYPE_KEYS.length; i++) {
+      const k = ALL_FILLTYPE_KEYS[i];
+      h += `<option value="${k}"${!useCustom && k === prim ? ' selected' : ''}>${k}</option>`;
+    }
+    return h;
+  }
+
+  function outputFillSelectOptions(current) {
+    const c = String(current || '');
+    const inList = OUTPUT_FILL_TYPES.includes(c);
+    let h = `<option value="__custom__"${!inList ? ' selected' : ''}>${escapeHtml(t('optCustom'))}</option>`;
+    OUTPUT_FILL_TYPES.forEach((k) => {
+      h += `<option value="${k}"${inList && k === c ? ' selected' : ''}>${k}</option>`;
+    });
+    return h;
+  }
+
+  function animalKindSelectOptions(current) {
+    const c = String(current || '');
+    const inList = ANIMAL_KINDS.includes(c);
+    let h = '';
+    ANIMAL_KINDS.forEach((k) => {
+      h += `<option value="${k}"${inList && k === c ? ' selected' : ''}>${k}</option>`;
+    });
+    h += `<option value="__other__"${!inList ? ' selected' : ''}>${escapeHtml(t('optOther'))}</option>`;
+    return h;
+  }
+
+  const ANIMAL_EMOJI = {
+    COW: '🐄', SHEEP: '🐑', PIG: '🐖', HORSE: '🐎', CHICKEN: '🐔', CUSTOM: '🐾',
+  };
+  const GROUP_ACCENT = {
+    hay: '#d4a843',
+    silage: '#6ab04c',
+    grass: '#3ec98f',
+    bulk: '#5b9bd5',
+    base: '#e87d2c',
+    grain: '#c9963a',
+    protein: '#9b6fc7',
+    earth: '#b8714a',
+    forage: '#e6c97a',
+  };
+
+  function accentForPrimary(primary) {
+    const m = FILLTYPE_META[String(primary || '').trim()];
+    return m && GROUP_ACCENT[m.group] ? GROUP_ACCENT[m.group] : '#95a680';
+  }
+
+  function animalEmojiFor(at) {
+    return ANIMAL_EMOJI[at] || ANIMAL_EMOJI.CUSTOM;
+  }
+
+  function outputFillEmoji(ft) {
+    const k = String(ft || '').toUpperCase();
+    if (k === 'FORAGE') return '🥣';
+    if (k === 'PIGFOOD') return '🐖';
+    if (k === 'CHICKENFOOD') return '🐔';
+    return '📋';
+  }
+
+  function applyBlankBuiltin() {
+    state.animals = [defaultAnimal()];
+    state.mixtures = [];
+    state.recipes = [];
+  }
+
+  function applyStarterBuiltin() {
+    state.animals = [defaultAnimal()];
+    state.mixtures = [defaultMixture()];
+    state.recipes = [defaultRecipe()];
+  }
+
+  const PRESETS = [
+    { id: 'animalic', kind: 'fetch', path: 'samples/animalicFood.xml', embed: EMBEDDED_ANIMALIC_XML },
+    { id: 'vanilla', kind: 'fetch', path: 'samples/animalFood-vanilla.xml' },
+    { id: 'mittellandkanal', kind: 'fetch', path: 'samples/animalFood-mittellandkanal.xml' },
+    { id: 'harterleiten', kind: 'fetch', path: 'samples/animalFood-harterleiten.xml' },
+    { id: 'blank', kind: 'builtin', apply: applyBlankBuiltin },
+    { id: 'starter', kind: 'builtin', apply: applyStarterBuiltin },
+  ];
+
+  function getPreset(id) {
+    return PRESETS.find((p) => p.id === id) || PRESETS[0];
+  }
+
+  const el = {
+    animalsRoot: document.getElementById('animals-root'),
+    mixturesRoot: document.getElementById('mixtures-root'),
+    recipesRoot: document.getElementById('recipes-root'),
+    presetSelect: document.getElementById('preset-select'),
+    xmlOut: document.getElementById('xml-out'),
+    validationMsg: document.getElementById('validation-msg'),
+  };
+
+  async function loadPreset(id, opts = {}) {
+    const isInit = !!opts.isInit;
+    const p = getPreset(id);
+    if (p.kind === 'builtin') {
+      p.apply();
+      renderAll();
+      return true;
+    }
+    try {
+      const res = await fetch(p.path, { cache: 'no-store' });
+      if (!res.ok) throw new Error(String(res.status));
+      const text = await res.text();
+      parseSampleToState(text);
+      renderAll();
+      return true;
+    } catch {
+      if (p.embed) {
+        try {
+          parseSampleToState(p.embed);
+          renderAll();
+          return true;
+        } catch {
+          /* fall through */
+        }
+      }
+      if (isInit) {
+        applyStarterBuiltin();
+        renderAll();
+      } else {
+        alert(t('alertLoadFail'));
+      }
+      return false;
+    }
+  }
+
+  function parseSampleToState(xmlString) {
+    const parser = new DOMParser();
+    const xml = parser.parseFromString(xmlString, 'application/xml');
+    if (xml.querySelector('parsererror')) throw new Error('Invalid XML');
+    const root = xml.querySelector('animalFood');
+    if (!root) throw new Error('No animalFood root');
+
+    state.animals = Array.from(root.querySelectorAll('animals > animal')).map((node) => ({
+      id: nid(),
+      animalType: node.getAttribute('animalType') || 'COW',
+      consumptionType: (node.getAttribute('consumptionType') || 'PARALLEL').toUpperCase(),
+      groups: Array.from(node.querySelectorAll(':scope > foodGroup')).map((fg) => {
+        const fillTypes = fg.getAttribute('fillTypes') || '';
+        const primary = splitFillTokens(fillTypes)[0] || '';
+        const exp = expectedFoodGroupTitle(primary);
+        let title = fg.getAttribute('title') || '';
+        let fgAutoL10n = !!(exp && title === exp);
+        if (!title && exp) {
+          title = exp;
+          fgAutoL10n = true;
+        }
+        const fgCustomPrimary = !primary || !FILLTYPE_META[primary];
+        return {
+          id: nid(),
+          title,
+          productionWeight: fg.getAttribute('productionWeight') ?? '0',
+          eatWeight: fg.getAttribute('eatWeight') ?? '0',
+          fillTypes,
+          fgAutoL10n,
+          fgCustomPrimary,
+        };
+      }),
+    }));
+
+    state.mixtures = Array.from(root.querySelectorAll('mixtures > mixture')).map((node) => ({
+      id: nid(),
+      animalType: node.getAttribute('animalType') || '',
+      fillType: node.getAttribute('fillType') || '',
+      ingredients: Array.from(node.querySelectorAll(':scope > ingredient')).map((ing) => {
+        const fillTypes = ing.getAttribute('fillTypes') || '';
+        const p = splitFillTokens(fillTypes)[0] || '';
+        return {
+          id: nid(),
+          fillTypes,
+          weight: ing.getAttribute('weight') ?? '0',
+          ingCustomPrimary: !p || !FILLTYPE_META[p],
+        };
+      }),
+    }));
+
+    state.recipes = Array.from(root.querySelectorAll('recipes > recipe')).map((node) => ({
+      id: nid(),
+      fillType: node.getAttribute('fillType') || '',
+      ingredients: Array.from(node.querySelectorAll(':scope > ingredient')).map((ing) => {
+        const fillTypes = ing.getAttribute('fillTypes') || '';
+        const primary = splitFillTokens(fillTypes)[0] || '';
+        const name = ing.getAttribute('name') || '';
+        const title = ing.getAttribute('title') || '';
+        const m = FILLTYPE_META[primary];
+        const expectTitle = m ? `$l10n_fillType_${m.recipeTitle}` : '';
+        const ingAutoL10n = !!(m && name === m.recipeName && title === expectTitle);
+        const ingCustomPrimary = !primary || !FILLTYPE_META[primary];
+        return {
+          id: nid(),
+          name,
+          title,
+          fillTypes,
+          minPercentage: ing.getAttribute('minPercentage') ?? '0',
+          maxPercentage: ing.getAttribute('maxPercentage') ?? '0',
+          ingAutoL10n,
+          ingCustomPrimary,
+        };
+      }),
+    }));
+
+    if (!state.animals.length) state.animals = [defaultAnimal()];
+  }
+
+  function validate() {
+    const issues = [];
+    state.animals.forEach((a, i) => {
+      const parallel = String(a.consumptionType).toUpperCase() === 'PARALLEL';
+      if (parallel && a.groups.length) {
+        let sp = 0;
+        let se = 0;
+        a.groups.forEach((g) => {
+          sp += Number(g.productionWeight) || 0;
+          se += Number(g.eatWeight) || 0;
+        });
+        if (Math.abs(sp - 1) > 0.02) issues.push(t('valAnimalProd', { n: i + 1, at: a.animalType, s: sp.toFixed(3) }));
+        if (Math.abs(se - 1) > 0.02) issues.push(t('valAnimalEat', { n: i + 1, at: a.animalType, s: se.toFixed(3) }));
+      }
+    });
+    state.mixtures.forEach((m, i) => {
+      const s = m.ingredients.reduce((acc, ing) => acc + (Number(ing.weight) || 0), 0);
+      if (m.ingredients.length && Math.abs(s - 1) > 0.02) {
+        issues.push(t('valMix', { n: i + 1, ft: m.fillType, s: s.toFixed(3) }));
+      }
+    });
+    return issues;
+  }
+
+  function buildXml() {
+    const lines = [];
+    lines.push('<?xml version="1.0" encoding="utf-8" standalone="no" ?>');
+    lines.push(`<animalFood xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="${escapeXmlAttr(SCHEMA_URL_FIXED)}">`);
+    lines.push('\t<animals>');
+    state.animals.forEach((a) => {
+      const ct = escapeXmlAttr(String(a.consumptionType).toUpperCase());
+      const at = escapeXmlAttr(a.animalType);
+      lines.push(`\t\t<animal animalType="${at}" consumptionType="${ct}">`);
+      const parallel = String(a.consumptionType).toUpperCase() === 'PARALLEL';
+      a.groups.forEach((g) => {
+        const t = escapeXmlAttr(g.title);
+        const pw = escapeXmlAttr(fmtWeight(g.productionWeight));
+        const ft = escapeXmlAttr(g.fillTypes.trim());
+        if (parallel) {
+          const ew = escapeXmlAttr(fmtWeight(g.eatWeight));
+          lines.push(`\t\t\t<foodGroup title="${t}" productionWeight="${pw}" eatWeight="${ew}" fillTypes="${ft}"/>`);
+        } else {
+          lines.push(`\t\t\t<foodGroup title="${t}" productionWeight="${pw}" fillTypes="${ft}"/>`);
+        }
+      });
+      lines.push('\t\t</animal>');
+    });
+    lines.push('\t</animals>');
+
+    lines.push('\t<mixtures>');
+    state.mixtures.forEach((m) => {
+      lines.push(`\t\t<mixture animalType="${escapeXmlAttr(m.animalType)}" fillType="${escapeXmlAttr(m.fillType)}">`);
+      m.ingredients.forEach((ing) => {
+        lines.push(`\t\t\t<ingredient fillTypes="${escapeXmlAttr(ing.fillTypes.trim())}" weight="${escapeXmlAttr(fmtWeight(ing.weight))}"/>`);
+      });
+      lines.push('\t\t</mixture>');
+    });
+    lines.push('\t</mixtures>');
+
+    lines.push('\t<recipes>');
+    state.recipes.forEach((r) => {
+      lines.push(`\t\t<recipe fillType="${escapeXmlAttr(r.fillType)}">`);
+      r.ingredients.forEach((ing) => {
+        lines.push(
+          `\t\t\t<ingredient name="${escapeXmlAttr(ing.name)}" title="${escapeXmlAttr(ing.title)}" fillTypes="${escapeXmlAttr(ing.fillTypes.trim())}" minPercentage="${escapeXmlAttr(ing.minPercentage)}" maxPercentage="${escapeXmlAttr(ing.maxPercentage)}"/>`
+        );
+      });
+      lines.push('\t\t</recipe>');
+    });
+    lines.push('\t</recipes>');
+    lines.push('</animalFood>');
+    return lines.join('\n');
+  }
+
+  function syncOutput() {
+    const xml = buildXml();
+    el.xmlOut.value = xml;
+    const issues = validate();
+    if (!issues.length) {
+      el.validationMsg.innerHTML = `<div class="status ok">${escapeHtml(t('validationOk'))}</div>`;
+    } else {
+      el.validationMsg.innerHTML = `<div class="status warn"><strong>${escapeHtml(t('validationCheck'))}</strong><ul class="tight" style="margin:8px 0 0;">${issues.map((x) => `<li>${escapeHtml(x)}</li>`).join('')}</ul></div>`;
+    }
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, (m) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
+  }
+
+  function renderAnimals() {
+    const blocks = state.animals.map((a) => {
+      const parallel = String(a.consumptionType).toUpperCase() === 'PARALLEL';
+      const animalInList = ANIMAL_KINDS.includes(a.animalType);
+      const emoji = animalEmojiFor(animalInList ? a.animalType : 'CUSTOM');
+      const groupsHtml = a.groups.map((g) => {
+        const parts = splitFillTokens(g.fillTypes);
+        const primary = parts[0] || '';
+        const extra = parts.slice(1).join(' ');
+        const isCustomPrimary = !!g.fgCustomPrimary || !primary || !FILLTYPE_META[primary];
+        const acc = escapeHtml(accentForPrimary(isCustomPrimary ? '' : primary));
+        const customBlock = isCustomPrimary
+          ? `<label class="f">${escapeHtml(t('fillTypesFull'))}</label>
+          <input type="text" class="inp-fg-ft-full" data-aid="${a.id}" data-gid="${g.id}" value="${escapeHtml(g.fillTypes)}" spellcheck="false">`
+          : `<label class="f">${escapeHtml(t('additionalFt'))}</label>
+          <input type="text" class="inp-fg-extra" data-aid="${a.id}" data-gid="${g.id}" value="${escapeHtml(extra)}" placeholder="${escapeHtml(t('phExtraFt'))}" spellcheck="false" list="${FILLTYPE_DATALIST_ID}" autocomplete="off">`;
+        const titleBlock = g.fgAutoL10n && !isCustomPrimary
+          ? `<div class="l10n-hint">${escapeHtml(t('groupTitleHint'))} <kbd>${escapeHtml(g.title)}</kbd></div>
+          <button type="button" class="btn-inline btn-fg-title-override" data-aid="${a.id}" data-gid="${g.id}">${escapeHtml(t('editTitleManual'))}</button>`
+          : `<label class="f">${escapeHtml(t('titleXml'))}</label>
+          <input type="text" class="inp-fg-title" data-aid="${a.id}" data-gid="${g.id}" value="${escapeHtml(g.title)}" spellcheck="false">
+          ${!isCustomPrimary ? `<button type="button" class="btn-inline btn-fg-title-auto" data-aid="${a.id}" data-gid="${g.id}">${escapeHtml(t('useAutoTitle'))}</button>` : ''}`;
+        const fgMode = parallel ? t('fgParallel') : t('fgSerial');
+        return `
+        <div class="fg-editor" data-gid="${g.id}" style="--fg-accent:${acc}">
+          <div class="fg-editor-inner">
+            <div class="fg-editor-head">
+              <span class="fg-editor-label">${escapeHtml(t('fgFoodGroup'))} <span class="mini">${escapeHtml(fgMode)}</span></span>
+              <button type="button" class="btn danger btn-compact btn-rm-group" data-aid="${a.id}" data-gid="${g.id}">${escapeHtml(t('remove'))}</button>
+            </div>
+            <label class="f">${escapeHtml(t('primaryFill'))}</label>
+            <select class="sel-fg-primary" data-aid="${a.id}" data-gid="${g.id}">
+              ${fillTypeSelectOptions(isCustomPrimary ? '__custom__' : primary)}
+            </select>
+            ${customBlock}
+            ${titleBlock}
+            <div class="row2">
+              <div>
+                <label class="f">${escapeHtml(t('prodWeight'))}</label>
+                <input type="text" class="inp-fg-pw" data-aid="${a.id}" data-gid="${g.id}" value="${escapeHtml(g.productionWeight)}">
+              </div>
+              <div class="${parallel ? '' : 'muted'}" style="${parallel ? '' : 'opacity:0.5;pointer-events:none;'}">
+                <label class="f">${escapeHtml(t('eatWeight'))}</label>
+                <input type="text" class="inp-fg-ew" data-aid="${a.id}" data-gid="${g.id}" value="${escapeHtml(g.eatWeight)}" ${parallel ? '' : 'disabled'}>
+              </div>
+            </div>
+          </div>
+        </div>`;
+      }).join('');
+
+      return `
+      <article class="animal" data-aid="${a.id}">
+        <div class="animal-sticky">
+          <div class="animal-head">
+            <div class="animal-head-left">
+              <h3 class="animal-title">${emoji} ${escapeHtml(a.animalType)}</h3>
+              <span class="pill">${parallel ? 'PARALLEL' : 'SERIAL'}</span>
+            </div>
+            <button type="button" class="btn danger btn-compact btn-rm-animal" data-aid="${a.id}">${escapeHtml(t('removeAnimal'))}</button>
+          </div>
+          <div class="animal-controls row2">
+            <div>
+              <label class="f">${escapeHtml(t('animalType'))}</label>
+              <select class="sel-animal-kind" data-aid="${a.id}">${animalKindSelectOptions(a.animalType)}</select>
+              <div class="animal-custom-row" data-aid="${a.id}" style="margin-top:8px;display:${animalInList ? 'none' : 'block'};">
+                <label class="f">${escapeHtml(t('customAnimalType'))}</label>
+                <input type="text" class="inp-animal-custom" data-aid="${a.id}" value="${escapeHtml(animalInList ? '' : a.animalType)}" placeholder="${escapeHtml(t('phGoose'))}" spellcheck="false">
+              </div>
+            </div>
+            <div>
+              <label class="f">${escapeHtml(t('consumptionType'))}</label>
+              <select class="sel-consumption" data-aid="${a.id}">
+                <option value="PARALLEL"${parallel ? ' selected' : ''}>PARALLEL</option>
+                <option value="SERIAL"${!parallel ? ' selected' : ''}>SERIAL</option>
+              </select>
+            </div>
+          </div>
+          <span class="animal-fg-cap">${escapeHtml(t('foodGroupsCap'))}</span>
+        </div>
+        <div class="animal-fg-list">${groupsHtml}</div>
+        <button type="button" class="btn btn-add-group" data-aid="${a.id}" style="margin-top:10px;">${escapeHtml(t('addFoodGroup'))}</button>
+      </article>`;
+    }).join('');
+    el.animalsRoot.innerHTML = `<div class="main-panel--animals"><div class="animals-editor">${blocks}</div></div>`;
+
+    el.animalsRoot.querySelectorAll('.sel-animal-kind').forEach((sel) => {
+      sel.addEventListener('change', () => {
+        const aid = sel.getAttribute('data-aid');
+        const a = state.animals.find((x) => x.id === aid);
+        if (!a) return;
+        const row = el.animalsRoot.querySelector(`.animal-custom-row[data-aid="${aid}"]`);
+        const inp = row && row.querySelector('.inp-animal-custom');
+        if (sel.value === '__other__') {
+          if (row) row.style.display = 'block';
+          if (ANIMAL_KINDS.includes(a.animalType)) a.animalType = 'CUSTOM';
+          if (inp) inp.value = a.animalType;
+        } else {
+          a.animalType = sel.value;
+          if (row) row.style.display = 'none';
+        }
+        syncOutput();
+      });
+    });
+
+    el.animalsRoot.querySelectorAll('.inp-animal-custom').forEach((inp) => {
+      inp.addEventListener('input', () => {
+        const aid = inp.getAttribute('data-aid');
+        const a = state.animals.find((x) => x.id === aid);
+        if (a) a.animalType = inp.value.trim() || 'CUSTOM';
+        syncOutput();
+      });
+    });
+
+    el.animalsRoot.querySelectorAll('.sel-consumption').forEach((sel) => {
+      sel.addEventListener('change', () => {
+        const aid = sel.getAttribute('data-aid');
+        const a = state.animals.find((x) => x.id === aid);
+        if (a) {
+          a.consumptionType = sel.value;
+          renderAll();
+        }
+      });
+    });
+
+    el.animalsRoot.querySelectorAll('.sel-fg-primary').forEach((sel) => {
+      sel.addEventListener('change', () => {
+        const aid = sel.getAttribute('data-aid');
+        const gid = sel.getAttribute('data-gid');
+        const a = state.animals.find((x) => x.id === aid);
+        const g = a && a.groups.find((x) => x.id === gid);
+        if (!g) return;
+        if (sel.value === '__custom__') {
+          g.fgCustomPrimary = true;
+          g.fgAutoL10n = false;
+        } else {
+          const wasCustom = g.fgCustomPrimary;
+          g.fgCustomPrimary = false;
+          const extraInp = el.animalsRoot.querySelector(`.inp-fg-extra[data-aid="${aid}"][data-gid="${gid}"]`);
+          let extra = extraInp ? extraInp.value : '';
+          if (wasCustom) extra = splitFillTokens(g.fillTypes).slice(1).join(' ');
+          g.fillTypes = joinPrimaryAndExtra(sel.value, extra);
+          g.fgAutoL10n = true;
+          syncFoodGroupTitle(g);
+        }
+        renderAll();
+      });
+    });
+
+    el.animalsRoot.querySelectorAll('.inp-fg-extra').forEach((inp) => {
+      inp.addEventListener('input', () => {
+        const aid = inp.getAttribute('data-aid');
+        const gid = inp.getAttribute('data-gid');
+        const a = state.animals.find((x) => x.id === aid);
+        const g = a && a.groups.find((x) => x.id === gid);
+        const sel = el.animalsRoot.querySelector(`.sel-fg-primary[data-aid="${aid}"][data-gid="${gid}"]`);
+        if (!g || !sel || sel.value === '__custom__') return;
+        g.fillTypes = joinPrimaryAndExtra(sel.value, inp.value);
+        syncFoodGroupTitle(g);
+        syncOutput();
+      });
+    });
+
+    el.animalsRoot.querySelectorAll('.inp-fg-ft-full').forEach((inp) => {
+      inp.addEventListener('input', () => {
+        const aid = inp.getAttribute('data-aid');
+        const gid = inp.getAttribute('data-gid');
+        const a = state.animals.find((x) => x.id === aid);
+        const g = a && a.groups.find((x) => x.id === gid);
+        if (g) g.fillTypes = inp.value;
+        syncOutput();
+      });
+    });
+
+    el.animalsRoot.querySelectorAll('.inp-fg-title').forEach((inp) => {
+      inp.addEventListener('input', () => {
+        const aid = inp.getAttribute('data-aid');
+        const gid = inp.getAttribute('data-gid');
+        const a = state.animals.find((x) => x.id === aid);
+        const g = a && a.groups.find((x) => x.id === gid);
+        if (g) g.title = inp.value;
+        syncOutput();
+      });
+    });
+
+    el.animalsRoot.querySelectorAll('.inp-fg-pw, .inp-fg-ew').forEach((inp) => {
+      inp.addEventListener('input', () => {
+        const aid = inp.getAttribute('data-aid');
+        const gid = inp.getAttribute('data-gid');
+        const a = state.animals.find((x) => x.id === aid);
+        const g = a && a.groups.find((x) => x.id === gid);
+        if (!g) return;
+        if (inp.classList.contains('inp-fg-pw')) g.productionWeight = inp.value;
+        if (inp.classList.contains('inp-fg-ew')) g.eatWeight = inp.value;
+        syncOutput();
+      });
+    });
+
+    el.animalsRoot.querySelectorAll('.btn-fg-title-override').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const aid = btn.getAttribute('data-aid');
+        const gid = btn.getAttribute('data-gid');
+        const a = state.animals.find((x) => x.id === aid);
+        const g = a && a.groups.find((x) => x.id === gid);
+        if (g) g.fgAutoL10n = false;
+        renderAll();
+      });
+    });
+
+    el.animalsRoot.querySelectorAll('.btn-fg-title-auto').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const aid = btn.getAttribute('data-aid');
+        const gid = btn.getAttribute('data-gid');
+        const a = state.animals.find((x) => x.id === aid);
+        const g = a && a.groups.find((x) => x.id === gid);
+        if (g) {
+          g.fgAutoL10n = true;
+          syncFoodGroupTitle(g);
+        }
+        renderAll();
+      });
+    });
+
+    el.animalsRoot.querySelectorAll('.btn-rm-animal').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const aid = btn.getAttribute('data-aid');
+        state.animals = state.animals.filter((x) => x.id !== aid);
+        if (!state.animals.length) state.animals = [defaultAnimal()];
+        renderAll();
+      });
+    });
+
+    el.animalsRoot.querySelectorAll('.btn-rm-group').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const aid = btn.getAttribute('data-aid');
+        const gid = btn.getAttribute('data-gid');
+        const a = state.animals.find((x) => x.id === aid);
+        if (a) {
+          a.groups = a.groups.filter((x) => x.id !== gid);
+          if (!a.groups.length) a.groups.push(defaultFoodGroup());
+        }
+        renderAll();
+      });
+    });
+
+    el.animalsRoot.querySelectorAll('.btn-add-group').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const aid = btn.getAttribute('data-aid');
+        const a = state.animals.find((x) => x.id === aid);
+        if (a) a.groups.push(defaultFoodGroup());
+        renderAll();
+      });
+    });
+  }
+
+  function renderMixtures() {
+    el.mixturesRoot.innerHTML = state.mixtures.map((m) => {
+      const atIn = ANIMAL_KINDS.includes(m.animalType);
+      const outCustom = !OUTPUT_FILL_TYPES.includes(m.fillType);
+      const mixEmoji = animalEmojiFor(atIn ? m.animalType : 'CUSTOM');
+      const ingHtml = m.ingredients.map((ing) => {
+        const parts = splitFillTokens(ing.fillTypes);
+        const primary = parts[0] || '';
+        const extra = parts.slice(1).join(' ');
+        const isCustom = !!ing.ingCustomPrimary || !primary || !FILLTYPE_META[primary];
+        const acc = escapeHtml(accentForPrimary(isCustom ? '' : primary));
+        const ingBody = isCustom
+          ? `<label class="f">${escapeHtml(t('fillTypesFull'))}</label>
+            <input type="text" class="inp-mix-ing-ft-full" data-mid="${m.id}" data-iid="${ing.id}" value="${escapeHtml(ing.fillTypes)}" spellcheck="false">`
+          : `<label class="f">${escapeHtml(t('additionalFt'))}</label>
+            <input type="text" class="inp-mix-ing-extra" data-mid="${m.id}" data-iid="${ing.id}" value="${escapeHtml(extra)}" spellcheck="false" list="${FILLTYPE_DATALIST_ID}" autocomplete="off">`;
+        return `
+          <div class="mix-ing-editor" data-mid="${m.id}" data-iid="${ing.id}" style="--fg-accent:${acc}">
+            <div class="fg-editor-head">
+              <span class="fg-editor-label">${escapeHtml(t('ingredient'))} <span class="mini">${escapeHtml(t('weightSlot'))}</span></span>
+              <button type="button" class="btn danger btn-compact btn-rm-mix-ing" data-mid="${m.id}" data-iid="${ing.id}">${escapeHtml(t('remove'))}</button>
+            </div>
+            <label class="f">${escapeHtml(t('primaryFill'))}</label>
+            <select class="sel-mix-ing-primary" data-mid="${m.id}" data-iid="${ing.id}">${fillTypeSelectOptions(isCustom ? '__custom__' : primary)}</select>
+            ${ingBody}
+            <label class="f">${escapeHtml(t('weight01'))}</label>
+            <input type="text" class="inp-mix-ing-w" data-mid="${m.id}" data-iid="${ing.id}" value="${escapeHtml(ing.weight)}">
+          </div>`;
+      }).join('');
+      return `
+      <div class="editor-card" data-mid="${m.id}">
+        <div class="editor-card-sticky">
+          <div class="editor-card-head">
+            <div>
+              <h3 class="editor-card-title">${escapeHtml(t('mixture'))}</h3>
+              <p class="editor-card-sub">${mixEmoji} <span>${escapeHtml(m.animalType)}</span> → <strong>${escapeHtml(m.fillType)}</strong></p>
+            </div>
+            <button type="button" class="btn danger btn-compact btn-rm-mixture" data-mid="${m.id}">${escapeHtml(t('removeMix'))}</button>
+          </div>
+          <div class="row2">
+            <div>
+              <label class="f">${escapeHtml(t('animalType'))}</label>
+              <select class="sel-mix-at" data-mid="${m.id}">${animalKindSelectOptions(m.animalType)}</select>
+              <div class="mix-at-custom" data-mid="${m.id}" style="margin-top:8px;display:${atIn ? 'none' : 'block'};">
+                <input type="text" class="inp-mix-at-custom" data-mid="${m.id}" value="${escapeHtml(atIn ? '' : m.animalType)}" placeholder="${escapeHtml(t('customAnimalType'))}" spellcheck="false">
+              </div>
+            </div>
+            <div>
+              <label class="f">${escapeHtml(t('outputFillType'))}</label>
+              <select class="sel-mix-ft-out" data-mid="${m.id}">${outputFillSelectOptions(m.fillType)}</select>
+              <input type="text" class="inp-mix-ft-custom" data-mid="${m.id}" value="${escapeHtml(m.fillType)}" placeholder="${escapeHtml(t('phMixOut'))}" spellcheck="false" style="margin-top:8px;display:${outCustom ? 'block' : 'none'};">
+            </div>
+          </div>
+          <span class="editor-ing-cap">${escapeHtml(t('ingredientsCap'))}</span>
+        </div>
+        <div class="mix-ing-list">${ingHtml}</div>
+        <button type="button" class="btn btn-add-mix-ing" data-mid="${m.id}" style="margin-top:10px;">${escapeHtml(t('addIngredient'))}</button>
+      </div>`;
+    }).join('');
+
+    el.mixturesRoot.querySelectorAll('.sel-mix-at').forEach((sel) => {
+      sel.addEventListener('change', () => {
+        const mid = sel.getAttribute('data-mid');
+        const m = state.mixtures.find((x) => x.id === mid);
+        if (!m) return;
+        const wrap = el.mixturesRoot.querySelector(`.mix-at-custom[data-mid="${mid}"]`);
+        const inp = wrap && wrap.querySelector('.inp-mix-at-custom');
+        if (sel.value === '__other__') {
+          if (ANIMAL_KINDS.includes(m.animalType)) m.animalType = 'CUSTOM';
+          if (wrap) wrap.style.display = 'block';
+          if (inp) inp.value = m.animalType;
+        } else {
+          m.animalType = sel.value;
+          if (wrap) wrap.style.display = 'none';
+        }
+        syncOutput();
+      });
+    });
+
+    el.mixturesRoot.querySelectorAll('.inp-mix-at-custom').forEach((inp) => {
+      inp.addEventListener('input', () => {
+        const mid = inp.getAttribute('data-mid');
+        const m = state.mixtures.find((x) => x.id === mid);
+        if (m) m.animalType = inp.value.trim() || 'CUSTOM';
+        syncOutput();
+      });
+    });
+
+    el.mixturesRoot.querySelectorAll('.sel-mix-ft-out').forEach((sel) => {
+      sel.addEventListener('change', () => {
+        const mid = sel.getAttribute('data-mid');
+        const m = state.mixtures.find((x) => x.id === mid);
+        if (!m) return;
+        const cInp = el.mixturesRoot.querySelector(`.inp-mix-ft-custom[data-mid="${mid}"]`);
+        if (sel.value === '__custom__') {
+          m.fillType = cInp && cInp.value.trim() ? cInp.value.trim() : 'FORAGE';
+          if (cInp) { cInp.style.display = 'block'; cInp.value = m.fillType; }
+        } else {
+          m.fillType = sel.value;
+          if (cInp) cInp.style.display = 'none';
+        }
+        renderAll();
+      });
+    });
+
+    el.mixturesRoot.querySelectorAll('.inp-mix-ft-custom').forEach((inp) => {
+      inp.addEventListener('input', () => {
+        const mid = inp.getAttribute('data-mid');
+        const m = state.mixtures.find((x) => x.id === mid);
+        if (m) m.fillType = inp.value.trim() || 'FORAGE';
+        syncOutput();
+      });
+    });
+
+    el.mixturesRoot.querySelectorAll('.sel-mix-ing-primary').forEach((sel) => {
+      sel.addEventListener('change', () => {
+        const mid = sel.getAttribute('data-mid');
+        const iid = sel.getAttribute('data-iid');
+        const m = state.mixtures.find((x) => x.id === mid);
+        const ing = m && m.ingredients.find((x) => x.id === iid);
+        if (!ing) return;
+        if (sel.value === '__custom__') {
+          ing.ingCustomPrimary = true;
+        } else {
+          const wasCustom = ing.ingCustomPrimary;
+          ing.ingCustomPrimary = false;
+          const extraInp = el.mixturesRoot.querySelector(`.inp-mix-ing-extra[data-mid="${mid}"][data-iid="${iid}"]`);
+          let extra = extraInp ? extraInp.value : '';
+          if (wasCustom) extra = splitFillTokens(ing.fillTypes).slice(1).join(' ');
+          ing.fillTypes = joinPrimaryAndExtra(sel.value, extra);
+        }
+        renderAll();
+      });
+    });
+
+    el.mixturesRoot.querySelectorAll('.inp-mix-ing-extra').forEach((inp) => {
+      inp.addEventListener('input', () => {
+        const mid = inp.getAttribute('data-mid');
+        const iid = inp.getAttribute('data-iid');
+        const m = state.mixtures.find((x) => x.id === mid);
+        const ing = m && m.ingredients.find((x) => x.id === iid);
+        const sel = el.mixturesRoot.querySelector(`.sel-mix-ing-primary[data-mid="${mid}"][data-iid="${iid}"]`);
+        if (!ing || !sel || sel.value === '__custom__') return;
+        ing.fillTypes = joinPrimaryAndExtra(sel.value, inp.value);
+        syncOutput();
+      });
+    });
+
+    el.mixturesRoot.querySelectorAll('.inp-mix-ing-ft-full').forEach((inp) => {
+      inp.addEventListener('input', () => {
+        const mid = inp.getAttribute('data-mid');
+        const iid = inp.getAttribute('data-iid');
+        const m = state.mixtures.find((x) => x.id === mid);
+        const ing = m && m.ingredients.find((x) => x.id === iid);
+        if (ing) ing.fillTypes = inp.value;
+        syncOutput();
+      });
+    });
+
+    el.mixturesRoot.querySelectorAll('.inp-mix-ing-w').forEach((inp) => {
+      inp.addEventListener('input', () => {
+        const mid = inp.getAttribute('data-mid');
+        const iid = inp.getAttribute('data-iid');
+        const m = state.mixtures.find((x) => x.id === mid);
+        const ing = m && m.ingredients.find((x) => x.id === iid);
+        if (ing) ing.weight = inp.value;
+        syncOutput();
+      });
+    });
+
+    el.mixturesRoot.querySelectorAll('.btn-rm-mixture').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const mid = btn.getAttribute('data-mid');
+        state.mixtures = state.mixtures.filter((x) => x.id !== mid);
+        renderAll();
+      });
+    });
+
+    el.mixturesRoot.querySelectorAll('.btn-rm-mix-ing').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const mid = btn.getAttribute('data-mid');
+        const iid = btn.getAttribute('data-iid');
+        const m = state.mixtures.find((x) => x.id === mid);
+        if (m) {
+          m.ingredients = m.ingredients.filter((x) => x.id !== iid);
+          if (!m.ingredients.length) m.ingredients.push({ id: nid(), fillTypes: 'WHEAT', weight: '1', ingCustomPrimary: false });
+        }
+        renderAll();
+      });
+    });
+
+    el.mixturesRoot.querySelectorAll('.btn-add-mix-ing').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const mid = btn.getAttribute('data-mid');
+        const m = state.mixtures.find((x) => x.id === mid);
+        if (m) m.ingredients.push({ id: nid(), fillTypes: 'WHEAT', weight: '0.1', ingCustomPrimary: false });
+        renderAll();
+      });
+    });
+  }
+
+  function renderRecipes() {
+    el.recipesRoot.innerHTML = state.recipes.map((r) => {
+      const outCustom = !OUTPUT_FILL_TYPES.includes(r.fillType);
+      const outEm = outputFillEmoji(r.fillType);
+      const ingHtml = r.ingredients.map((ing) => {
+        const parts = splitFillTokens(ing.fillTypes);
+        const primary = parts[0] || '';
+        const extra = parts.slice(1).join(' ');
+        const isCustom = !!ing.ingCustomPrimary || !primary || !FILLTYPE_META[primary];
+        const acc = escapeHtml(accentForPrimary(isCustom ? '' : primary));
+        const l10nBlock = ing.ingAutoL10n && !isCustom
+          ? `<div class="l10n-hint">${escapeHtml(t('name'))} <kbd>${escapeHtml(ing.name)}</kbd> · ${escapeHtml(t('title'))} <kbd>${escapeHtml(ing.title)}</kbd></div>
+            <button type="button" class="btn-inline btn-rec-ing-l10n-edit" data-rid="${r.id}" data-iid="${ing.id}">${escapeHtml(t('editNameTitle'))}</button>`
+          : `<div class="row2">
+              <div>
+                <label class="f">${escapeHtml(t('name'))}</label>
+                <input type="text" class="inp-rec-n" data-rid="${r.id}" data-iid="${ing.id}" value="${escapeHtml(ing.name)}" spellcheck="false">
+              </div>
+              <div>
+                <label class="f">${escapeHtml(t('title'))}</label>
+                <input type="text" class="inp-rec-t" data-rid="${r.id}" data-iid="${ing.id}" value="${escapeHtml(ing.title)}" spellcheck="false">
+              </div>
+            </div>
+            ${!isCustom ? `<button type="button" class="btn-inline btn-rec-ing-l10n-auto" data-rid="${r.id}" data-iid="${ing.id}">${escapeHtml(t('deriveFromFt'))}</button>` : ''}`;
+        const ftBlock = isCustom
+          ? `<label class="f">${escapeHtml(t('fillTypesFull'))}</label>
+            <input type="text" class="inp-rec-ft-full" data-rid="${r.id}" data-iid="${ing.id}" value="${escapeHtml(ing.fillTypes)}" spellcheck="false">`
+          : `<label class="f">${escapeHtml(t('additionalFt'))}</label>
+            <input type="text" class="inp-rec-ing-extra" data-rid="${r.id}" data-iid="${ing.id}" value="${escapeHtml(extra)}" spellcheck="false" list="${FILLTYPE_DATALIST_ID}" autocomplete="off">`;
+        return `
+          <div class="rec-ing-editor" data-rid="${r.id}" data-iid="${ing.id}" style="--fg-accent:${acc}">
+            <div class="fg-editor-head">
+              <span class="fg-editor-label">${escapeHtml(t('ingSlot'))} <span class="mini">${escapeHtml(t('mixerPct'))}</span></span>
+              <button type="button" class="btn danger btn-compact btn-rm-rec-ing" data-rid="${r.id}" data-iid="${ing.id}">${escapeHtml(t('remove'))}</button>
+            </div>
+            <label class="f">${escapeHtml(t('primaryFill'))}</label>
+            <select class="sel-rec-ing-primary" data-rid="${r.id}" data-iid="${ing.id}">${fillTypeSelectOptions(isCustom ? '__custom__' : primary)}</select>
+            ${ftBlock}
+            ${l10nBlock}
+            <div class="row2">
+              <div>
+                <label class="f">${escapeHtml(t('minPct'))}</label>
+                <input type="text" class="inp-rec-min" data-rid="${r.id}" data-iid="${ing.id}" value="${escapeHtml(ing.minPercentage)}">
+              </div>
+              <div>
+                <label class="f">${escapeHtml(t('maxPct'))}</label>
+                <input type="text" class="inp-rec-max" data-rid="${r.id}" data-iid="${ing.id}" value="${escapeHtml(ing.maxPercentage)}">
+              </div>
+            </div>
+          </div>`;
+      }).join('');
+      return `
+      <div class="editor-card" data-rid="${r.id}">
+        <div class="editor-card-sticky">
+          <div class="editor-card-head">
+            <div>
+              <h3 class="editor-card-title">${escapeHtml(t('recipe'))}</h3>
+              <p class="editor-card-sub">${outEm} ${escapeHtml(t('recipeOutputLine'))} <strong>${escapeHtml(r.fillType)}</strong></p>
+            </div>
+            <button type="button" class="btn danger btn-compact btn-rm-recipe" data-rid="${r.id}">${escapeHtml(t('remove'))}</button>
+          </div>
+          <label class="f">${escapeHtml(t('recipeOutFt'))}</label>
+          <select class="sel-recipe-out" data-rid="${r.id}">${outputFillSelectOptions(r.fillType)}</select>
+          <input type="text" class="inp-recipe-ft-custom" data-rid="${r.id}" value="${escapeHtml(r.fillType)}" placeholder="${escapeHtml(t('phRecOut'))}" spellcheck="false" style="margin-top:8px;display:${outCustom ? 'block' : 'none'};">
+          <span class="editor-ing-cap">${escapeHtml(t('ingredientSlotsCap'))}</span>
+        </div>
+        <div class="rec-ing-list">${ingHtml}</div>
+        <button type="button" class="btn btn-add-rec-ing" data-rid="${r.id}" style="margin-top:10px;">${escapeHtml(t('addIngSlot'))}</button>
+      </div>`;
+    }).join('');
+
+    el.recipesRoot.querySelectorAll('.sel-recipe-out').forEach((sel) => {
+      sel.addEventListener('change', () => {
+        const rid = sel.getAttribute('data-rid');
+        const r = state.recipes.find((x) => x.id === rid);
+        if (!r) return;
+        const cInp = el.recipesRoot.querySelector(`.inp-recipe-ft-custom[data-rid="${rid}"]`);
+        if (sel.value === '__custom__') {
+          r.fillType = cInp && cInp.value.trim() ? cInp.value.trim() : 'FORAGE';
+          if (cInp) { cInp.style.display = 'block'; cInp.value = r.fillType; }
+        } else {
+          r.fillType = sel.value;
+          if (cInp) cInp.style.display = 'none';
+        }
+        renderAll();
+      });
+    });
+
+    el.recipesRoot.querySelectorAll('.inp-recipe-ft-custom').forEach((inp) => {
+      inp.addEventListener('input', () => {
+        const rid = inp.getAttribute('data-rid');
+        const r = state.recipes.find((x) => x.id === rid);
+        if (r) r.fillType = inp.value.trim() || 'FORAGE';
+        syncOutput();
+      });
+    });
+
+    el.recipesRoot.querySelectorAll('.sel-rec-ing-primary').forEach((sel) => {
+      sel.addEventListener('change', () => {
+        const rid = sel.getAttribute('data-rid');
+        const iid = sel.getAttribute('data-iid');
+        const r = state.recipes.find((x) => x.id === rid);
+        const ing = r && r.ingredients.find((x) => x.id === iid);
+        if (!ing) return;
+        if (sel.value === '__custom__') {
+          ing.ingCustomPrimary = true;
+          ing.ingAutoL10n = false;
+        } else {
+          const wasCustom = ing.ingCustomPrimary;
+          ing.ingCustomPrimary = false;
+          const extraInp = el.recipesRoot.querySelector(`.inp-rec-ing-extra[data-rid="${rid}"][data-iid="${iid}"]`);
+          let extra = extraInp ? extraInp.value : '';
+          if (wasCustom) extra = splitFillTokens(ing.fillTypes).slice(1).join(' ');
+          ing.fillTypes = joinPrimaryAndExtra(sel.value, extra);
+          if (ing.ingAutoL10n) syncRecipeIngL10n(ing);
+        }
+        renderAll();
+      });
+    });
+
+    el.recipesRoot.querySelectorAll('.inp-rec-ing-extra').forEach((inp) => {
+      inp.addEventListener('input', () => {
+        const rid = inp.getAttribute('data-rid');
+        const iid = inp.getAttribute('data-iid');
+        const r = state.recipes.find((x) => x.id === rid);
+        const ing = r && r.ingredients.find((x) => x.id === iid);
+        const sel = el.recipesRoot.querySelector(`.sel-rec-ing-primary[data-rid="${rid}"][data-iid="${iid}"]`);
+        if (!ing || !sel || sel.value === '__custom__') return;
+        ing.fillTypes = joinPrimaryAndExtra(sel.value, inp.value);
+        if (ing.ingAutoL10n) syncRecipeIngL10n(ing);
+        syncOutput();
+      });
+    });
+
+    el.recipesRoot.querySelectorAll('.inp-rec-ft-full').forEach((inp) => {
+      inp.addEventListener('input', () => {
+        const rid = inp.getAttribute('data-rid');
+        const iid = inp.getAttribute('data-iid');
+        const r = state.recipes.find((x) => x.id === rid);
+        const ing = r && r.ingredients.find((x) => x.id === iid);
+        if (ing) ing.fillTypes = inp.value;
+        syncOutput();
+      });
+    });
+
+    el.recipesRoot.querySelectorAll('.inp-rec-n, .inp-rec-t, .inp-rec-min, .inp-rec-max').forEach((inp) => {
+      inp.addEventListener('input', () => {
+        const rid = inp.getAttribute('data-rid');
+        const iid = inp.getAttribute('data-iid');
+        const r = state.recipes.find((x) => x.id === rid);
+        const ing = r && r.ingredients.find((x) => x.id === iid);
+        if (!ing) return;
+        if (inp.classList.contains('inp-rec-n')) ing.name = inp.value;
+        if (inp.classList.contains('inp-rec-t')) ing.title = inp.value;
+        if (inp.classList.contains('inp-rec-min')) ing.minPercentage = inp.value;
+        if (inp.classList.contains('inp-rec-max')) ing.maxPercentage = inp.value;
+        syncOutput();
+      });
+    });
+
+    el.recipesRoot.querySelectorAll('.btn-rec-ing-l10n-edit').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const rid = btn.getAttribute('data-rid');
+        const iid = btn.getAttribute('data-iid');
+        const r = state.recipes.find((x) => x.id === rid);
+        const ing = r && r.ingredients.find((x) => x.id === iid);
+        if (ing) ing.ingAutoL10n = false;
+        renderAll();
+      });
+    });
+
+    el.recipesRoot.querySelectorAll('.btn-rec-ing-l10n-auto').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const rid = btn.getAttribute('data-rid');
+        const iid = btn.getAttribute('data-iid');
+        const r = state.recipes.find((x) => x.id === rid);
+        const ing = r && r.ingredients.find((x) => x.id === iid);
+        if (ing) {
+          ing.ingAutoL10n = true;
+          syncRecipeIngL10n(ing);
+        }
+        renderAll();
+      });
+    });
+
+    el.recipesRoot.querySelectorAll('.btn-rm-recipe').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const rid = btn.getAttribute('data-rid');
+        state.recipes = state.recipes.filter((x) => x.id !== rid);
+        renderAll();
+      });
+    });
+
+    el.recipesRoot.querySelectorAll('.btn-rm-rec-ing').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const rid = btn.getAttribute('data-rid');
+        const iid = btn.getAttribute('data-iid');
+        const r = state.recipes.find((x) => x.id === rid);
+        if (r) {
+          r.ingredients = r.ingredients.filter((x) => x.id !== iid);
+          if (!r.ingredients.length) {
+            r.ingredients.push({ id: nid(), name: 'wheat', title: '$l10n_fillType_wheat', fillTypes: 'WHEAT', minPercentage: '0', maxPercentage: '100', ingAutoL10n: true, ingCustomPrimary: false });
+          }
+        }
+        renderAll();
+      });
+    });
+
+    el.recipesRoot.querySelectorAll('.btn-add-rec-ing').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const rid = btn.getAttribute('data-rid');
+        const r = state.recipes.find((x) => x.id === rid);
+        if (r) {
+          r.ingredients.push({ id: nid(), name: 'grass', title: '$l10n_fillType_grass', fillTypes: 'GRASS_WINDROW', minPercentage: '0', maxPercentage: '50', ingAutoL10n: true, ingCustomPrimary: false });
+        }
+        renderAll();
+      });
+    });
+  }
+
+  function renderAll() {
+    ensureFillTypeDatalist();
+    renderAnimals();
+    renderMixtures();
+    renderRecipes();
+    syncOutput();
+  }
+
+  document.getElementById('add-animal').addEventListener('click', () => {
+    state.animals.push(defaultAnimal());
+    renderAll();
+  });
+
+  document.getElementById('add-mixture').addEventListener('click', () => {
+    state.mixtures.push(defaultMixture());
+    renderAll();
+  });
+
+  document.getElementById('add-recipe').addEventListener('click', () => {
+    state.recipes.push(defaultRecipe());
+    renderAll();
+  });
+
+  document.querySelectorAll('.lang-btn').forEach((btn) => {
+    btn.addEventListener('click', () => setUiLang(btn.getAttribute('data-lang')));
+  });
+
+  document.getElementById('btn-download').addEventListener('click', () => {
+    const blob = new Blob([buildXml()], { type: 'application/xml;charset=utf-8' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'animalicFood.xml';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  });
+
+  document.getElementById('btn-copy').addEventListener('click', async () => {
+    const b = document.getElementById('btn-copy');
+    try {
+      await navigator.clipboard.writeText(el.xmlOut.value);
+      b.textContent = t('copyDone');
+      setTimeout(() => { b.textContent = t('btnCopy'); }, 1600);
+    } catch {
+      el.xmlOut.select();
+      document.execCommand('copy');
+    }
+  });
+
+  document.getElementById('btn-clear').addEventListener('click', () => {
+    state.animals = [defaultAnimal()];
+    state.mixtures = [];
+    state.recipes = [];
+    renderAll();
+  });
+
+  document.getElementById('btn-load-preset').addEventListener('click', async () => {
+    if (!window.confirm(t('confirmPreset'))) return;
+    await loadPreset(el.presetSelect.value, { isInit: false });
+  });
+
+  applyStaticI18n();
+
+  (async () => {
+    await loadPreset(el.presetSelect.value, { isInit: true });
+  })();
+})();
+</script>
+</body>
+</html>

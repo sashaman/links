@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<!-- Example map mod: FS25 Harterleiten — split silage recipe rows, GRAINGRIST/CCM, GOOSE/RABBIT, custom groups. For testing the explorer only. -->
+<animalFood>
+	<animals>
+		<animal animalType="COW" consumptionType="PARALLEL">
+			<foodGroup title="$l10n_fillTypeGroup_hay" 		productionWeight="0.3" eatWeight="0.3" fillTypes="DRYGRASS_WINDROW DRYCLOVER_WINDROW DRYALFALFA_WINDROW"/>
+			<foodGroup title="$l10n_fillTypeGroup_silage" 	productionWeight="0.4" eatWeight="0.4" fillTypes="SILAGE CLOVER_FERMENTED ALFALFA_FERMENTED GRASS_SILAGE"/>
+			<foodGroup title="$l10n_fillTypeGroup_grass" 	productionWeight="0.2" eatWeight="0.2" fillTypes="GRASS_WINDROW CLOVER_WINDROW ALFALFA_WINDROW"/>
+			<foodGroup title="$l10n_fillTypeGroup_grain" 	productionWeight="0.1" eatWeight="0.1" fillTypes="GRAINGRIST CCM"/>
+		</animal>
+		<animal animalType="SHEEP" consumptionType="PARALLEL">
+			<foodGroup title="$l10n_fillTypeGroup_grass" 	productionWeight="0.60" eatWeight="0.60" fillTypes="DRYGRASS_WINDROW CLOVER_WINDROW DRYCLOVER_WINDROW DRYALFALFA_WINDROW ALFALFA_WINDROW GRASS_WINDROW"/>
+			<foodGroup title="$l10n_fillTypeGroup_silage" 	productionWeight="0.40" eatWeight="0.40" fillTypes="SILAGE CLOVER_FERMENTED ALFALFA_FERMENTED GRASS_SILAGE"/>
+		</animal>
+		<animal animalType="PIG" consumptionType="PARALLEL">
+			<foodGroup title="Mais/Sorghum/CCM/Maiskornschrot" 		productionWeight="0.35" eatWeight="0.35" fillTypes="MAIZE SORGHUM CCM CCM_RAW"/>
+			<foodGroup title="Getreideschrot" 						productionWeight="0.25" eatWeight="0.25" fillTypes="GRAINGRIST"/>
+			<foodGroup title="Sojabohnen/Raps/Sonnenblumen" 		productionWeight="0.15" eatWeight="0.15" fillTypes="SOYBEAN CANOLA SUNFLOWER"/>
+			<foodGroup title="Erdfrüchte" 							productionWeight="0.25" eatWeight="0.25" fillTypes="POTATO SUGARBEET CARROT PARSNIP BEETROOT"/>
+		</animal>
+		<animal animalType="HORSE" consumptionType="PARALLEL">
+			<foodGroup title="Hafer/Weizen/Sorghum" 		productionWeight="0.40" eatWeight="0.25" fillTypes="OAT SORGHUM"/>
+			<foodGroup title="Gras/Heu/Klee/Kleeheu" 		productionWeight="0.55" eatWeight="0.70" fillTypes="GRASS_WINDROW DRYGRASS_WINDROW CLOVER_WINDROW DRYCLOVER_WINDROW"/>
+			<foodGroup title="$l10n_fillTypeGroup_earth" 	productionWeight="0.05" eatWeight="0.05" fillTypes="CARROT PARSNIP BEETROOT APPLE"/>
+		</animal>
+		<animal animalType="CHICKEN" consumptionType="PARALLEL">
+			<foodGroup title="$l10n_fillTypeGroup_grain" 	productionWeight="0.70" eatWeight="0.70" fillTypes="WHEAT BARLEY SORGHUM CCM_RAW"/>
+			<foodGroup title="Gras/Heu/Klee/Kleeheu" 		productionWeight="0.15" eatWeight="0.15" fillTypes="GRASS_WINDROW DRYGRASS_WINDROW CLOVER_WINDROW DRYCLOVER_WINDROW"/>
+			<foodGroup title="Salat/Karotten/"   			productionWeight="0.15" eatWeight="0.15" fillTypes="LETTUCE CARROT APPLE" />
+		</animal>
+		<animal animalType="GOOSE" consumptionType="SERIAL">
+			<foodGroup title="Maiskornschrot/Getreideschrot/Weizen/Gertse/Sonnenblumen" productionWeight="1.00" fillTypes="CCM_RAW GRAINGRIST WHEAT BARLEY SORGHUM OAT SUNFLOWER"/>
+		</animal>
+		<animal animalType="RABBIT" consumptionType="PARALLEL">
+            <foodGroup title="Gras/Heu/Klee/Kleeheu"   	 	productionWeight="0.60" eatWeight="0.60" fillTypes="GRASS_WINDROW DRYGRASS_WINDROW CLOVER_WINDROW DRYCLOVER_WINDROW" />
+            <foodGroup title="Salat/Karotten/Hasenfutter"   productionWeight="0.40" eatWeight="0.40" fillTypes="LETTUCE CARROT RABBITFOOD" />
+        </animal>
+	</animals>
+	<mixtures>
+		<mixture animalType="PIG" fillType="PIGFOOD">
+			<ingredient fillTypes="MAIZE SORGHUM CCM CCM_RAW" 					weight="0.35"/>
+			<ingredient fillTypes="GRAINGRIST" 									weight="0.25"/>
+			<ingredient fillTypes="SOYBEAN CANOLA SUNFLOWER" 					weight="0.15"/>
+			<ingredient fillTypes="POTATO SUGARBEET CARROT PARSNIP BEETROOT" 	weight="0.25"/>
+		</mixture>
+		<mixture animalType="COW" fillType="FORAGE">
+			<ingredient fillTypes="DRYGRASS_WINDROW DRYCLOVER_WINDROW DRYALFALFA_WINDROW" 	weight="0.3"/>
+			<ingredient fillTypes="SILAGE CLOVER_FERMENTED ALFALFA_FERMENTED GRASS_SILAGE" 	weight="0.4"/>
+			<ingredient fillTypes="GRASS_WINDROW CLOVER_WINDROW ALFALFA_WINDROW" 			weight="0.2"/>
+			<ingredient fillTypes="MINERAL_FEED GRAINGRIST SUGARBEET_CUT CCM" 				weight="0.1"/>
+		</mixture>
+	</mixtures>
+	<recipes>
+		<recipe fillType="FORAGE">
+			<ingredient name="dryGrass" title="$l10n_fillType_dryGrass" fillTypes="DRYGRASS_WINDROW DRYCLOVER_WINDROW DRYALFALFA_WINDROW" 	minPercentage="20" maxPercentage="75"/>
+			<ingredient name="silage" title="$l10n_fillType_silage" fillTypes="SILAGE GRASS_SILAGE" 										minPercentage="20" maxPercentage="75"/>
+			<ingredient name="silage" title="$l10n_fillType_silage" fillTypes="CLOVER_FERMENTED ALFALFA_FERMENTED" 							minPercentage="20" maxPercentage="75"/>
+			<ingredient name="mineralFeed" title="$l10n_fillType_mineralFeed" fillTypes="MINERAL_FEED GRAINGRIST CCM" 						minPercentage="0" maxPercentage="7"/>
+		</recipe>
+	</recipes>
+</animalFood>
