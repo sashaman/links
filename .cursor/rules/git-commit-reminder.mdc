@@ -1,0 +1,14 @@
+---
+description: Remind to commit and push after meaningful work; keep git history tidy
+alwaysApply: true
+---
+
+# Git commit habit (Termlink / links)
+
+After a **coherent chunk of work** (feature, page, or doc pass), **do not assume** the user has committed.
+
+1. **Offer to commit**: run `git status`; if there are changes, suggest staging and a short commit message (or run commit if they asked to save work).
+2. **Before wrapping up** a session where files were edited: briefly remind them to **commit** and optionally **`git push`** so GitHub Pages / CI stay in sync.
+3. Keep reminders **one line** unless they ask for git help; avoid nagging on tiny one-off questions with no file edits.
+
+Optional phrasing for the user: *“Want me to stage and commit this batch?”*
