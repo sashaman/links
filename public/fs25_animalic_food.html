@@ -496,6 +496,7 @@
     cursor: pointer;
   }
   .slider-accent {
+    position: relative;
     margin-top: 6px;
     height: 6px;
     border-radius: 999px;
@@ -503,7 +504,10 @@
     overflow: hidden;
   }
   .slider-accent-fill {
+    position: absolute;
+    top: 0;
     height: 100%;
+    box-sizing: border-box;
   }
   .bale-warn {
     font-size: 11px;
@@ -1158,9 +1162,41 @@
     background: rgba(20, 24, 14, .55);
   }
   .combo-legend {
+    position: relative;
+    width: 100%;
+    min-height: 26px;
     margin-top: 8px;
-    display: grid;
-    gap: 6px;
+    padding-bottom: 2px;
+  }
+  .combo-legend-item {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translateX(-50%);
+    max-width: min(42vw, 11rem);
+    padding: 3px 8px;
+    border-radius: 8px;
+    border: 1px solid color-mix(in srgb, var(--border) 85%, transparent);
+    background: linear-gradient(180deg, rgba(26,34,18,.96), rgba(18,24,12,.96));
+    box-shadow: 0 1px 3px rgba(0,0,0,.25);
+    font-size: 10px;
+    line-height: 1.25;
+    color: var(--muted);
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    pointer-events: none;
+  }
+  .combo-legend-item .combo-legend-a {
+    color: var(--text);
+    font-weight: 600;
+  }
+  .combo-legend-item .combo-legend-sep {
+    color: var(--gold-soft);
+    opacity: 0.75;
+    margin: 0 3px;
+    font-weight: 600;
   }
   .calc-mode {
     display: inline-flex;
@@ -1922,11 +1958,19 @@
     return Math.max(lo, Math.min(hi, n));
   }
 
+  /** Recipe % bands → liter bounds (float) for bulk mixer clamping and redistribution. */
+  function bulkIngredientBoundsLiters(ing, targetLiters) {
+    const T = Math.max(1, Number(targetLiters) || 1);
+    const mn = Math.max(0, Number(ing.minPercentage) || 0);
+    const mx = Math.max(0, Number(ing.maxPercentage) || 100);
+    return { minL: (mn * T) / 100, maxL: (mx * T) / 100 };
+  }
+
   function projectToBoundsWithSum(target, desired, mins, maxs) {
     const x = desired.map((v, i) => clamp(v, mins[i], maxs[i]));
     let diff = target - x.reduce((a, b) => a + b, 0);
     let guard = 0;
-    while (Math.abs(diff) > 0.5 && guard < 200) {
+    while (Math.abs(diff) > 1e-3 && guard < 400) {
       guard += 1;
       if (diff > 0) {
         const room = x.map((v, i) => maxs[i] - v);
@@ -1977,6 +2021,88 @@
     const projected = projectSliceToSum(out, mins, maxs, freeIdx, freeTarget);
     lockedIdx.forEach((i) => { projected[i] = lockedValues[i]; });
     return projected;
+  }
+
+  /**
+   * After committing a bulk liter value: keep that row at its clamped value and adjust only other
+   * unlocked rows so the total matches mixer capacity (avoids full rebalance erasing small edits).
+   */
+  function redistributeBulkAfterInput(editedIdx) {
+    if (!STATE.data) return;
+    const selectedKey = STATE.calc.selectedRecipe;
+    if (!selectedKey) return;
+    const selected = STATE.data.recipes.find((r) => getRecipeKey(r) === selectedKey);
+    if (!selected || !selected.ingredients[editedIdx]) return;
+    const ingredients = selected.ingredients;
+    const n = ingredients.length;
+    const target = Math.max(1, Number(STATE.calc.targetLiters) || 1);
+    const mins = ingredients.map((ing) => bulkIngredientBoundsLiters(ing, target).minL);
+    const maxs = ingredients.map((ing) => bulkIngredientBoundsLiters(ing, target).maxL);
+
+    const lockFlags = ingredients.map((_, ix) => !!STATE.calc.bulkLocks[getIngredientConfigKey(selectedKey, ix)]);
+    const lockValues = {};
+    ingredients.forEach((_, ix) => {
+      if (lockFlags[ix]) {
+        const k = getIngredientConfigKey(selectedKey, ix);
+        const snap = Number(STATE.calc.bulkLockValues[k]);
+        const base = Number.isFinite(snap) ? snap : Number(STATE.calc.bulkLiters[k]) || 0;
+        lockValues[ix] = clamp(base, mins[ix], maxs[ix]);
+      }
+    });
+
+    if (lockFlags[editedIdx]) return;
+
+    let editedVal = clamp(Number(STATE.calc.bulkLiters[getIngredientConfigKey(selectedKey, editedIdx)]) || 0, mins[editedIdx], maxs[editedIdx]);
+
+    let lockedSum = 0;
+    for (let ix = 0; ix < n; ix++) {
+      if (lockFlags[ix]) lockedSum += lockValues[ix];
+    }
+
+    const others = ingredients.map((_, ix) => ix).filter((ix) => !lockFlags[ix] && ix !== editedIdx);
+
+    const writeAll = (vec) => {
+      vec.forEach((v, ix) => {
+        STATE.calc.bulkLiters[getIngredientConfigKey(selectedKey, ix)] = v;
+      });
+    };
+
+    if (others.length === 0) {
+      const req = target - lockedSum;
+      editedVal = clamp(req, mins[editedIdx], maxs[editedIdx]);
+      const out = ingredients.map((_, ix) => (lockFlags[ix] ? lockValues[ix] : editedVal));
+      writeAll(out);
+      return;
+    }
+
+    const othersMin = others.reduce((s, ix) => s + mins[ix], 0);
+    const othersMax = others.reduce((s, ix) => s + maxs[ix], 0);
+    let need = target - lockedSum - editedVal;
+    if (need < othersMin) {
+      editedVal = clamp(target - lockedSum - othersMin, mins[editedIdx], maxs[editedIdx]);
+      need = target - lockedSum - editedVal;
+    } else if (need > othersMax) {
+      editedVal = clamp(target - lockedSum - othersMax, mins[editedIdx], maxs[editedIdx]);
+      need = target - lockedSum - editedVal;
+    }
+
+    const values = ingredients.map((_, ix) => clamp(Number(STATE.calc.bulkLiters[getIngredientConfigKey(selectedKey, ix)]) || 0, mins[ix], maxs[ix]));
+    const out = values.slice();
+    for (let ix = 0; ix < n; ix++) {
+      if (lockFlags[ix]) out[ix] = lockValues[ix];
+    }
+    out[editedIdx] = editedVal;
+
+    let adjusted = projectSliceToSum(out, mins, maxs, others, need);
+    let sumPost = adjusted.reduce((a, b) => a + b, 0);
+    if (Math.abs(sumPost - target) > 0.05) {
+      const lockValsForRe = {};
+      ingredients.forEach((_, ix) => {
+        if (lockFlags[ix]) lockValsForRe[ix] = lockValues[ix];
+      });
+      adjusted = rebalanceWithLocks(adjusted, mins, maxs, lockFlags, target, lockValsForRe);
+    }
+    writeAll(adjusted);
   }
 
   function isMineralIngredient(ingredient) {
@@ -2251,14 +2377,38 @@
       }, 0);
       const bulkKey = getIngredientConfigKey(selectedKey, idx);
       if (typeof STATE.calc.bulkLiters[bulkKey] !== 'number') {
-        STATE.calc.bulkLiters[bulkKey] = isMineralIngredient(ing) ? 0 : Math.round(defaultTarget);
+        STATE.calc.bulkLiters[bulkKey] = isMineralIngredient(ing) ? 0 : defaultTarget;
       }
-      const minL = Math.round((Number(ing.minPercentage) || 0) * targetLiters / 100);
-      const maxL = Math.round((Number(ing.maxPercentage) || 100) * targetLiters / 100);
-      const bulkLiters = Math.max(minL, Math.min(maxL, Number(STATE.calc.bulkLiters[bulkKey]) || 0));
+      const { minL, maxL } = bulkIngredientBoundsLiters(ing, targetLiters);
+      const bulkLiters = clamp(Number(STATE.calc.bulkLiters[bulkKey]) || 0, minL, maxL);
       STATE.calc.bulkLiters[bulkKey] = bulkLiters;
       return { idx, ing, ingName, band, fillType, fillTypeLabel: resolveFillType(fillType), targetShareL: defaultTarget, bale, count, actualBale, bulkLiters, opts, sizeCounts };
     });
+
+    const bulkModeBounds = mode === 'bulk'
+      ? calcIngredients.map((ing) => bulkIngredientBoundsLiters(ing, targetLiters))
+      : null;
+
+    if (bulkModeBounds) {
+      const mins = bulkModeBounds.map((b) => b.minL);
+      const maxs = bulkModeBounds.map((b) => b.maxL);
+      const current = rows.map((r) => r.bulkLiters);
+      const lockFlags = rows.map((r) => !!STATE.calc.bulkLocks[getIngredientConfigKey(selectedKey, r.idx)]);
+      const lockValues = {};
+      rows.forEach((r, i) => {
+        const k = getIngredientConfigKey(selectedKey, r.idx);
+        if (lockFlags[i]) lockValues[i] = Number(STATE.calc.bulkLockValues[k]);
+      });
+      const sumBulk = current.reduce((a, b) => a + b, 0);
+      if (Math.abs(sumBulk - targetLiters) > 0.02) {
+        const balanced = rebalanceWithLocks(current, mins, maxs, lockFlags, targetLiters, lockValues);
+        rows.forEach((r, i) => {
+          const key = getIngredientConfigKey(selectedKey, r.idx);
+          STATE.calc.bulkLiters[key] = balanced[i];
+          r.bulkLiters = balanced[i];
+        });
+      }
+    }
 
     const litersVec = mode === 'bulk' ? rows.map((r) => r.bulkLiters) : rows.filter((r) => !isMineralIngredient(r.ing)).map((r) => r.actualBale);
     const totalActual = litersVec.reduce((a, b) => a + b, 0);
@@ -2282,22 +2432,9 @@
     </div>`;
 
     let bulkTable = '';
-    if (mode === 'bulk') {
-      const mins = rows.map((r) => Math.round((Number(r.ing.minPercentage) || 0) * targetLiters / 100));
-      const maxs = rows.map((r) => Math.round((Number(r.ing.maxPercentage) || 100) * targetLiters / 100));
-      const current = rows.map((r) => r.bulkLiters);
-      const lockFlags = rows.map((r) => !!STATE.calc.bulkLocks[getIngredientConfigKey(selectedKey, r.idx)]);
-      const lockValues = {};
-      rows.forEach((r, i) => {
-        const k = getIngredientConfigKey(selectedKey, r.idx);
-        if (lockFlags[i]) lockValues[i] = Number(STATE.calc.bulkLockValues[k]);
-      });
-      const balanced = rebalanceWithLocks(current, mins, maxs, lockFlags, targetLiters, lockValues);
-      rows.forEach((r, i) => {
-        const key = getIngredientConfigKey(selectedKey, r.idx);
-        STATE.calc.bulkLiters[key] = balanced[i];
-        r.bulkLiters = balanced[i];
-      });
+    if (mode === 'bulk' && bulkModeBounds) {
+      const mins = bulkModeBounds.map((b) => b.minL);
+      const maxs = bulkModeBounds.map((b) => b.maxL);
       const segHtml = rows.map((r, i) => {
         const pct = targetLiters > 0 ? (100 * r.bulkLiters / targetLiters) : 0;
         const c = getFillTypeColor(r.fillType);
@@ -2316,23 +2453,32 @@
         const locked = !!STATE.calc.bulkLocks[lockKey];
         const color = getFillTypeColor(r.fillType);
         const pct = targetLiters > 0 ? (100 * r.bulkLiters / targetLiters) : 0;
+        const cumBefore = rows.slice(0, i).reduce((a, x) => a + x.bulkLiters, 0);
+        const leftPct = targetLiters > 0 ? (100 * cumBefore / targetLiters) : 0;
         return `<div class="slider-card${locked ? ' is-locked' : ''}">
         <div class="slider-head">
           <div>${getFillIcon(r.fillType)} <strong>${escapeHtml(r.ingName)}</strong></div>
-          <div class="slider-hint">${t('calcRecipeBand')}: ${escapeHtml(r.band)} | min ${mins[i]}L - max ${maxs[i]}L</div>
+          <div class="slider-hint">${t('calcRecipeBand')}: ${escapeHtml(r.band)} | min ${Math.round(mins[i])}L - max ${Math.round(maxs[i])}L</div>
         </div>
         <div class="slider-controls">
-          <input data-bulk-input="${r.idx}" type="number" min="${mins[i]}" max="${maxs[i]}" step="10" value="${Math.round(r.bulkLiters)}" style="width:120px" ${locked ? 'disabled' : ''}>
+          <input data-bulk-input="${r.idx}" type="number" min="${mins[i]}" max="${maxs[i]}" step="1" value="${Math.round(r.bulkLiters)}" style="width:120px" ${locked ? 'disabled' : ''}>
           <button type="button" class="slider-lock-btn" data-bulk-lock="${r.idx}" title="${locked ? 'Unlock' : 'Lock'}">${locked ? '🔒' : '🔓'}</button>
           <span class="slider-hint">${pctMix(r.idx)}%</span>
         </div>
-        <div class="slider-accent"><div class="slider-accent-fill" style="width:${pct}%; background:${color};"></div></div>
+        <div class="slider-accent"><div class="slider-accent-fill" style="left:${leftPct}%; width:${pct}%; background:${color};"></div></div>
       </div>`;
       }).join('');
       bulkTable = `<div>
         <div class="combo-rail" data-bulk-rail="1">${segHtml}${handles}</div>
         <div class="combo-legend">
-          ${rows.slice(0, -1).map((r, i) => `<div class="slider-hint">${escapeHtml(rows[i].ingName)} ↔ ${escapeHtml(rows[i + 1].ingName)}</div>`).join('')}
+          ${rows.slice(0, -1).map((r, i) => {
+            const cumLeft = rows.slice(0, i + 1).reduce((a, x) => a + x.bulkLiters, 0);
+            const leftPct = targetLiters > 0 ? (100 * cumLeft / targetLiters) : 0;
+            const a = escapeHtml(rows[i].ingName);
+            const b = escapeHtml(rows[i + 1].ingName);
+            const tip = escapeHtml(`${rows[i].ingName} ↔ ${rows[i + 1].ingName}`);
+            return `<div class="combo-legend-item" style="left:${leftPct}%" title="${tip}"><span class="combo-legend-a">${a}</span><span class="combo-legend-sep">↔</span><span class="combo-legend-a">${b}</span></div>`;
+          }).join('')}
         </div>
         <div style="margin-top:10px;">${inputs}</div>
       </div>`;
@@ -2734,8 +2880,9 @@
     if (!selectedKey) return;
     const selected = STATE.data.recipes.find((r) => getRecipeKey(r) === selectedKey);
     if (!selected || i < 0 || i >= selected.ingredients.length - 1) return;
-    const mins = selected.ingredients.map((ing) => Math.round((Number(ing.minPercentage) || 0) * STATE.calc.targetLiters / 100));
-    const maxs = selected.ingredients.map((ing) => Math.round((Number(ing.maxPercentage) || 100) * STATE.calc.targetLiters / 100));
+    const targetL = Math.max(1, Number(STATE.calc.targetLiters) || 1);
+    const mins = selected.ingredients.map((ing) => bulkIngredientBoundsLiters(ing, targetL).minL);
+    const maxs = selected.ingredients.map((ing) => bulkIngredientBoundsLiters(ing, targetL).maxL);
     const values = selected.ingredients.map((_, ix) => {
       const key = getIngredientConfigKey(selectedKey, ix);
       return Math.max(mins[ix], Math.min(maxs[ix], Number(STATE.calc.bulkLiters[key]) || mins[ix]));
@@ -2772,24 +2919,6 @@
   el.calcRoot.addEventListener('input', (e) => {
     const target = e.target;
     if (!(target instanceof HTMLInputElement) || !STATE.data) return;
-    const bulkSliderIdx = target.getAttribute('data-bulk-slider');
-    const bulkInputIdx = target.getAttribute('data-bulk-input');
-    const bulkIdx = bulkSliderIdx != null ? bulkSliderIdx : bulkInputIdx;
-    if (bulkIdx != null) {
-      const idx = Number(bulkIdx);
-      if (!Number.isFinite(idx)) return;
-      const selectedKey = STATE.calc.selectedRecipe;
-      if (!selectedKey) return;
-      const selected = STATE.data.recipes.find((r) => getRecipeKey(r) === selectedKey);
-      if (!selected || !selected.ingredients[idx]) return;
-      const minL = Math.round((Number(selected.ingredients[idx].minPercentage) || 0) * STATE.calc.targetLiters / 100);
-      const maxL = Math.round((Number(selected.ingredients[idx].maxPercentage) || 100) * STATE.calc.targetLiters / 100);
-      const key = getIngredientConfigKey(selectedKey, idx);
-      const next = Math.max(minL, Math.min(maxL, Number(target.value) || 0));
-      STATE.calc.bulkLiters[key] = next;
-      renderCalculator(STATE.data);
-      return;
-    }
     const countIdx = target.getAttribute('data-calc-count');
     if (countIdx == null) return;
     const idx = Number(countIdx);
@@ -2801,7 +2930,29 @@
 
   el.calcRoot.addEventListener('change', (e) => {
     const target = e.target;
-    if (!(target instanceof HTMLSelectElement) || !STATE.data) return;
+    if (!STATE.data) return;
+    if (target instanceof HTMLInputElement) {
+      const bulkInputIdx = target.getAttribute('data-bulk-input');
+      if (bulkInputIdx != null) {
+        const idx = Number(bulkInputIdx);
+        if (!Number.isFinite(idx)) return;
+        const selectedKey = STATE.calc.selectedRecipe;
+        if (!selectedKey) return;
+        const selected = STATE.data.recipes.find((r) => getRecipeKey(r) === selectedKey);
+        if (!selected || !selected.ingredients[idx]) return;
+        const targetL = Math.max(1, Number(STATE.calc.targetLiters) || 1);
+        const { minL, maxL } = bulkIngredientBoundsLiters(selected.ingredients[idx], targetL);
+        const key = getIngredientConfigKey(selectedKey, idx);
+        let next = Number(target.value);
+        if (!Number.isFinite(next)) next = clamp(Number(STATE.calc.bulkLiters[key]) || 0, minL, maxL);
+        next = clamp(next, minL, maxL);
+        STATE.calc.bulkLiters[key] = next;
+        redistributeBulkAfterInput(idx);
+        renderCalculator(STATE.data);
+        return;
+      }
+    }
+    if (!(target instanceof HTMLSelectElement)) return;
     const sel = target.getAttribute('data-calc-bale-select');
     if (sel == null) return;
     const idx = Number(sel);

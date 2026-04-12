@@ -54,10 +54,12 @@ See **[DEVELOPMENT_WORKFLOW.md](DEVELOPMENT_WORKFLOW.md)** for the full suggeste
 
 ### Bulk goods mode
 
-- Combined colored segmented slider rail.
-- Draggable boundaries; constrained by recipe min/max.
-- Per-filltype numeric input + lock/unlock button.
-- Locked values use snapshot pinning (no drift expected).
+- Combined colored segmented slider rail; segment **%** display one decimal, liters stored as floats.
+- Draggable boundaries; constrained by recipe min/max (float liter bounds from %).
+- Per-filltype numeric input (**`change`** commit, **`step="1"`**); redistribution keeps the edited row and adjusts other unlocked rows to match target; full rebalance only when total drifts from target.
+- Per-row **accent** bar aligned under matching rail segment (cumulative **`left`/`width`**).
+- **Legend:** handle-aligned boundary pills (not a left-stacked list).
+- Per-filltype lock (snapshot pinning).
 - Status panel hidden intentionally in this mode.
 
 ### Bales mode
@@ -92,9 +94,9 @@ See **[DEVELOPMENT_WORKFLOW.md](DEVELOPMENT_WORKFLOW.md)** for the full suggeste
 ## Current Outstanding Tasks
 
 1. Bale module optional polish (narrow-width bar/legends; optional “all ingredients” summary).
-2. Minor bulk slider edge-case polish.
+2. Optional bulk polish (debounced live input; legend overlap on very narrow widths).
 3. Optional SVG icon pass for bales.
 
 ## Quick Resume Prompt
 
-"Resume from `CONTEXT_CHEATSHEET.md` + **PROJECT_STATE.md** (checkpoints **2026-04-10** explorer, **2026-04-11** builder, **2026-04-12** bale module). Explorer bales UX: **FS25_BALE_CALC_MODULE.md**; bulk slider edge cases optional. Builder: **FS25_ANIMALIC_FOOD_BUILDER.md** + `public/fs25_animalic_food_builder.html` — sticky UX is **per card** only; section heads are `.panel-section-head` (not sticky). Keep `public/samples/*.xml` in sync with embedded map XML when changing Mittelland/Harterleiten (run `node scripts/inject-embed-samples.mjs`)."
+"Resume from `CONTEXT_CHEATSHEET.md` + **PROJECT_STATE.md** (checkpoints **2026-04-10** explorer, **2026-04-11** builder, **2026-04-12** bale module, **2026-04-13** bulk mixer + legend). Explorer bales UX: **FS25_BALE_CALC_MODULE.md**. Bulk mode: float bounds, input commit + redistribute, rail-aligned accents + legend pills. Builder: **FS25_ANIMALIC_FOOD_BUILDER.md** + `public/fs25_animalic_food_builder.html` — sticky UX is **per card** only; section heads are `.panel-section-head` (not sticky). Keep `public/samples/*.xml` in sync with embedded map XML when changing Mittelland/Harterleiten (run `node scripts/inject-embed-samples.mjs`)."

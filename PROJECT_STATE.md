@@ -17,6 +17,13 @@
   - `/links/fs25_animalic_food.html` -> `public/og-animal-food-explorer.png` via in-file OG tags.
   - `/links/fs25_animalic_food_builder.html` -> `public/og-animal-food-builder.png` via in-file OG tags.
 
+## Checkpoint: 2026-04-13 — FS25 `fs25_animalic_food.html` (bulk mixer UX + legend)
+
+- **Bulk liters math:** Min/max from recipe % use **float liter bounds** (not rounded-to-integer bands) for clamping and redistribution. **`projectToBoundsWithSum`** converges to ~**1e-3 L** instead of 0.5 L steps.
+- **Inputs:** Bulk liter fields use **`change`** (commit on blur/Enter), **`step="1"`**, clamp to bounds; **`redistributeBulkAfterInput`** adjusts **only other unlocked** rows so total matches target—avoids full rebalance erasing small edits (e.g. +1 L at 45k target). Full **`rebalanceWithLocks`** runs on render only when total drifts more than **~0.02 L** from target (initial load, recipe/capacity change, edge fallback).
+- **Per-row accent bar:** **`slider-accent-fill`** is positioned with **`left` + `width` %** matching each **`combo-seg`** on the rail (cumulative offset), not left-aligned per card.
+- **Combo legend:** Boundary hints are **handle-aligned** (`left` % = cumulative mix share), compact **pill** styling, ellipsis + **`title`** for long names; no longer a left-stacked list.
+
 ## Checkpoint: 2026-04-12 — FS25 `fs25_animalic_food.html` (bale calculator module)
 
 - **Bales mode** no longer uses the wide multi-column table. It uses a **module** layout: target/recipe badges, **mixer bar** (segments vs target + “free” headroom + min/max % overlays), **legend**, **focus strip** (one recipe ingredient at a time), **size tokens** (left +1 / right −1, same validation as before), **Reset**, mineral-feed note when relevant.
@@ -74,15 +81,17 @@ See **[FS25_BALE_CALC_MODULE.md](FS25_BALE_CALC_MODULE.md)** for design decision
 
 ## Bulk Calculator (Current UX/Logic)
 
-- Combined slider rail with colored segments per filltype.
+- Combined slider rail with colored segments per filltype (segment **%** labels use **one decimal**; stored liters are high-precision floats).
 - Draggable boundary handles rebalance neighboring sets under min/max constraints.
 - Per-filltype lock (snapshot-based) to pin exact values.
+- Per-row **accent** bar geometry matches rail segments (cumulative **`left`/`width`**).
+- **Legend** under rail: one pill per boundary, centered on the corresponding handle position.
 - Status panel intentionally hidden in bulk mode (bulk path is constrained by design).
 
 ## Known Remaining Polish
 
-- Minor slider UX edge cases may still exist in rare interactions.
 - Bale module: optional polish (bar/overlay readability on narrow widths, compact “all ingredients” summary if desired).
+- Bulk: optional debounced live input if commit-on-blur is too passive for some users; very narrow viewports may see combo-legend pill overlap (ellipsis + title mitigate).
 
 ## Important Files
 
