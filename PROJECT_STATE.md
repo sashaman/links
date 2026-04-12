@@ -7,6 +7,7 @@
 - Homepage (`src/pages/index.astro`) supports category-based terminal navigation with per-category behaviors/timing.
 - FS25 explorer (`public/fs25_animalic_food.html`) is a full interactive app (XML parsing + visualizer + calculator modes). **Bales-mode UX** (mixer bar, focus strip, module layout) and the decisions behind it: **[FS25_BALE_CALC_MODULE.md](FS25_BALE_CALC_MODULE.md)**.
 - FS25 **animalFood builder** (`public/fs25_animalic_food_builder.html`) is a separate **authoring** page: documented fields, form-based editing, validation hints, download/copy of `animalicFood.xml`. Module description and progress: **[FS25_ANIMALIC_FOOD_BUILDER.md](FS25_ANIMALIC_FOOD_BUILDER.md)**.
+- **CRT scanline overlay** on both FS25 public pages (Termlink-parity): **[FS25_ANIMALIC_SCANLINES.md](FS25_ANIMALIC_SCANLINES.md)**.
 
 ## Deployment + Preview Status
 

@@ -11,8 +11,8 @@
 
 - `src/pages/index.astro` -> terminal homepage + category logic
 - `src/layouts/Layout.astro` -> global meta/OG/twitter handling
-- `public/fs25_animalic_food.html` -> standalone FS25 explorer app (bales-mode module UX + decisions: **FS25_BALE_CALC_MODULE.md**)
-- `public/fs25_animalic_food_builder.html` -> guided `animalicFood.xml` authoring (see **FS25_ANIMALIC_FOOD_BUILDER.md**)
+- `public/fs25_animalic_food.html` -> standalone FS25 explorer app (bales-mode module UX + decisions: **FS25_BALE_CALC_MODULE.md**; Termlink-style scanlines: **FS25_ANIMALIC_SCANLINES.md**)
+- `public/fs25_animalic_food_builder.html` -> guided `animalicFood.xml` authoring (see **FS25_ANIMALIC_FOOD_BUILDER.md**; scanlines: **FS25_ANIMALIC_SCANLINES.md**)
 - `public/og-animal-food-explorer.png` -> OG image for FS25 explorer page
 - `public/og-animal-food-builder.png` -> OG image for FS25 builder page
 - `public/img/termlink-og.png` -> OG image for homepage

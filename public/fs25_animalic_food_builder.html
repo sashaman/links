@@ -42,6 +42,9 @@
     --table-head: #2f3c1d;
     --table-row: #202915;
     --table-row-alt: #1b2312;
+    /* CRT scanlines — same as src/pages/index.astro (fixed layer, 2px + 2px green @ 3%) */
+    --scanline-color: #00ff00;
+    --scanline-opacity: 0.03;
   }
   * { box-sizing: border-box; }
   body {
@@ -52,13 +55,30 @@
     font-size: 15px;
     line-height: 1.45;
   }
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 50;
+    opacity: var(--scanline-opacity);
+    background: repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 2px,
+      var(--scanline-color) 2px,
+      var(--scanline-color) 4px
+    );
+  }
   .wrap {
     width: min(1200px, 100%);
     margin: 0 auto;
-    padding: clamp(16px, 3vw, 32px);
+    padding: 24px 20px;
     display: flex;
     flex-direction: column;
-    gap: clamp(20px, 3.5vw, 32px);
+    /* Space between rounded cards only — no full-bleed rule on transparent sections (avoids stray stripe) */
+    gap: 20px;
+    background: transparent;
   }
   h1 {
     margin: 0 0 6px;
