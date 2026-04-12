@@ -51,10 +51,13 @@ Two inputs shaped the design:
 
 **In `public/fs25_animalic_food.html`:**
 
-- **CSS:** New block for `.bale-calc-module`, mixer bar/wrap, segments, “free” segment, overlay bands, legend rows, focus buttons, options panel, `.bale-mod-token` / `.bale-mini`, actions. **Removed** obsolete styles for the old table-era bale grid (`.bale-picks`, `.bale-groups-grid`, legacy `.bale-token` layout, etc.).
-- **`renderCalculator` (bales branch):** Builds a single **module** HTML string instead of `<table>` rows: header badges (target + recipe ok/open), mixer bar from **`baleRows`**, overlays from each ingredient’s min/max **%**, legend with per-row ok/warn/bad vs **`RECIPE_EPS`**, focus buttons **`data-bale-focus="${idx}"`**, options for **active** row only with **`data-bale-token`** / **`data-bale-allow-add`** (same feasibility checks as before), optional partial line, **Reset** button **`data-bale-reset`**, mineral note when applicable.
-- **Events:** Click on focus strip updates **`activeBaleIngredientIdx`** and re-renders; Reset clears **`baleCounts`** and **`count`** for all non-mineral ingredients in the current recipe; existing **click** / **contextmenu** handlers still use **`closest('[data-bale-token]')`** (tokens now use class **`bale-mod-token`**).
-- **Strings:** New **`UI`** keys (e.g. `calcTabBulk`, `calcTabBales`, `calcBaleUxTitle`, `calcMixerFree`, `calcRecipeStatusOk` / `Open`, `calcBaleReset`, `calcBaleBlocked`, `calcIssues`, `calcBaleNoAdd`, `calcBaleMineralNote`, `calcBalePickSizes`, …) in **de / en / fr**.
+- **CSS:** `.bale-calc-module`, `.bale-mod-section` / `.bale-mod-h` / `.bale-mod-hint`, mixer bar (container queries), segments (stacked label + %), in-segment overlays, **`.bale-legend-chip`** / **`.bale-legend-status`**, focus buttons, **`.bale-options-lane`** grid, `.bale-mod-token` / `.bale-mini`, actions. **Removed** obsolete table-era bale grid styles.
+- **`renderCalculator` (bales branch):** Builds a single **module** HTML string instead of `<table>` rows: **three sections** (preview → breakdown → pick bales), header badges (target + recipe ok/open), mixer bar from **`baleRows`**, **per-segment** `.bale-mixer-overlay` inside each colored slice (same width as liters/target — recipe band only in `title` / legend, not a second horizontal scale), legend with per-row status from **liter distance** to the recipe band at the current mix total (violations: **L over max / L under min**; soft: **near max / near min** with a neutral mid-band), chip outline matches severity, **`data-bale-focus`** rows, focus pill strip, options for **active** row only with **`data-bale-token`** / **`data-bale-allow-add`**, **CSS grid** for bale size tokens, **Reset**, mineral note when applicable.
+- **Events:** Click on focus strip **or glance chips** updates **`activeBaleIngredientIdx`** and re-renders; Reset clears **`baleCounts`** / **`count`** for non-mineral rows; **click** / **contextmenu** on **`closest('[data-bale-token]')`** (class **`bale-mod-token`**).
+- **Strings:** **`UI`** keys in **de / en / fr**, including **`calcViolationLine`** with **`{{name}}` / `{{pct}}` / `{{mn}}` / `{{mx}}`** placeholders via **`tpl()`** for status violations.
+- **Helpers:** **`tpl(key, vars)`** for placeholder substitution; **`shortMixerSegLabel()`** for narrow segment text.
+- **Responsive:** **`container-type: inline-size`** on the mixer wrap — below **~640px** width the mixer becomes a **vertical stack** (muted **↕** hint on the left, `bale-mixer-vaxis-hint`, for quick visual orientation). On the **horizontal** bar, slices with **tank share &lt; ~0.18%** use **`bale-mixer-seg--bar-micro`** (`display: none`) so label chrome does not paint as hairline slivers; they still appear in the **vertical** stack. **every** recipe ingredient gets a row; **0 L** rows are **ghost** (tinted, dashed, semi-transparent). **flex-grow** matches **liters ÷ capacity** for filled rows (same as horizontal width %); empty slots use a **small** flex share when the rest of the mix has volume, or **equal** shares when the wagon is still empty. A full-width **frei** row appears only when there is **some** fill but not full; when **nothing** is loaded, horizontal mode shows that **frei** strip only (ghost rows are `display:none` wide). Legend status **text** hides under ~640px (dot remains).
+- **Concurrency:** All logic stays in the main document (no Web Workers). A multi-agent or worker split was not used: the work is DOM templating and light arithmetic, and the page is intentionally a single portable HTML file.
 
 **Unchanged in spirit:**
 
@@ -73,22 +76,26 @@ Two inputs shaped the design:
 
 ---
 
-## 6. Possible follow-ups (not committed)
+## 6. Follow-ups from the MVP doc — what happened
 
-- Further visual polish (segment labels, overlay readability on small widths).
-- Optional compact “all ingredients” summary alongside focus mode (if power users miss the old table density).
-- Extract bale module markup/logic to a shared script if a **dedicated bale page** is added later.
-- Localize **`recipeViolationLines`** internals (some strings still mix fixed wording with percentages).
+| Original idea | Outcome |
+|----------------|---------|
+| Segment labels + recipe band hint | **Done:** overlays sit **inside** each segment (accent top edge + tooltip); mix % stays on the segment; recipe min–max % stays in legend / `title`. |
+| Compact “all ingredients” summary beside focus | **Done:** **glance chips** under the legend (L + actual mix %), same focus binding as the pill strip. |
+| Localize **`recipeViolationLines`** | **Done:** **`calcViolationLine`** + **`tpl()`** per language. |
+| Extract shared script / dedicated page | **Open:** only if the bale UI is duplicated or grows large enough to warrant a second URL or importable module. |
 
 ---
 
 ## 7. How to verify quickly
 
 1. Open **`fs25_animalic_food.html`** over HTTP, load a sample, pick a recipe.
-2. Switch to **Bales**: mixer bar, legend, focus strip, tokens appear; bulk tab still shows rail/sliders only.
-3. Change **DE / EN / FR**: module strings and tabs update.
-4. Left/right click tokens; blocked adds show localized message; **Reset** clears counts.
+2. Switch to **Bales**: three sections (preview bar, breakdown with legend + chips, pick bales); bulk tab unchanged.
+3. Change **DE / EN / FR**: module strings, section headings, and violation lines follow the language.
+4. Click a **legend row** (ingredient chip) or **focus** pill; bale tokens update for that ingredient.
+5. Left/right click tokens; blocked adds show localized message; **Reset** clears counts.
+6. Narrow the viewport: mixer bar stays usable; legend status sentences may hide while dots + legend bands remain.
 
 ---
 
-*Last updated: 2026-04-12 — bale module tied to explorer (`activeBaleIngredientIdx`, no solver).*
+*Last updated: 2026-04-12 — sectioned module, glance chips, localized violations, responsive mixer (no Workers).*
