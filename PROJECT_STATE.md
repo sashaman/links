@@ -5,7 +5,7 @@
 - Main site is Astro + Tailwind on GitHub Pages at `https://sashaman.github.io/links/`.
 - Branding in UI/meta is **Termlink**.
 - Homepage (`src/pages/index.astro`) supports category-based terminal navigation with per-category behaviors/timing.
-- FS25 explorer (`public/fs25_animalic_food.html`) is a full interactive app (XML parsing + visualizer + calculator modes).
+- FS25 explorer (`public/fs25_animalic_food.html`) is a full interactive app (XML parsing + visualizer + calculator modes). **Bales-mode UX** (mixer bar, focus strip, module layout) and the decisions behind it: **[FS25_BALE_CALC_MODULE.md](FS25_BALE_CALC_MODULE.md)**.
 - FS25 **animalFood builder** (`public/fs25_animalic_food_builder.html`) is a separate **authoring** page: documented fields, form-based editing, validation hints, download/copy of `animalicFood.xml`. Module description and progress: **[FS25_ANIMALIC_FOOD_BUILDER.md](FS25_ANIMALIC_FOOD_BUILDER.md)**.
 
 ## Deployment + Preview Status
@@ -15,6 +15,13 @@
   - `/links/` -> `public/img/termlink-og.png` via `Layout.astro`.
   - `/links/fs25_animalic_food.html` -> `public/og-animal-food-explorer.png` via in-file OG tags.
   - `/links/fs25_animalic_food_builder.html` -> `public/og-animal-food-builder.png` via in-file OG tags.
+
+## Checkpoint: 2026-04-12 — FS25 `fs25_animalic_food.html` (bale calculator module)
+
+- **Bales mode** no longer uses the wide multi-column table. It uses a **module** layout: target/recipe badges, **mixer bar** (segments vs target + “free” headroom + min/max % overlays), **legend**, **focus strip** (one recipe ingredient at a time), **size tokens** (left +1 / right −1, same validation as before), **Reset**, mineral-feed note when relevant.
+- **State:** `STATE.calc.activeBaleIngredientIdx` for focus; cleared when recipe changes. Bale counts remain in `ingredientConfig` / `baleCounts` (no duplicate module store).
+- **Solver** from the reference prototype was **not** implemented (scope/complexity). **i18n:** new strings DE/EN/FR via existing `t()` keys.
+- Full rationale and decision log: **[FS25_BALE_CALC_MODULE.md](FS25_BALE_CALC_MODULE.md)**.
 
 ## Checkpoint: 2026-04-11 — FS25 `fs25_animalic_food_builder.html`
 
@@ -51,12 +58,15 @@ Stable handoff state for the standalone explorer (animals UI, samples, no mislea
 
 ## Bale Calculator (Current UX/Logic)
 
+See **[FS25_BALE_CALC_MODULE.md](FS25_BALE_CALC_MODULE.md)** for design decisions and implementation narrative.
+
 - Starts empty (no bales prefilled).
-- Ingredient rows are grouped by **Round** and **Square** bale classes (with fallback Other).
+- **Module UI:** mixer bar + legend + **focus strip** (pick one ingredient); bale sizes for the active ingredient only (round/square inferred from catalog labels where possible).
 - Bale interactions:
   - left click token = add bale
   - right click token = remove bale
   - mixed bale sizes allowed simultaneously for one ingredient
+- **Reset** clears all bale counts for the current recipe (non-mineral rows).
 - Validation:
   - disables bale additions that would make valid target recipe unreachable
   - top status validator is shown in bales mode (prominent pills + issues + gap suggestions)
@@ -71,13 +81,14 @@ Stable handoff state for the standalone explorer (animals UI, samples, no mislea
 ## Known Remaining Polish
 
 - Minor slider UX edge cases may still exist in rare interactions.
-- Bale visual design can still be polished further (spacing/icon refinement).
+- Bale module: optional polish (bar/overlay readability on narrow widths, compact “all ingredients” summary if desired).
 
 ## Important Files
 
 - `public/fs25_animalic_food.html` - primary active work area (explorer + calculators).
 - `public/fs25_animalic_food_builder.html` - guided XML authoring for `animalicFood.xml` / `animalFood`.
 - `FS25_ANIMALIC_FOOD_BUILDER.md` - module purpose, file map, deployment, progress log for the builder.
+- `FS25_BALE_CALC_MODULE.md` - bale calculator module: goals, reference learnings, decisions, technical summary (explorer bales mode).
 - `public/samples/animalicFood.xml`, `animalFood-vanilla.xml`, `animalFood-mittellandkanal.xml`, `animalFood-harterleiten.xml` - must stay in sync with embedded copies in the HTML when those samples change.
 - `scripts/inject-embed-samples.mjs` - refreshes Mittelland/Harterleiten embedded XML in the HTML from `public/samples/`.
 - `src/layouts/Layout.astro` - global metadata/OG behavior.

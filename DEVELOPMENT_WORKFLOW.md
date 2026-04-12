@@ -1,11 +1,11 @@
 # Suggested development workflow (Termlink + FS25 explorer)
 
-This document captures a practical order of work after the dual calculator (bulk + bales) landed in `public/fs25_animalic_food.html`. Use it to avoid mixing logic changes with UI polish in the same pass.
+This document captures a practical order of work after the dual calculator (bulk + bales) landed in `public/fs25_animalic_food.html`. Use it to avoid mixing logic changes with UI polish in the same pass. **Bales-mode** layout and decision history: **[FS25_BALE_CALC_MODULE.md](FS25_BALE_CALC_MODULE.md)**.
 
 ## 1. Freeze logic, polish UI in small passes
 
 - **Rule:** One pass = one concern (either logic *or* visuals, not both).
-- **Bale selector pass:** spacing, density, icon consistency, mobile layout only.
+- **Bale module pass:** mixer bar / focus strip / tokens — spacing, density, overlay readability, mobile layout only.
 - **Bulk slider pass:** micro-interactions, handle hit areas, legend clarity only.
 
 Avoid bundling “fix edge case + redesign tokens” in a single PR or session.
@@ -42,7 +42,7 @@ When ready for maintainability:
 After logic feels stable:
 
 - Unify paddings, type scale, token sizes, status panel hierarchy.
-- Mobile: scrollable bale groups, touch-friendly targets.
+- Mobile: scrollable/focused bale options, touch-friendly token targets.
 - **Accessibility:** keyboard focus on tokens (or explicit +/-), ARIA labels, `prefers-reduced-motion` where motion exists.
 
 ## 6. Optional follow-ups
@@ -56,4 +56,4 @@ After logic feels stable:
 
 ---
 
-*Last aligned with project state: dual calculator, recipe-based mixer logic, bulk vs bales mode separation.*
+*Last aligned with project state: dual calculator, recipe-based mixer logic, bulk vs bales mode separation; bales UI = module layout (see FS25_BALE_CALC_MODULE.md).*

@@ -72,7 +72,32 @@
   }
   .title-row { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: flex-start; justify-content: space-between; }
   .title-main { min-width: min(100%, 280px); flex: 1; }
-  .title-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; flex-shrink: 0; }
+  .title-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+  .title-meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px 12px;
+  }
+  .explorer-builder-link {
+    display: inline-block;
+    margin-top: 6px;
+    font-size: 13px;
+    color: var(--gold-soft);
+    text-decoration: none;
+    border-bottom: 1px solid color-mix(in srgb, var(--gold) 40%, transparent);
+  }
+  .explorer-builder-link:hover {
+    color: var(--gold);
+    text-decoration: none;
+  }
   .doc-stats {
     margin: 6px 0 0;
     font-size: 12px;
@@ -143,6 +168,7 @@
     font-size: 16px;
     line-height: 1;
     cursor: pointer;
+    padding: 0;
     transition: border-color .16s ease, transform .16s ease, background .16s ease;
   }
   .lang-btn:hover { border-color: var(--gold); transform: translateY(-1px); }
@@ -213,13 +239,14 @@
   .animal-title { margin: 0; font-size: 19px; font-family: 'Oswald', sans-serif; color: var(--gold-soft); }
   .pill {
     font-size: 11px;
-    letter-spacing: .8px;
+    letter-spacing: 0.08em;
     border: 1px solid #566741;
     color: #b9cc9c;
     border-radius: 999px;
     padding: 3px 8px;
     text-transform: uppercase;
     white-space: nowrap;
+    display: inline-block;
   }
   .fg-row {
     position: relative;
@@ -446,89 +473,209 @@
   .slider-accent-fill {
     height: 100%;
   }
-  .bale-picks {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
-    max-width: 260px;
-  }
-  .bale-pick {
-    border: 1px solid var(--border);
-    background: #1a2212;
-    color: var(--text);
-    border-radius: 999px;
-    padding: 2px 7px;
-    font-size: 11px;
-    cursor: pointer;
-    line-height: 1.2;
-  }
-  .bale-pick.is-active {
-    border-color: var(--gold);
-    color: var(--gold-soft);
-    background: rgba(200,168,75,.14);
-  }
-  .bale-size-row {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin-bottom: 4px;
-  }
-  .bale-size-label {
-    min-width: 74px;
-    font-size: 11px;
-    color: var(--muted);
-  }
-  .bale-token {
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    padding: 2px 8px;
-    font-size: 11px;
-    cursor: pointer;
-    user-select: none;
-    background: #1a2212;
-    color: var(--text);
-  }
-  .bale-token .count {
-    color: var(--gold-soft);
-    font-weight: 700;
-  }
-  .bale-token.is-disabled {
-    opacity: .35;
-    cursor: not-allowed;
-    filter: grayscale(.35);
-  }
-  .bale-group-title {
-    font-size: 10px;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: .5px;
-    margin: 6px 0 2px 0;
-  }
-  .bale-groups-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    width: 100%;
-  }
-  .bale-group-col {
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 6px;
-    background: rgba(255,255,255,.02);
-  }
-  .bale-group-col.is-round {
-    border-color: #4f5f7b;
-  }
-  .bale-group-col.is-square {
-    border-color: #6c5b3c;
-  }
-  .bale-group-title .icon {
-    margin-right: 4px;
-  }
   .bale-warn {
     font-size: 11px;
     color: var(--warn);
     margin-top: 4px;
+  }
+  .bale-calc-module {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
+    padding: 12px 14px;
+    margin-top: 2px;
+  }
+  .bale-mixer-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .bale-mixer-head-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: 15px;
+    letter-spacing: 0.4px;
+    color: var(--gold-soft);
+  }
+  .bale-mixer-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+  }
+  .bale-mixer-badge {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 2px 10px;
+    font-size: 11px;
+    letter-spacing: 0.2px;
+    background: rgba(0,0,0,.15);
+  }
+  .bale-mixer-badge.ok { color: var(--ok); border-color: rgba(99,212,113,.45); background: rgba(99,212,113,.1); }
+  .bale-mixer-badge.warn { color: var(--warn); border-color: rgba(255,200,87,.45); background: rgba(255,200,87,.1); }
+  .bale-mixer-badge.bad { color: var(--error); border-color: rgba(255,107,107,.45); background: rgba(255,107,107,.1); }
+  .bale-mixer-bar-wrap {
+    position: relative;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    min-height: 44px;
+    background: #172013;
+  }
+  .bale-mixer-bar {
+    display: flex;
+    height: 44px;
+    width: 100%;
+    align-items: stretch;
+  }
+  .bale-mixer-seg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    color: #0f130b;
+    text-shadow: 0 1px 0 rgba(255,255,255,.12);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0 4px;
+    transition: width 0.18s ease;
+  }
+  .bale-mixer-seg.is-free {
+    background: rgba(255,255,255,.06);
+    color: var(--muted);
+    font-weight: 600;
+    text-shadow: none;
+  }
+  .bale-mixer-overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    pointer-events: none;
+    border-left: 1px dashed color-mix(in srgb, var(--gold) 35%, transparent);
+    border-right: 1px dashed color-mix(in srgb, var(--gold) 35%, transparent);
+    box-sizing: border-box;
+    opacity: 0.85;
+  }
+  .bale-mixer-overlay::after {
+    content: attr(data-label);
+    position: absolute;
+    bottom: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 9px;
+    color: var(--muted);
+    white-space: nowrap;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    pointer-events: none;
+  }
+  .bale-mixer-legend {
+    display: grid;
+    gap: 6px;
+    margin-top: 10px;
+  }
+  .bale-legend-row {
+    display: grid;
+    grid-template-columns: 14px 1fr auto auto;
+    gap: 8px;
+    align-items: center;
+    font-size: 12px;
+  }
+  .bale-legend-swatch {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    border: 1px solid rgba(255,255,255,.12);
+  }
+  .bale-focus-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 12px 0 10px;
+  }
+  .bale-focus-btn {
+    border: 1px solid var(--border);
+    background: #1a2212;
+    color: var(--text);
+    border-radius: 999px;
+    padding: 6px 12px;
+    font: inherit;
+    font-size: 12px;
+    cursor: pointer;
+    transition: border-color 0.18s ease, transform 0.18s ease, background 0.18s ease;
+  }
+  .bale-focus-btn:hover { border-color: var(--gold); transform: translateY(-1px); }
+  .bale-focus-btn.is-active {
+    border-color: var(--gold);
+    background: rgba(200, 168, 75, 0.16);
+    color: var(--gold-soft);
+  }
+  .bale-options-panel {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 12px;
+    background: rgba(255,255,255,.02);
+  }
+  .bale-options-title {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .bale-options-title strong { color: var(--text); }
+  .bale-mod-option-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+  .bale-mod-option-row:last-child { margin-bottom: 0; }
+  .bale-mod-token {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 6px 10px;
+    font-size: 12px;
+    cursor: pointer;
+    user-select: none;
+    background: #1a2212;
+    color: var(--text);
+    transition: border-color 0.18s ease, transform 0.18s ease;
+  }
+  .bale-mod-token:hover:not(.is-disabled) { border-color: color-mix(in srgb, var(--gold) 55%, var(--border)); }
+  .bale-mod-token.is-disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    filter: grayscale(0.35);
+  }
+  .bale-mod-token .bale-mod-count { color: var(--gold-soft); font-weight: 700; min-width: 1.2em; }
+  .bale-mini {
+    width: 28px;
+    height: 22px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    border: 1px solid rgba(0,0,0,.25);
+  }
+  .bale-mini.is-round { width: 26px; height: 26px; border-radius: 50%; }
+  .bale-mod-actions {
+    margin-top: 12px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .bale-mod-partial {
+    margin-top: 10px;
+    font-size: 11px;
+    color: var(--muted);
   }
   .calc-status {
     border: 1px solid var(--border);
@@ -672,8 +819,15 @@
           <p id="doc-stats" class="doc-stats" aria-live="polite" aria-atomic="true"></p>
         </div>
         <div class="title-meta">
-          <div class="pill" id="schema-pill">animalFood.xsd 1.17</div>
-          <a id="builder-link" href="fs25_animalic_food_builder.html" style="margin-top:10px;font-size:13px;color:var(--gold-soft);text-decoration:none;border-bottom:1px solid color-mix(in srgb, var(--gold) 40%, transparent);"></a>
+          <div class="title-meta-row">
+            <span class="pill" id="schema-pill">animalFood.xsd 1.17</span>
+            <div class="lang-switch" role="group" aria-label="Language">
+              <button type="button" class="lang-btn" data-lang="de" title="Deutsch" lang="de">🇩🇪</button>
+              <button type="button" class="lang-btn" data-lang="en" title="English" lang="en">🇬🇧</button>
+              <button type="button" class="lang-btn" data-lang="fr" title="Français" lang="fr">🇫🇷</button>
+            </div>
+          </div>
+          <a id="builder-link" href="fs25_animalic_food_builder.html" class="explorer-builder-link"></a>
         </div>
       </div>
 
@@ -694,11 +848,6 @@
           <option value="harterleiten" data-i18n-opt="sampleOptHarterleiten">Harterleiten</option>
         </select>
         <button class="btn" id="sample-btn" type="button">Sample laden</button>
-        <div class="lang-switch" aria-label="Language">
-          <button type="button" class="lang-btn" data-lang="de" title="Deutsch">🇩🇪</button>
-          <button type="button" class="lang-btn" data-lang="en" title="English">🇬🇧</button>
-          <button type="button" class="lang-btn" data-lang="fr" title="Français">🇫🇷</button>
-        </div>
       </div>
 
       <div class="drop" id="drop-zone">XML hierher ziehen (Drag & Drop)</div>
@@ -1001,9 +1150,9 @@
   };
 
   const UI = {
-    de: { appTitle: 'FS25 Tierernahrung Explorer', appSubtitle: 'Upload einer animalicFood.xml und visualisiere Animals, Mixtures und Recipes.', infoText: 'Dieses Tool visualisiert die Gewichte aus animalicFood.xml fur Tiere, Mischungen und Rezepte. Uploaden, Sprache wechseln und direkt vergleichen.', upload: 'XML hochladen', sample: 'Sample laden', drop: 'XML hierher ziehen (Drag & Drop)', ready: 'Bereit.', builderLink: 'XML-Assistent (Felder & Download)', animals: 'Tiere', mixtures: 'Mischungen', recipes: 'Rezepte', loaded: 'Datei geladen:', loadedSample: 'Sample XML geladen.', parseError: 'XML konnte nicht gelesen werden.', invalidRoot: 'Kein <animalFood>-Root gefunden.', noAnimals: 'Keine Tiere im XML gefunden.', noMixtures: 'Keine Mischungen vorhanden.', noRecipes: 'Keine Rezepte vorhanden.', consumption: 'Fressmodus', prod: 'Prod', eat: 'Eat', totalProd: 'Gesamt ProductionWeight', totalEat: 'Gesamt EatWeight', warningTotals: 'Hinweis: Gewichte weichen von 1.0 ab.', serialProdNote: 'SERIAL: Gruppen nacheinander von oben nach unten. productionWeight gilt pro Gruppe, nicht als Anteil an 100 %.', files: 'Fill Types', weightPct: 'Gewicht %', animalCount: 'Tiere', mixtureCount: 'Mischungen', recipeCount: 'Rezepte', calcTitle: 'Mixer Rechner', calcSubtitle: 'Mixer-Waggon nutzt Rezepte; Mischungen teilen FORAGE am Trog. Soll-Liter aus Rezept min/max (Mitte, auf 100% normiert). Ganze Ballen primar.', calcRecipe: 'Rezept', calcTarget: 'Ziel Liter', calcBale: 'Standard Ballen Liter', calcPartial: 'Teilballen Hinweis anzeigen', calcNoRecipe: 'Keine Rezepte verfugbar.', calcRecipeBand: 'Rezept %', calcIngredient: 'Zutat', calcTargetLiters: 'Soll (L)', calcPlanLiters: 'Plan (L)', calcFillType: 'FillType', calcBaleLiters: 'Ballen (L)', calcWholeBales: 'Ganze', calcActualLiters: 'Ist (L)', calcDelta: 'Delta (L)', calcPartialBales: 'Teilballen', calcTotal: 'Gesamt', calcScenario: 'Szenario', calcFillups: 'Mogliche Fullungen', calcRemainder: 'Rest (L)', calcTopUpSuggestion: 'Luckenfuller (Rest unter Ziel, rezeptkonform)', calcTopUpNone: 'Keine passende Ein-Ballen-Erweiterung.', calcBaleXml: 'Ballen-XML', calcBaleSize: 'Ballen-Grosse', calcBaleCount: 'Ballen', calcPctMix: 'Anteil', calcRecipeOk: 'Rezept ok', calcRecipeBad: 'Rezept verletzt', calcHeadroom: 'Frei bis Ziel', calcOverCap: 'Uber Kapazitat', calcMaxExtra: 'Max. +Ballen', calcGapTitle: 'Ziel & Rezept', calcCustomBale: 'Andere (Standard-Liter)', calcPlanHint: 'Soll-Anteil (Mitte)', samplePickLabel: 'Datenquelle', sampleOptAnimalic: 'FS25_Animalic (animalicFood.xml)', sampleOptVanilla: 'Vanilla (animalFood.xml)', sampleOptMittelland: 'Am Mittellandkanal', sampleOptHarterleiten: 'Harterleiten', loadedEmbedAnimalic: 'animalicFood.xml (Snapshot, offline)', loadedEmbedVanilla: 'animalFood Vanilla (Snapshot, offline)', loadedEmbedMittelland: 'animalFood Mittellandkanal (Snapshot, offline)', loadedEmbedHarterleiten: 'animalFood Harterleiten (Snapshot, offline)', sampleFetchError: 'Beispiel-XML konnte nicht geladen werden. Seite per HTTP oeffnen (nicht file://) oder Pfad pruefen.' },
-    en: { appTitle: 'FS25 Animal Food Explorer', appSubtitle: 'Upload an animalicFood.xml and visualize animals, mixtures, and recipes.', infoText: 'This tool visualizes weights from animalicFood.xml for animals, mixtures, and recipes. Upload, switch language, and compare instantly.', upload: 'Upload XML', sample: 'Load sample', drop: 'Drop XML file here (drag & drop)', ready: 'Ready.', builderLink: 'Guided XML builder', animals: 'Animals', mixtures: 'Mixtures', recipes: 'Recipes', loaded: 'File loaded:', loadedSample: 'Sample XML loaded.', parseError: 'Failed to parse XML.', invalidRoot: 'No <animalFood> root found.', noAnimals: 'No animals found in XML.', noMixtures: 'No mixtures found.', noRecipes: 'No recipes found.', consumption: 'Consumption', prod: 'Prod', eat: 'Eat', totalProd: 'Total ProductionWeight', totalEat: 'Total EatWeight', warningTotals: 'Warning: weights differ from 1.0.', serialProdNote: 'SERIAL: groups are used one after another, top to bottom. productionWeight is per group, not shares of 100%.', files: 'Fill Types', weightPct: 'Weight %', animalCount: 'Animals', mixtureCount: 'Mixtures', recipeCount: 'Recipes', calcTitle: 'Mixer Calculator', calcSubtitle: 'Mixer wagon uses recipes; mixtures split FORAGE at the trough. Target liters from each recipe min/max band (midpoint, normalized to 100%). Whole bales primary.', calcRecipe: 'Recipe', calcTarget: 'Target liters', calcBale: 'Default bale liters', calcPartial: 'Show partial-bale advisory', calcNoRecipe: 'No recipes available.', calcRecipeBand: 'Recipe %', calcIngredient: 'Ingredient', calcTargetLiters: 'Target (L)', calcPlanLiters: 'Planned (L)', calcFillType: 'Fill type', calcBaleLiters: 'Bale (L)', calcWholeBales: 'Whole', calcActualLiters: 'Actual (L)', calcDelta: 'Delta (L)', calcPartialBales: 'Partial', calcTotal: 'Total', calcScenario: 'Scenario', calcFillups: 'Possible fillups', calcRemainder: 'Remainder (L)', calcTopUpSuggestion: 'Gap fillers (under capacity, recipe-safe)', calcTopUpNone: 'No single-bale extension fits.', calcBaleXml: 'Bale XML', calcBaleSize: 'Bale size', calcBaleCount: 'Bales', calcPctMix: 'Share', calcRecipeOk: 'Recipe OK', calcRecipeBad: 'Recipe violated', calcHeadroom: 'Headroom to target', calcOverCap: 'Over capacity', calcMaxExtra: 'Max +bales', calcGapTitle: 'Target & recipe', calcCustomBale: 'Custom (default L)', calcPlanHint: 'Target share (mid)', samplePickLabel: 'Data source', sampleOptAnimalic: 'FS25_Animalic (animalicFood.xml)', sampleOptVanilla: 'Vanilla (animalFood.xml)', sampleOptMittelland: 'Am Mittellandkanal', sampleOptHarterleiten: 'Harterleiten', loadedEmbedAnimalic: 'animalicFood.xml (embedded snapshot, offline)', loadedEmbedVanilla: 'animalFood vanilla (embedded snapshot, offline)', loadedEmbedMittelland: 'animalFood Mittellandkanal (embedded snapshot, offline)', loadedEmbedHarterleiten: 'animalFood Harterleiten (embedded snapshot, offline)', sampleFetchError: 'Could not load sample XML. Open this page over HTTP (not file://) or check the path.' },
-    fr: { appTitle: 'FS25 Explorateur alimentation animale', appSubtitle: 'Chargez un fichier animalicFood.xml et visualisez animaux, melanges et recettes.', infoText: 'Cet outil visualise les poids de animalicFood.xml pour animaux, melanges et recettes. Importez, changez la langue et comparez instantanement.', upload: 'Importer XML', sample: 'Charger exemple', drop: 'Deposez le fichier XML ici (glisser-deposer)', ready: 'Pret.', builderLink: 'Assistant XML (explications & telechargement)', animals: 'Animaux', mixtures: 'Melanges', recipes: 'Recettes', loaded: 'Fichier charge :', loadedSample: 'Exemple XML charge.', parseError: 'Impossible de lire le XML.', invalidRoot: 'Racine <animalFood> introuvable.', noAnimals: 'Aucun animal trouve dans le XML.', noMixtures: 'Aucun melange disponible.', noRecipes: 'Aucune recette disponible.', consumption: 'Consommation', prod: 'Prod', eat: 'Eat', totalProd: 'Total ProductionWeight', totalEat: 'Total EatWeight', warningTotals: 'Attention : les poids different de 1.0.', serialProdNote: 'SERIAL : groupes successivement de haut en bas. productionWeight par groupe, pas des parts sur 100 %.', files: 'Types de remplissage', weightPct: 'Poids %', animalCount: 'Animaux', mixtureCount: 'Melanges', recipeCount: 'Recettes', calcTitle: 'Calculateur de melange', calcSubtitle: 'Melangeuse: recettes; melanges: repartition a la mangeoire. Litres cibles depuis min/max (milieu, normalise a 100%). Balles entieres en priorite.', calcRecipe: 'Recette', calcTarget: 'Litres cibles', calcBale: 'Litres balle par defaut', calcPartial: 'Afficher le conseil balle partielle', calcNoRecipe: 'Aucune recette disponible.', calcRecipeBand: 'Recette %', calcIngredient: 'Ingredient', calcTargetLiters: 'Cible (L)', calcPlanLiters: 'Plan (L)', calcFillType: 'Type', calcBaleLiters: 'Balle (L)', calcWholeBales: 'Entieres', calcActualLiters: 'Reel (L)', calcDelta: 'Ecart (L)', calcPartialBales: 'Partiel', calcTotal: 'Total', calcScenario: 'Scenario', calcFillups: 'Remplissages possibles', calcRemainder: 'Reste (L)', calcTopUpSuggestion: 'Combler le creux (sous capacite, recette ok)', calcTopUpNone: 'Aucune extension 1 balle.', calcBaleXml: 'XML balles', calcBaleSize: 'Taille balle', calcBaleCount: 'Balles', calcPctMix: 'Part', calcRecipeOk: 'Recette ok', calcRecipeBad: 'Recette refusee', calcHeadroom: 'Marge sous cible', calcOverCap: 'Depassement', calcMaxExtra: 'Max +balles', calcGapTitle: 'Cible & recette', calcCustomBale: 'Autre (L par defaut)', calcPlanHint: 'Cible part (milieu)', samplePickLabel: 'Source', sampleOptAnimalic: 'FS25_Animalic (animalicFood.xml)', sampleOptVanilla: 'Vanilla (animalFood.xml)', sampleOptMittelland: 'Am Mittellandkanal', sampleOptHarterleiten: 'Harterleiten', loadedEmbedAnimalic: 'animalicFood.xml (snapshot integre, hors ligne)', loadedEmbedVanilla: 'animalFood vanilla (snapshot integre, hors ligne)', loadedEmbedMittelland: 'animalFood Mittellandkanal (snapshot integre, hors ligne)', loadedEmbedHarterleiten: 'animalFood Harterleiten (snapshot integre, hors ligne)', sampleFetchError: 'Impossible de charger l\'exemple XML. Ouvrir la page en HTTP (pas file://) ou verifier le chemin.' }
+    de: { appTitle: 'FS25 Tierernahrung Explorer', appSubtitle: 'Upload einer animalicFood.xml und visualisiere Animals, Mixtures und Recipes.', infoText: 'Dieses Tool visualisiert die Gewichte aus animalicFood.xml fur Tiere, Mischungen und Rezepte. Uploaden, Sprache wechseln und direkt vergleichen.', upload: 'XML hochladen', sample: 'Sample laden', drop: 'XML hierher ziehen (Drag & Drop)', ready: 'Bereit.', builderLink: 'XML-Assistent (Felder & Download)', animals: 'Tiere', mixtures: 'Mischungen', recipes: 'Rezepte', loaded: 'Datei geladen:', loadedSample: 'Sample XML geladen.', parseError: 'XML konnte nicht gelesen werden.', invalidRoot: 'Kein <animalFood>-Root gefunden.', noAnimals: 'Keine Tiere im XML gefunden.', noMixtures: 'Keine Mischungen vorhanden.', noRecipes: 'Keine Rezepte vorhanden.', consumption: 'Fressmodus', prod: 'Prod', eat: 'Eat', totalProd: 'Gesamt ProductionWeight', totalEat: 'Gesamt EatWeight', warningTotals: 'Hinweis: Gewichte weichen von 1.0 ab.', serialProdNote: 'SERIAL: Gruppen nacheinander von oben nach unten. productionWeight gilt pro Gruppe, nicht als Anteil an 100 %.', files: 'Fill Types', weightPct: 'Gewicht %', animalCount: 'Tiere', mixtureCount: 'Mischungen', recipeCount: 'Rezepte', calcTitle: 'Mixer Rechner', calcSubtitle: 'Mixer-Waggon nutzt Rezepte; Mischungen teilen FORAGE am Trog. Soll-Liter aus Rezept min/max (Mitte, auf 100% normiert). Ganze Ballen primar.', calcRecipe: 'Rezept', calcTarget: 'Ziel Liter', calcBale: 'Standard Ballen Liter', calcPartial: 'Teilballen Hinweis anzeigen', calcNoRecipe: 'Keine Rezepte verfugbar.', calcRecipeBand: 'Rezept %', calcIngredient: 'Zutat', calcTargetLiters: 'Soll (L)', calcPlanLiters: 'Plan (L)', calcFillType: 'FillType', calcBaleLiters: 'Ballen (L)', calcWholeBales: 'Ganze', calcActualLiters: 'Ist (L)', calcDelta: 'Delta (L)', calcPartialBales: 'Teilballen', calcTotal: 'Gesamt', calcScenario: 'Szenario', calcFillups: 'Mogliche Fullungen', calcRemainder: 'Rest (L)', calcTopUpSuggestion: 'Luckenfuller (Rest unter Ziel, rezeptkonform)', calcTopUpNone: 'Keine passende Ein-Ballen-Erweiterung.', calcBaleXml: 'Ballen-XML', calcBaleSize: 'Ballen-Grosse', calcBaleCount: 'Ballen', calcPctMix: 'Anteil', calcRecipeOk: 'Rezept ok', calcRecipeBad: 'Rezept verletzt', calcHeadroom: 'Frei bis Ziel', calcOverCap: 'Uber Kapazitat', calcMaxExtra: 'Max. +Ballen', calcGapTitle: 'Ziel & Rezept', calcCustomBale: 'Andere (Standard-Liter)', calcPlanHint: 'Soll-Anteil (Mitte)', samplePickLabel: 'Datenquelle', sampleOptAnimalic: 'FS25_Animalic (animalicFood.xml)', sampleOptVanilla: 'Vanilla (animalFood.xml)', sampleOptMittelland: 'Am Mittellandkanal', sampleOptHarterleiten: 'Harterleiten', loadedEmbedAnimalic: 'animalicFood.xml (Snapshot, offline)', loadedEmbedVanilla: 'animalFood Vanilla (Snapshot, offline)', loadedEmbedMittelland: 'animalFood Mittellandkanal (Snapshot, offline)', loadedEmbedHarterleiten: 'animalFood Harterleiten (Snapshot, offline)', sampleFetchError: 'Beispiel-XML konnte nicht geladen werden. Seite per HTTP oeffnen (nicht file://) oder Pfad pruefen.', calcTabBulk: 'Schuttgut', calcTabBales: 'Ballen', calcBaleUxTitle: 'Ballen-Mischung', calcMixerFree: 'frei', calcRecipeStatusOk: 'Rezept ok', calcRecipeStatusOpen: 'Rezept offen', calcBaleTokenHint: 'Links: +1 | Rechts: −1', calcBaleReset: 'Ballen zuruecksetzen', calcBaleBlocked: 'Diese Ballenerhohung lasst kein rezeptkonformes Ziel mehr zu.', calcIssues: 'Hinweise', calcBaleNoAdd: 'Zurzeit kann kein weiterer Ballen hinzugefugt werden.', calcBaleMineralNote: 'Mineralfutter zahlt in diesem Modus nicht zur Ballen-Mischung.', calcBalePickSizes: 'Ballengrossen' },
+    en: { appTitle: 'FS25 Animal Food Explorer', appSubtitle: 'Upload an animalicFood.xml and visualize animals, mixtures, and recipes.', infoText: 'This tool visualizes weights from animalicFood.xml for animals, mixtures, and recipes. Upload, switch language, and compare instantly.', upload: 'Upload XML', sample: 'Load sample', drop: 'Drop XML file here (drag & drop)', ready: 'Ready.', builderLink: 'Guided XML builder', animals: 'Animals', mixtures: 'Mixtures', recipes: 'Recipes', loaded: 'File loaded:', loadedSample: 'Sample XML loaded.', parseError: 'Failed to parse XML.', invalidRoot: 'No <animalFood> root found.', noAnimals: 'No animals found in XML.', noMixtures: 'No mixtures found.', noRecipes: 'No recipes found.', consumption: 'Consumption', prod: 'Prod', eat: 'Eat', totalProd: 'Total ProductionWeight', totalEat: 'Total EatWeight', warningTotals: 'Warning: weights differ from 1.0.', serialProdNote: 'SERIAL: groups are used one after another, top to bottom. productionWeight is per group, not shares of 100%.', files: 'Fill Types', weightPct: 'Weight %', animalCount: 'Animals', mixtureCount: 'Mixtures', recipeCount: 'Recipes', calcTitle: 'Mixer Calculator', calcSubtitle: 'Mixer wagon uses recipes; mixtures split FORAGE at the trough. Target liters from each recipe min/max band (midpoint, normalized to 100%). Whole bales primary.', calcRecipe: 'Recipe', calcTarget: 'Target liters', calcBale: 'Default bale liters', calcPartial: 'Show partial-bale advisory', calcNoRecipe: 'No recipes available.', calcRecipeBand: 'Recipe %', calcIngredient: 'Ingredient', calcTargetLiters: 'Target (L)', calcPlanLiters: 'Planned (L)', calcFillType: 'Fill type', calcBaleLiters: 'Bale (L)', calcWholeBales: 'Whole', calcActualLiters: 'Actual (L)', calcDelta: 'Delta (L)', calcPartialBales: 'Partial', calcTotal: 'Total', calcScenario: 'Scenario', calcFillups: 'Possible fillups', calcRemainder: 'Remainder (L)', calcTopUpSuggestion: 'Gap fillers (under capacity, recipe-safe)', calcTopUpNone: 'No single-bale extension fits.', calcBaleXml: 'Bale XML', calcBaleSize: 'Bale size', calcBaleCount: 'Bales', calcPctMix: 'Share', calcRecipeOk: 'Recipe OK', calcRecipeBad: 'Recipe violated', calcHeadroom: 'Headroom to target', calcOverCap: 'Over capacity', calcMaxExtra: 'Max +bales', calcGapTitle: 'Target & recipe', calcCustomBale: 'Custom (default L)', calcPlanHint: 'Target share (mid)', samplePickLabel: 'Data source', sampleOptAnimalic: 'FS25_Animalic (animalicFood.xml)', sampleOptVanilla: 'Vanilla (animalFood.xml)', sampleOptMittelland: 'Am Mittellandkanal', sampleOptHarterleiten: 'Harterleiten', loadedEmbedAnimalic: 'animalicFood.xml (embedded snapshot, offline)', loadedEmbedVanilla: 'animalFood vanilla (embedded snapshot, offline)', loadedEmbedMittelland: 'animalFood Mittellandkanal (embedded snapshot, offline)', loadedEmbedHarterleiten: 'animalFood Harterleiten (embedded snapshot, offline)', sampleFetchError: 'Could not load sample XML. Open this page over HTTP (not file://) or check the path.', calcTabBulk: 'Bulk goods', calcTabBales: 'Bales', calcBaleUxTitle: 'Bale mix', calcMixerFree: 'free', calcRecipeStatusOk: 'Recipe OK', calcRecipeStatusOpen: 'Recipe open', calcBaleTokenHint: 'Left: +1 | Right: −1', calcBaleReset: 'Reset bales', calcBaleBlocked: 'That bale would make a valid target mix impossible.', calcIssues: 'Issues', calcBaleNoAdd: 'No valid bale can be added right now.', calcBaleMineralNote: 'Mineral feed is not part of the bale mix in this mode.', calcBalePickSizes: 'Bale sizes' },
+    fr: { appTitle: 'FS25 Explorateur alimentation animale', appSubtitle: 'Chargez un fichier animalicFood.xml et visualisez animaux, melanges et recettes.', infoText: 'Cet outil visualise les poids de animalicFood.xml pour animaux, melanges et recettes. Importez, changez la langue et comparez instantanement.', upload: 'Importer XML', sample: 'Charger exemple', drop: 'Deposez le fichier XML ici (glisser-deposer)', ready: 'Pret.', builderLink: 'Assistant XML (explications & telechargement)', animals: 'Animaux', mixtures: 'Melanges', recipes: 'Recettes', loaded: 'Fichier charge :', loadedSample: 'Exemple XML charge.', parseError: 'Impossible de lire le XML.', invalidRoot: 'Racine <animalFood> introuvable.', noAnimals: 'Aucun animal trouve dans le XML.', noMixtures: 'Aucun melange disponible.', noRecipes: 'Aucune recette disponible.', consumption: 'Consommation', prod: 'Prod', eat: 'Eat', totalProd: 'Total ProductionWeight', totalEat: 'Total EatWeight', warningTotals: 'Attention : les poids different de 1.0.', serialProdNote: 'SERIAL : groupes successivement de haut en bas. productionWeight par groupe, pas des parts sur 100 %.', files: 'Types de remplissage', weightPct: 'Poids %', animalCount: 'Animaux', mixtureCount: 'Melanges', recipeCount: 'Recettes', calcTitle: 'Calculateur de melange', calcSubtitle: 'Melangeuse: recettes; melanges: repartition a la mangeoire. Litres cibles depuis min/max (milieu, normalise a 100%). Balles entieres en priorite.', calcRecipe: 'Recette', calcTarget: 'Litres cibles', calcBale: 'Litres balle par defaut', calcPartial: 'Afficher le conseil balle partielle', calcNoRecipe: 'Aucune recette disponible.', calcRecipeBand: 'Recette %', calcIngredient: 'Ingredient', calcTargetLiters: 'Cible (L)', calcPlanLiters: 'Plan (L)', calcFillType: 'Type', calcBaleLiters: 'Balle (L)', calcWholeBales: 'Entieres', calcActualLiters: 'Reel (L)', calcDelta: 'Ecart (L)', calcPartialBales: 'Partiel', calcTotal: 'Total', calcScenario: 'Scenario', calcFillups: 'Remplissages possibles', calcRemainder: 'Reste (L)', calcTopUpSuggestion: 'Combler le creux (sous capacite, recette ok)', calcTopUpNone: 'Aucune extension 1 balle.', calcBaleXml: 'XML balles', calcBaleSize: 'Taille balle', calcBaleCount: 'Balles', calcPctMix: 'Part', calcRecipeOk: 'Recette ok', calcRecipeBad: 'Recette refusee', calcHeadroom: 'Marge sous cible', calcOverCap: 'Depassement', calcMaxExtra: 'Max +balles', calcGapTitle: 'Cible & recette', calcCustomBale: 'Autre (L par defaut)', calcPlanHint: 'Cible part (milieu)', samplePickLabel: 'Source', sampleOptAnimalic: 'FS25_Animalic (animalicFood.xml)', sampleOptVanilla: 'Vanilla (animalFood.xml)', sampleOptMittelland: 'Am Mittellandkanal', sampleOptHarterleiten: 'Harterleiten', loadedEmbedAnimalic: 'animalicFood.xml (snapshot integre, hors ligne)', loadedEmbedVanilla: 'animalFood vanilla (snapshot integre, hors ligne)', loadedEmbedMittelland: 'animalFood Mittellandkanal (snapshot integre, hors ligne)', loadedEmbedHarterleiten: 'animalFood Harterleiten (snapshot integre, hors ligne)', sampleFetchError: 'Impossible de charger l\'exemple XML. Ouvrir la page en HTTP (pas file://) ou verifier le chemin.', calcTabBulk: 'VRAC', calcTabBales: 'Balles', calcBaleUxTitle: 'Melange balles', calcMixerFree: 'libre', calcRecipeStatusOk: 'Recette ok', calcRecipeStatusOpen: 'Recette ouverte', calcBaleTokenHint: 'Gauche : +1 | Droite : −1', calcBaleReset: 'Reinitialiser les balles', calcBaleBlocked: 'Cette balle rend un melange cible impossible.', calcIssues: 'Points', calcBaleNoAdd: 'Aucune balle valide a ajouter pour l\'instant.', calcBaleMineralNote: 'L\'aliment mineral ne compte pas dans le melange balles dans ce mode.', calcBalePickSizes: 'Tailles de balles' }
   };
 
   const L10N = {
@@ -1073,7 +1222,7 @@
     RABBITFOOD: '🐰',
   };
 
-  const STATE = { lang: 'de', data: null, calc: { mode: 'bulk', selectedRecipe: '', showPartial: false, defaultBaleLiters: 5500, targetLiters: 45000, ingredientConfig: {}, bulkLiters: {}, bulkLocks: {}, bulkLockValues: {}, uploadedBaleRows: [], draggingBoundary: null } };
+  const STATE = { lang: 'de', data: null, calc: { mode: 'bulk', selectedRecipe: '', showPartial: false, defaultBaleLiters: 5500, targetLiters: 45000, ingredientConfig: {}, bulkLiters: {}, bulkLocks: {}, bulkLockValues: {}, uploadedBaleRows: [], draggingBoundary: null, activeBaleIngredientIdx: null } };
   const el = {
     file: document.getElementById('xml-file'),
     sampleBtn: document.getElementById('sample-btn'),
@@ -1671,8 +1820,8 @@
       : t('calcTopUpNone');
 
     const tabs = `<div style="display:flex; gap:8px; margin:0 0 10px 0;">
-      <button type="button" data-calc-mode="bulk" class="btn"${mode === 'bulk' ? ' style="border-color:var(--gold); color:var(--gold-soft);"' : ''}>Bulk goods</button>
-      <button type="button" data-calc-mode="bales" class="btn"${mode === 'bales' ? ' style="border-color:var(--gold); color:var(--gold-soft);"' : ''}>Bales</button>
+      <button type="button" data-calc-mode="bulk" class="btn"${mode === 'bulk' ? ' style="border-color:var(--gold); color:var(--gold-soft);"' : ''}>${escapeHtml(t('calcTabBulk'))}</button>
+      <button type="button" data-calc-mode="bales" class="btn"${mode === 'bales' ? ' style="border-color:var(--gold); color:var(--gold-soft);"' : ''}>${escapeHtml(t('calcTabBales'))}</button>
     </div>`;
 
     let bulkTable = '';
@@ -1732,43 +1881,136 @@
       </div>`;
     }
 
-    const balesRows = baleRows.map((r, bi) => {
-      const options = r.opts.map((o) => {
-        const liters = Math.round(o.liters);
-        const k = String(liters);
-        const c = Math.max(0, Number(r.sizeCounts[k]) || 0);
-        const next = baleLitersVec.slice();
-        next[bi] += liters;
-        const allowAdd = next.reduce((a, b) => a + b, 0) <= targetLiters + 0.5 && canStillReachRecipeAtTarget(next, baleIngredients, targetLiters);
-        const kind = /sq|square/i.test(o.label) ? 'square' : (/^R|round/i.test(o.label) ? 'round' : 'other');
-        const tokenIcon = kind === 'round' ? '⭕' : (kind === 'square' ? '⬛' : '📦');
-        const tokenBars = c > 0 ? `${'▮'.repeat(Math.min(c, 12))}${c > 12 ? '…' : ''}` : '—';
-        return { kind, html: `<div class="bale-size-row">
-          <span class="bale-size-label">${liters}L</span>
-          <span class="bale-token${allowAdd ? '' : ' is-disabled'}" data-bale-token="${r.idx}" data-bale-liters="${liters}" data-bale-allow-add="${allowAdd ? '1' : '0'}" title="Left click: +1 | Right click: -1">${tokenIcon} <span class="count">${c}</span> ${tokenBars}</span>
-        </div>` };
+    const balesModuleHtml = (() => {
+      const baleIdxList = baleRows.map((r) => r.idx);
+      if (!baleIdxList.length) return `<p class="small muted">${escapeHtml(t('calcNoRecipe'))}</p>`;
+      let activeBaleIdx = STATE.calc.activeBaleIngredientIdx;
+      if (!baleIdxList.includes(activeBaleIdx)) {
+        activeBaleIdx = baleIdxList[0];
+        STATE.calc.activeBaleIngredientIdx = activeBaleIdx;
+      }
+      const activeRow = baleRows.find((r) => r.idx === activeBaleIdx);
+      const bi = baleRows.findIndex((r) => r.idx === activeBaleIdx);
+
+      const localeTag = STATE.lang === 'de' ? 'de-DE' : (STATE.lang === 'fr' ? 'fr-FR' : 'en-US');
+      const targetFmt = Math.round(targetLiters).toLocaleString(localeTag);
+
+      const headHtml = `<div class="bale-mixer-head">
+        <div class="bale-mixer-head-title">${escapeHtml(t('calcBaleUxTitle'))}</div>
+        <div class="bale-mixer-meta">
+          <span class="bale-mixer-badge">${escapeHtml(t('calcTarget'))} ${targetFmt}L</span>
+          <span class="bale-mixer-badge ${recipeOk ? 'ok' : 'bad'}">${escapeHtml(recipeOk ? t('calcRecipeStatusOk') : t('calcRecipeStatusOpen'))}</span>
+        </div>
+      </div>`;
+
+      let barInner = '';
+      baleRows.forEach((r) => {
+        if (r.actualBale <= 0 || targetLiters <= 0) return;
+        const w = (r.actualBale / targetLiters) * 100;
+        const share = totalActual > 0 ? (100 * r.actualBale) / totalActual : 0;
+        const c = getFillTypeColor(r.fillType);
+        barInner += `<div class="bale-mixer-seg" style="width:${w}%; background:${c};" title="${escapeHtml(r.ingName)}">${share.toFixed(0)}%</div>`;
       });
-      const roundRows = options.filter((x) => x.kind === 'round').map((x) => x.html).join('');
-      const squareRows = options.filter((x) => x.kind === 'square').map((x) => x.html).join('');
-      const otherRows = options.filter((x) => x.kind === 'other').map((x) => x.html).join('');
-      const leftCol = `${roundRows ? `<div class="bale-group-col is-round"><div class="bale-group-title"><span class="icon">⭕</span>Round Bales</div>${roundRows}</div>` : ''}${!roundRows && otherRows ? `<div class="bale-group-col"><div class="bale-group-title"><span class="icon">📦</span>Other</div>${otherRows}</div>` : ''}`;
-      const rightCol = `${squareRows ? `<div class="bale-group-col is-square"><div class="bale-group-title"><span class="icon">⬛</span>Square Bales</div>${squareRows}</div>` : ''}${roundRows && otherRows ? `<div class="bale-group-col"><div class="bale-group-title"><span class="icon">📦</span>Other</div>${otherRows}</div>` : ''}`;
-      const sizeRows = `<div class="bale-groups-grid"><div>${leftCol || '<div class="bale-group-col"><div class="bale-group-title">Round Bales</div><div class="slider-hint">none</div></div>'}</div><div>${rightCol || '<div class="bale-group-col"><div class="bale-group-title">Square Bales</div><div class="slider-hint">none</div></div>'}</div></div>`;
-      const noAddPossible = !options.some((x) => /data-bale-allow-add="1"/.test(x.html));
-      return `<tr>
-        <td>${escapeHtml(r.ingName)}</td>
-        <td>${escapeHtml(r.band)}</td>
-        <td>${getFillIcon(r.fillType)} ${escapeHtml(r.fillTypeLabel)}</td>
-        <td><div class="bale-picks">${sizeRows}${noAddPossible ? `<div class="bale-warn">No valid bale can be added right now.</div>` : ''}</div></td>
-        <td>—</td>
-        ${showPartial ? `<td>${fmtNum(r.targetShareL / r.bale)}</td>` : ''}
-        <td>${Math.round(r.actualBale)}</td>
-        <td>${pctMix(r.idx)}%</td>
-      </tr>`;
-    }).join('');
-    const balesTable = `<table>
-      <thead><tr><th>${t('calcIngredient')}</th><th>${t('calcRecipeBand')}</th><th>${t('calcFillType')}</th><th>${t('calcBaleSize')}</th><th>${t('calcBaleCount')}</th>${showPartial ? `<th>${t('calcPartialBales')}</th>` : ''}<th>${t('calcActualLiters')}</th><th>${t('calcPctMix')}</th></tr></thead>
-      <tbody>${balesRows}</tbody></table>`;
+      if (totalActual < targetLiters && targetLiters > 0) {
+        const fw = ((targetLiters - totalActual) / targetLiters) * 100;
+        barInner += `<div class="bale-mixer-seg is-free" style="width:${fw}%;">${escapeHtml(t('calcMixerFree'))}</div>`;
+      }
+      if (!barInner && targetLiters > 0) {
+        barInner = `<div class="bale-mixer-seg is-free" style="width:100%;">${escapeHtml(t('calcMixerFree'))}</div>`;
+      }
+
+      const overlays = baleRows.map((r) => {
+        const mn = Math.max(0, Number(r.ing.minPercentage) || 0);
+        const mx = Math.max(mn, Number(r.ing.maxPercentage) || 100);
+        const bw = Math.max(0.4, mx - mn);
+        const col = getFillTypeColor(r.fillType);
+        return `<div class="bale-mixer-overlay" style="left:${mn}%; width:${bw}%; border-color:${col};" data-label="${escapeHtml(r.ingName)} ${fmtNum(mn)}–${fmtNum(mx)}%"></div>`;
+      }).join('');
+
+      const legendRows = baleRows.map((r) => {
+        const liters = r.actualBale;
+        const pct = totalActual > 0 ? (100 * liters) / totalActual : 0;
+        const mn = Math.max(0, Number(r.ing.minPercentage) || 0);
+        const mx = Math.max(0, Number(r.ing.maxPercentage) || 100);
+        let st = 'ok';
+        if (totalActual > 0) {
+          if (pct < mn - RECIPE_EPS) st = 'warn';
+          else if (pct > mx + RECIPE_EPS) st = 'bad';
+        } else if (mn > 0) st = 'warn';
+        const sw = getFillTypeColor(r.fillType);
+        return `<div class="bale-legend-row">
+          <span class="bale-legend-swatch" style="background:${sw};"></span>
+          <span>${escapeHtml(r.ingName)}</span>
+          <span class="bale-mixer-badge ${st}">${Math.round(liters)}L · ${pct.toFixed(1)}%</span>
+          <span class="bale-mixer-badge">${fmtNum(mn)}–${fmtNum(mx)}%</span>
+        </div>`;
+      }).join('');
+
+      const mixerHtml = `${headHtml}
+      <div class="bale-mixer-bar-wrap">
+        <div class="bale-mixer-bar">${barInner}</div>
+        ${overlays}
+      </div>
+      <div class="bale-mixer-legend">${legendRows}</div>`;
+
+      const focusHtml = baleRows.map((r) =>
+        `<button type="button" class="bale-focus-btn${r.idx === activeBaleIdx ? ' is-active' : ''}" data-bale-focus="${r.idx}">${escapeHtml(r.ingName)}</button>`
+      ).join('');
+
+      let optionsBody = '';
+      if (activeRow && bi >= 0) {
+        const optionRows = activeRow.opts.map((o) => {
+          const liters = Math.round(o.liters);
+          const k = String(liters);
+          const c0 = Math.max(0, Number(activeRow.sizeCounts[k]) || 0);
+          const next = baleLitersVec.slice();
+          next[bi] += liters;
+          const allowAdd = next.reduce((a, b) => a + b, 0) <= targetLiters + 0.5 && canStillReachRecipeAtTarget(next, baleIngredients, targetLiters);
+          const kind = /sq|square/i.test(o.label) ? 'square' : (/^R|round|Rund/i.test(o.label) ? 'round' : 'other');
+          const shapeClass = kind === 'round' ? 'is-round' : '';
+          const col = getFillTypeColor(activeRow.fillType);
+          return `<div class="bale-mod-option-row">
+            <span class="bale-mod-token${allowAdd ? '' : ' is-disabled'}" data-bale-token="${activeRow.idx}" data-bale-liters="${liters}" data-bale-allow-add="${allowAdd ? '1' : '0'}" title="${escapeHtml(t('calcBaleTokenHint'))}">
+              <span class="bale-mini ${shapeClass}" style="background:${col};"></span>
+              <span>${liters}L</span>
+              <span class="bale-mod-count">${c0}</span>
+            </span>
+          </div>`;
+        }).join('');
+        const noAddPossible = !activeRow.opts.some((o) => {
+          const liters = Math.round(o.liters);
+          const next = baleLitersVec.slice();
+          next[bi] += liters;
+          return next.reduce((a, b) => a + b, 0) <= targetLiters + 0.5 && canStillReachRecipeAtTarget(next, baleIngredients, targetLiters);
+        });
+        const warnLine = noAddPossible ? `<div class="bale-warn">${escapeHtml(t('calcBaleNoAdd'))}</div>` : '';
+        const partialLine = showPartial
+          ? `<div class="bale-mod-partial">${escapeHtml(t('calcPartialBales'))}: ${fmtNum(activeRow.targetShareL / Math.max(1, activeRow.bale))}</div>`
+          : '';
+        optionsBody = `<div class="bale-options-panel">
+          <div class="bale-options-title"><strong>${escapeHtml(activeRow.ingName)}</strong> · ${escapeHtml(t('calcRecipeBand'))}: ${escapeHtml(activeRow.band)} · ${getFillIcon(activeRow.fillType)} ${escapeHtml(activeRow.fillTypeLabel)}</div>
+          <div class="slider-hint" style="margin-bottom:8px;">${escapeHtml(t('calcBalePickSizes'))}</div>
+          ${optionRows}
+          ${warnLine}
+          ${partialLine}
+        </div>`;
+      }
+
+      const mineralNote = calcIngredients.some((ing) => isMineralIngredient(ing))
+        ? `<p class="small muted" style="margin-top:10px;">${escapeHtml(t('calcBaleMineralNote'))}</p>`
+        : '';
+
+      const actionsHtml = `<div class="bale-mod-actions">
+        <button type="button" class="btn" data-bale-reset>${escapeHtml(t('calcBaleReset'))}</button>
+      </div>`;
+
+      return `<div class="bale-calc-module">${mixerHtml}
+        <div class="bale-focus-strip">${focusHtml}</div>
+        ${optionsBody}
+        ${actionsHtml}
+        ${mineralNote}
+      </div>`;
+    })();
 
     const fitPill = recipeOk
       ? `<span class="calc-pill calc-pill-ok">${t('calcRecipeOk')}</span>`
@@ -1784,7 +2026,7 @@
           ${capPill}
           ${fitPill}
         </div>
-        ${violations.length ? `<div class="calc-status-row"><span class="calc-pill calc-pill-error">Issues</span> ${violations.map((v) => escapeHtml(v)).join('; ')}</div>` : ''}
+        ${violations.length ? `<div class="calc-status-row"><span class="calc-pill calc-pill-error">${escapeHtml(t('calcIssues'))}</span> ${violations.map((v) => escapeHtml(v)).join('; ')}</div>` : ''}
         <div class="calc-status-row">
           <span class="calc-pill ${gapRowClass}">${t('calcTopUpSuggestion')}</span>
           ${gapText}
@@ -1793,7 +2035,7 @@
 
     el.calcRoot.innerHTML = `${tabs}
       ${statusPanel}
-      ${mode === 'bulk' ? bulkTable : balesTable}
+      ${mode === 'bulk' ? bulkTable : balesModuleHtml}
       `;
   }
 
@@ -1948,6 +2190,7 @@
   });
   el.calcRecipe.addEventListener('change', () => {
     STATE.calc.selectedRecipe = el.calcRecipe.value || '';
+    STATE.calc.activeBaleIngredientIdx = null;
     if (STATE.data) renderCalculator(STATE.data);
   });
   el.calcTarget.addEventListener('input', () => {
@@ -2074,10 +2317,37 @@
       renderCalculator(STATE.data);
       return;
     }
+    const focusEl = target.closest('[data-bale-focus]');
+    if (focusEl instanceof HTMLElement) {
+      const fidx = Number(focusEl.getAttribute('data-bale-focus'));
+      if (Number.isFinite(fidx)) {
+        STATE.calc.activeBaleIngredientIdx = fidx;
+        renderCalculator(STATE.data);
+      }
+      return;
+    }
+    if (target.closest('[data-bale-reset]')) {
+      if (!STATE.data) return;
+      const selectedKey = STATE.calc.selectedRecipe;
+      if (!selectedKey) return;
+      const sel = STATE.data.recipes.find((r) => getRecipeKey(r) === selectedKey);
+      if (!sel) return;
+      sel.ingredients.forEach((ing, idx) => {
+        if (isMineralIngredient(ing)) return;
+        const key = getIngredientConfigKey(selectedKey, idx);
+        const cfg = STATE.calc.ingredientConfig[key];
+        if (cfg) {
+          cfg.baleCounts = {};
+          cfg.count = 0;
+        }
+      });
+      renderCalculator(STATE.data);
+      return;
+    }
     const tokenEl = target.closest('[data-bale-token]');
     if (tokenEl instanceof HTMLElement) {
       if (tokenEl.getAttribute('data-bale-allow-add') !== '1') {
-        setStatus('Blocked: this bale would make a valid target mix impossible.', 'error');
+        setStatus(t('calcBaleBlocked'), 'error');
         return;
       }
       const idx = Number(tokenEl.getAttribute('data-bale-token'));

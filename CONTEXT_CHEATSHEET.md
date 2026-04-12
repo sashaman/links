@@ -11,7 +11,7 @@
 
 - `src/pages/index.astro` -> terminal homepage + category logic
 - `src/layouts/Layout.astro` -> global meta/OG/twitter handling
-- `public/fs25_animalic_food.html` -> standalone FS25 explorer app
+- `public/fs25_animalic_food.html` -> standalone FS25 explorer app (bales-mode module UX + decisions: **FS25_BALE_CALC_MODULE.md**)
 - `public/fs25_animalic_food_builder.html` -> guided `animalicFood.xml` authoring (see **FS25_ANIMALIC_FOOD_BUILDER.md**)
 - `public/og-animal-food-explorer.png` -> OG image for FS25 explorer page
 - `public/og-animal-food-builder.png` -> OG image for FS25 builder page
@@ -62,10 +62,10 @@ See **[DEVELOPMENT_WORKFLOW.md](DEVELOPMENT_WORKFLOW.md)** for the full suggeste
 
 ### Bales mode
 
+- **Module layout:** mixer bar vs target + legend + **focus strip** (one ingredient) + tokens for that ingredient only; **Reset** clears counts. Rationale: **FS25_BALE_CALC_MODULE.md**.
 - Starts empty (no default bales).
 - Left click token add / right click token remove.
 - Mixed bale sizes allowed at same time for same ingredient.
-- Round vs Square groups shown side-by-side.
 - Tokens disabled when add would make valid target recipe unreachable.
 - Prominent validator/status panel shown at top in this mode.
 
@@ -91,10 +91,10 @@ See **[DEVELOPMENT_WORKFLOW.md](DEVELOPMENT_WORKFLOW.md)** for the full suggeste
 
 ## Current Outstanding Tasks
 
-1. Bale selector visual polish (spacing/iconography simplification).
+1. Bale module optional polish (narrow-width bar/legends; optional “all ingredients” summary).
 2. Minor bulk slider edge-case polish.
 3. Optional SVG icon pass for bales.
 
 ## Quick Resume Prompt
 
-"Resume from `CONTEXT_CHEATSHEET.md` + **PROJECT_STATE.md** (checkpoint **2026-04-10** explorer + **2026-04-11** builder). Explorer: default next focus **bale calculator** UX; bulk slider edge cases optional. Builder: **FS25_ANIMALIC_FOOD_BUILDER.md** + `public/fs25_animalic_food_builder.html` — sticky UX is **per card** only; section heads are `.panel-section-head` (not sticky). Keep `public/samples/*.xml` in sync with embedded map XML when changing Mittelland/Harterleiten (run `node scripts/inject-embed-samples.mjs`)."
+"Resume from `CONTEXT_CHEATSHEET.md` + **PROJECT_STATE.md** (checkpoints **2026-04-10** explorer, **2026-04-11** builder, **2026-04-12** bale module). Explorer bales UX: **FS25_BALE_CALC_MODULE.md**; bulk slider edge cases optional. Builder: **FS25_ANIMALIC_FOOD_BUILDER.md** + `public/fs25_animalic_food_builder.html` — sticky UX is **per card** only; section heads are `.panel-section-head` (not sticky). Keep `public/samples/*.xml` in sync with embedded map XML when changing Mittelland/Harterleiten (run `node scripts/inject-embed-samples.mjs`)."
