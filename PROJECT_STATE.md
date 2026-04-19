@@ -8,6 +8,7 @@
 - FS25 explorer (`public/fs25_animalic_food.html`) is a full interactive app (XML parsing + visualizer + calculator modes). **Bales-mode UX** (mixer bar, focus strip, module layout) and the decisions behind it: **[FS25_BALE_CALC_MODULE.md](FS25_BALE_CALC_MODULE.md)**.
 - FS25 **animalFood builder** (`public/fs25_animalic_food_builder.html`) is a separate **authoring** page: documented fields, form-based editing, validation hints, download/copy of `animalicFood.xml`. Module description and progress: **[FS25_ANIMALIC_FOOD_BUILDER.md](FS25_ANIMALIC_FOOD_BUILDER.md)**.
 - **CRT scanline overlay** on both FS25 public pages (Termlink-parity): **[FS25_ANIMALIC_SCANLINES.md](FS25_ANIMALIC_SCANLINES.md)**.
+- **Checkpoint dates** in this file are the **calendar day** that batch of work was finished and written up (aligned with commit/push that day, not an arbitrary earlier label).
 
 ## Deployment + Preview Status
 
@@ -17,7 +18,7 @@
   - `/links/fs25_animalic_food.html` -> `public/og-animal-food-explorer.png` via in-file OG tags.
   - `/links/fs25_animalic_food_builder.html` -> `public/og-animal-food-builder.png` via in-file OG tags.
 
-## Checkpoint: 2026-04-14 — FS25 explorer + builder (grids, i18n chrome, locale)
+## Checkpoint: 2026-04-19 — FS25 explorer + builder (grids, i18n chrome, locale)
 
 - **Equal-width grids:** Explorer **`.animals`** / builder **`.animals-editor`** and explorer **`.grid.grid-two`** (mixtures | recipes) use **`repeat(2, minmax(0, 1fr))`** — previous asymmetric `fr` tracks removed.
 - **Language switcher:** **DE / EN / FR** text only (no flag emoji — inconsistent across OS/fonts; regional indicators could read as a second “abbreviation”). **`appearance: none`**, higher-contrast button styling, **`flex-shrink: 0`**. **`.top`** header uses **`z-index: 55`** with **`isolation: isolate`** so the first card sits **above** the fixed **`body::after`** CRT layer (`z-index: 50`) and avoids some **desktop** compositor glitches; **mobile / published** often show controls fine either way.
