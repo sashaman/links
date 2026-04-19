@@ -113,6 +113,9 @@
     border-radius: 12px;
     padding: clamp(12px, 2.5vw, 20px);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+    position: relative;
+    z-index: 55;
+    isolation: isolate;
   }
   .title-row {
     display: flex;
@@ -321,7 +324,7 @@
   }
   @container animal-panel (min-width: 520px) {
     .animals-editor {
-      grid-template-columns: minmax(0, 1.14fr) minmax(0, 0.86fr);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
   .animal {
@@ -574,28 +577,47 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
+    flex-shrink: 0;
     border-radius: 8px;
     border: 1px solid var(--border);
     background: #202a15;
     padding: 6px;
   }
   .lang-btn {
-    min-width: 40px;
-    height: 30px;
+    -webkit-appearance: none;
+    appearance: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    min-width: 48px;
+    min-height: 32px;
+    padding: 6px 12px;
     border-radius: 7px;
-    border: 1px solid #465632;
-    background: #1a2212;
+    border: 1px solid color-mix(in srgb, var(--gold-soft) 35%, var(--border));
+    background: linear-gradient(180deg, #232d18, #1a2212);
     color: var(--text);
-    font-size: 16px;
-    line-height: 1;
+    font-family: 'Barlow', system-ui, sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    line-height: 1.2;
     cursor: pointer;
-    transition: border-color 0.16s ease, transform 0.16s ease, background 0.16s ease;
-    padding: 0;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    transition: border-color 0.16s ease, transform 0.16s ease, background 0.16s ease, color 0.16s ease;
   }
-  .lang-btn:hover { border-color: var(--gold); transform: translateY(-1px); }
+  .lang-btn:hover {
+    border-color: var(--gold);
+    color: var(--gold-soft);
+    transform: translateY(-1px);
+  }
   .lang-btn.is-active {
     border-color: var(--gold);
-    background: rgba(200, 168, 75, 0.18);
+    background: rgba(200, 168, 75, 0.22);
+    color: var(--gold-soft);
+    box-shadow: inset 0 0 0 1px rgba(200, 168, 75, 0.25);
   }
   .intro-preset-grid {
     display: grid;
@@ -631,9 +653,9 @@
           <div class="title-meta-row">
             <span class="pill" id="i18n-pill">animalFood.xsd</span>
             <div class="lang-switch" role="group" aria-label="Language">
-              <button type="button" class="lang-btn" data-lang="de" title="Deutsch" lang="de">🇩🇪</button>
-              <button type="button" class="lang-btn" data-lang="en" title="English" lang="en">🇬🇧</button>
-              <button type="button" class="lang-btn" data-lang="fr" title="Français" lang="fr">🇫🇷</button>
+              <button type="button" class="lang-btn" data-lang="de" title="Deutsch" lang="de">DE</button>
+              <button type="button" class="lang-btn" data-lang="en" title="English" lang="en">EN</button>
+              <button type="button" class="lang-btn" data-lang="fr" title="Français" lang="fr">FR</button>
             </div>
           </div>
           <a href="fs25_animalic_food.html" id="i18n-explorer-link" class="builder-explorer-link">Open visual explorer</a>
@@ -1061,7 +1083,31 @@
     },
   };
 
-  let uiLang = localStorage.getItem('fs25-builder-lang') || 'en';
+  const BUILDER_LANG_STORAGE = 'fs25-builder-lang';
+
+  /**
+   * First matching `navigator.languages` prefix among de/en/fr; null if none.
+   */
+  function detectBrowserUiLangBuilder() {
+    try {
+      const langs = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || ''];
+      const ok = new Set(['de', 'en', 'fr']);
+      for (const tag of langs) {
+        const base = String(tag || '').split('-')[0].toLowerCase();
+        if (ok.has(base)) return base;
+      }
+    } catch (_) {}
+    return null;
+  }
+
+  let uiLang = (() => {
+    try {
+      const stored = localStorage.getItem(BUILDER_LANG_STORAGE);
+      if (stored && I18N[stored]) return stored;
+    } catch (_) {}
+    const d = detectBrowserUiLangBuilder();
+    return (d && I18N[d] ? d : null) || 'en';
+  })();
   if (!I18N[uiLang]) uiLang = 'en';
 
   function t(key, params) {
@@ -1149,7 +1195,7 @@
   function setUiLang(code) {
     if (!I18N[code]) return;
     uiLang = code;
-    localStorage.setItem('fs25-builder-lang', code);
+    localStorage.setItem(BUILDER_LANG_STORAGE, code);
     applyStaticI18n();
     renderAll();
   }

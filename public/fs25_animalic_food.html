@@ -96,6 +96,10 @@
     padding: clamp(12px, 2.5vw, 20px);
     margin-bottom: 0;
     box-shadow: 0 8px 24px rgba(0, 0, 0, .22);
+    /* Above body::after CRT (z-index 50) — avoids compositor bugs where controls under fixed overlays fail to paint. */
+    position: relative;
+    z-index: 55;
+    isolation: isolate;
   }
   .title-row { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: flex-start; justify-content: space-between; }
   .title-main { min-width: min(100%, 280px); flex: 1; }
@@ -180,28 +184,48 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
+    flex-shrink: 0;
     border-radius: 8px;
     border: 1px solid var(--border);
     background: #202a15;
     padding: 6px;
   }
+  /* Plain DE/EN/FR — native button styles can hide labels on some platforms; force cosmetic + contrast. */
   .lang-btn {
-    min-width: 40px;
-    height: 30px;
+    -webkit-appearance: none;
+    appearance: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    min-width: 48px;
+    min-height: 32px;
+    padding: 6px 12px;
     border-radius: 7px;
-    border: 1px solid #465632;
-    background: #1a2212;
+    border: 1px solid color-mix(in srgb, var(--gold-soft) 35%, var(--border));
+    background: linear-gradient(180deg, #232d18, #1a2212);
     color: var(--text);
-    font-size: 16px;
-    line-height: 1;
+    font-family: 'Barlow', system-ui, sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    line-height: 1.2;
     cursor: pointer;
-    padding: 0;
-    transition: border-color .16s ease, transform .16s ease, background .16s ease;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .06);
+    transition: border-color .16s ease, transform .16s ease, background .16s ease, color .16s ease;
   }
-  .lang-btn:hover { border-color: var(--gold); transform: translateY(-1px); }
+  .lang-btn:hover {
+    border-color: var(--gold);
+    color: var(--gold-soft);
+    transform: translateY(-1px);
+  }
   .lang-btn.is-active {
     border-color: var(--gold);
-    background: rgba(200, 168, 75, .18);
+    background: rgba(200, 168, 75, .22);
+    color: var(--gold-soft);
+    box-shadow: inset 0 0 0 1px rgba(200, 168, 75, .25);
   }
   .btn, .file-label { cursor: pointer; transition: border-color .18s ease, transform .18s ease, background .18s ease; }
   .btn:hover, .file-label:hover { border-color: var(--gold); transform: translateY(-1px); }
@@ -227,7 +251,7 @@
   .status.warn { border-color: color-mix(in srgb, var(--warn) 45%, var(--border)); }
   .status.error { border-color: color-mix(in srgb, var(--error) 45%, var(--border)); }
   .grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
-  @media (min-width: 920px) { .grid.grid-two { grid-template-columns: 1.15fr 1fr; } }
+  @media (min-width: 920px) { .grid.grid-two { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   .panel {
     background: var(--card);
     border: 1px solid var(--border);
@@ -253,7 +277,7 @@
   }
   @container animal-panel (min-width: 520px) {
     .animals {
-      grid-template-columns: minmax(0, 1.14fr) minmax(0, 0.86fr);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
   .animal {
@@ -1242,9 +1266,9 @@
           <div class="title-meta-row">
             <span class="pill" id="schema-pill">animalFood.xsd 1.17</span>
             <div class="lang-switch" role="group" aria-label="Language">
-              <button type="button" class="lang-btn" data-lang="de" title="Deutsch" lang="de">🇩🇪</button>
-              <button type="button" class="lang-btn" data-lang="en" title="English" lang="en">🇬🇧</button>
-              <button type="button" class="lang-btn" data-lang="fr" title="Français" lang="fr">🇫🇷</button>
+              <button type="button" class="lang-btn" data-lang="de" title="Deutsch" lang="de">DE</button>
+              <button type="button" class="lang-btn" data-lang="en" title="English" lang="en">EN</button>
+              <button type="button" class="lang-btn" data-lang="fr" title="Français" lang="fr">FR</button>
             </div>
           </div>
           <a id="builder-link" href="fs25_animalic_food_builder.html" class="explorer-builder-link"></a>
@@ -1635,7 +1659,30 @@
   };
 
   const FALLBACK_BALE_LITERS = 5500;
-  const STATE = { lang: 'de', data: null, calc: { mode: 'bulk', selectedRecipe: '', targetLiters: 45000, ingredientConfig: {}, bulkLiters: {}, bulkLocks: {}, bulkLockValues: {}, uploadedBaleRows: [], draggingBoundary: null, activeBaleIngredientIdx: null } };
+  const UI_LANG_KEYS = /** @type {const} */ (['de', 'en', 'fr']);
+  const EXPLORER_LANG_STORAGE = 'fs25-explorer-lang';
+  function detectBrowserUiLangPicker() {
+    try {
+      const langs = typeof navigator !== 'undefined' && navigator.languages && navigator.languages.length
+        ? navigator.languages
+        : [navigator.language || ''];
+      const set = new Set(UI_LANG_KEYS);
+      for (const tag of langs) {
+        const base = String(tag || '').split('-')[0].toLowerCase();
+        if (set.has(base)) return base;
+      }
+    } catch (_) {}
+    return null;
+  }
+  function readInitialExplorerLang() {
+    try {
+      const stored = localStorage.getItem(EXPLORER_LANG_STORAGE);
+      if (stored && UI_LANG_KEYS.includes(stored)) return stored;
+    } catch (_) {}
+    return detectBrowserUiLangPicker() || 'de';
+  }
+
+  const STATE = { lang: readInitialExplorerLang(), data: null, calc: { mode: 'bulk', selectedRecipe: '', targetLiters: 45000, ingredientConfig: {}, bulkLiters: {}, bulkLocks: {}, bulkLockValues: {}, uploadedBaleRows: [], draggingBoundary: null, activeBaleIngredientIdx: null } };
   const el = {
     file: document.getElementById('xml-file'),
     sampleBtn: document.getElementById('sample-btn'),
@@ -2714,6 +2761,7 @@
   }
 
   function applyUiLanguage() {
+    document.documentElement.lang = STATE.lang;
     syncSampleSelectI18n();
     el.appTitle.textContent = t('appTitle');
     el.appSubtitle.textContent = t('appSubtitle');
@@ -3105,6 +3153,9 @@
   el.langButtons.forEach((btn) => {
     btn.addEventListener('click', () => {
       STATE.lang = btn.getAttribute('data-lang') || 'de';
+      try {
+        localStorage.setItem(EXPLORER_LANG_STORAGE, STATE.lang);
+      } catch (_) {}
       applyUiLanguage();
       if (!STATE.data) setStatus(t('ready'));
     });

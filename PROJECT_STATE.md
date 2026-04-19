@@ -17,6 +17,12 @@
   - `/links/fs25_animalic_food.html` -> `public/og-animal-food-explorer.png` via in-file OG tags.
   - `/links/fs25_animalic_food_builder.html` -> `public/og-animal-food-builder.png` via in-file OG tags.
 
+## Checkpoint: 2026-04-14 — FS25 explorer + builder (grids, i18n chrome, locale)
+
+- **Equal-width grids:** Explorer **`.animals`** / builder **`.animals-editor`** and explorer **`.grid.grid-two`** (mixtures | recipes) use **`repeat(2, minmax(0, 1fr))`** — previous asymmetric `fr` tracks removed.
+- **Language switcher:** **DE / EN / FR** text only (no flag emoji — inconsistent across OS/fonts; regional indicators could read as a second “abbreviation”). **`appearance: none`**, higher-contrast button styling, **`flex-shrink: 0`**. **`.top`** header uses **`z-index: 55`** with **`isolation: isolate`** so the first card sits **above** the fixed **`body::after`** CRT layer (`z-index: 50`) and avoids some **desktop** compositor glitches; **mobile / published** often show controls fine either way.
+- **Default language:** Explorer: **`localStorage` `fs25-explorer-lang`**, else first supported match from **`navigator.languages`**, else **`de`**; choice persisted on click. Builder: **`fs25-builder-lang`**, else browser locale, else **`en`**. Explorer sets **`document.documentElement.lang`** in `applyUiLanguage()`.
+
 ## Checkpoint: 2026-04-13 — FS25 `fs25_animalic_food.html` (bulk mixer UX + legend)
 
 - **Bulk liters math:** Min/max from recipe % use **float liter bounds** (not rounded-to-integer bands) for clamping and redistribution. **`projectToBoundsWithSum`** converges to ~**1e-3 L** instead of 0.5 L steps.
@@ -43,9 +49,9 @@ Stable handoff state for the standalone explorer (animals UI, samples, no mislea
 
 - **PARALLEL** animals: top stack bar (shares of production mix), aligned **narrow** tint bands on food-group rows (`fg-row--parallel`, 7% mix), eat % + totals + warn if weights ≠ 1.0.
 - **SERIAL** animals: **no** top stack bar; each food group uses **left-aligned** tint whose **width** = `productionWeight / max(productionWeight)` in that animal; **opacity** of tint scales with the same norm (stronger than parallel). Footer explains SERIAL semantics (no eatWeight; not a 100% total).
-- **Animal card grid**: container query on `.main-panel--animals` — from ~520px panel width, **two columns** with **1.14fr / 0.86fr** (alternating wide/narrow tracks).
+- **Animal card grid**: container query on `.main-panel--animals` — from ~520px panel width, **two equal columns** (`repeat(2, minmax(0, 1fr))`).
 - **Samples**: fetch `public/samples/*.xml` when served over HTTP; **embedded fallbacks** for **animalic**, **vanilla**, **Mittellandkanal**, **Harterleiten** (same content as repo samples). Embed path uses normal **ok** status (no yellow “could not fetch” warning). Regenerate map embeds: `node scripts/inject-embed-samples.mjs`.
-- **Reverted**: page-level 1/2/3 column control for main panels (restored classic layout: full-width animals, `grid-two` mixtures|recipes ≥920px, full-width calculator).
+- **Reverted**: page-level 1/2/3 column control for main panels (restored classic layout: full-width animals, **equal-column** `grid-two` mixtures|recipes ≥920px, full-width calculator).
 
 ## FS25 Explorer: Implemented Capabilities
 
@@ -92,6 +98,7 @@ See **[FS25_BALE_CALC_MODULE.md](FS25_BALE_CALC_MODULE.md)** for design decision
 
 - Bale module: optional polish (bar/overlay readability on narrow widths, compact “all ingredients” summary if desired).
 - Bulk: optional debounced live input if commit-on-blur is too passive for some users; very narrow viewports may see combo-legend pill overlap (ellipsis + title mitigate).
+- FS25 i18n bar: if one **desktop** build looks like missing lang controls, try **hard refresh** or **mobile** / **published** — can be environment-specific; **`.top` z-index** above CRT mitigates most cases.
 
 ## Important Files
 

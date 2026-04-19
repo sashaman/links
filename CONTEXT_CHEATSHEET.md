@@ -39,8 +39,9 @@ See **[DEVELOPMENT_WORKFLOW.md](DEVELOPMENT_WORKFLOW.md)** for the full suggeste
 - DE/EN/FR language switch + sample picker (**animalic**, **vanilla**, **Mittellandkanal**, **Harterleiten**); all four have **in-page embedded XML** if fetch fails (no scare warning — status stays **ok** with snapshot label)
 - Renders animals / food groups / mixtures / recipes
 - **PARALLEL** animals: top **stack bar** + narrow aligned row tints; **SERIAL**: **no** stack bar; row tint **width** = `productionWeight / max(weight)` for that animal (left-aligned)
-- Tiere panel: **container query** → two-column animal cards with **1.14fr / 0.86fr** when panel ≥ ~520px
-- Main layout: full-width animals; **mixtures | recipes** two-column from 920px; full-width calculator (no 1/2/3 column experiment)
+- Tiere panel: **container query** → **equal** two-column animal cards when panel ≥ ~520px
+- Main layout: full-width animals; **mixtures | recipes** **equal** two-column (`grid-two`) from 920px; full-width calculator (no 1/2/3 column experiment)
+- **i18n:** **DE/EN/FR** text buttons (not flag emoji); default language from **`navigator.languages`** with **`localStorage`** override (explorer `fs25-explorer-lang`, builder `fs25-builder-lang`); first header **`.top`** card stacked **above** CRT scanline layer for reliable control paint
 - Includes dual calculators (recipe-based):
   - **Bulk goods mode**
   - **Bales mode**
@@ -99,4 +100,4 @@ See **[DEVELOPMENT_WORKFLOW.md](DEVELOPMENT_WORKFLOW.md)** for the full suggeste
 
 ## Quick Resume Prompt
 
-"Resume from `CONTEXT_CHEATSHEET.md` + **PROJECT_STATE.md** (checkpoints **2026-04-10** explorer, **2026-04-11** builder, **2026-04-12** bale module, **2026-04-13** bulk mixer + legend). Explorer bales UX: **FS25_BALE_CALC_MODULE.md**. Bulk mode: float bounds, input commit + redistribute, rail-aligned accents + legend pills. Builder: **FS25_ANIMALIC_FOOD_BUILDER.md** + `public/fs25_animalic_food_builder.html` — sticky UX is **per card** only; section heads are `.panel-section-head` (not sticky). Keep `public/samples/*.xml` in sync with embedded map XML when changing Mittelland/Harterleiten (run `node scripts/inject-embed-samples.mjs`)."
+"Resume from `CONTEXT_CHEATSHEET.md` + **PROJECT_STATE.md** (checkpoints through **2026-04-14** — grids + i18n chrome + locale; **2026-04-13** bulk + legend; **2026-04-12** bale module; **2026-04-11** builder; **2026-04-10** explorer). Explorer bales UX: **FS25_BALE_CALC_MODULE.md**. Bulk: float bounds, redistribute on input, rail accents, handle-aligned legend. Builder: **FS25_ANIMALIC_FOOD_BUILDER.md**; lang + equal grids on both FS25 pages. Keep `public/samples/*.xml` in sync with embedded map XML when changing Mittelland/Harterleiten (run `node scripts/inject-embed-samples.mjs`)."
